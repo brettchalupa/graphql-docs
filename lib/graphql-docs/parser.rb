@@ -1,28 +1,30 @@
 module GraphQLDocs
   class Parser
-    attr_reader :schema
+    attr_reader :schema, :processed_schema
 
     def initialize(response)
       @schema = JSON.parse(response)['data']
+      @processed_schema = @schema.dup['__schema']
     end
 
     def parse
-      graphql_hash = @schema['__schema']
       # sort the types
-      graphql_hash['types'] = graphql_hash['types'].sort_by { |key, _| key['name'] }
+      @processed_schema['types'] = @processed_schema['types'].sort_by { |key, _| key['name'] }
 
       # fetch the connections
-      graphql_hash['types'].each do |object|
+      @processed_schema['types'].each do |object|
         next if object['fields'].nil?
         object['connections'] = object['fields'].select { |f| next if f.is_a?(Array); is_connection?(f) }
       end
 
       # fetch the kinds of items
-      # type_kinds = graphql_hash['types'].map { |h| h['kind'] }.uniq
-      # type_kinds.each do |kind|
-      #   graphql_hash["#{kind.downcase}_types"] = graphql_hash['types'].select { |t| t['kind'] == kind }
-      # end
-      graphql_hash
+      type_kinds = @processed_schema['types'].map { |h| h['kind'] }.uniq
+      type_kinds.each do |kind|
+        @processed_schema["#{kind.downcase}_types"] = @processed_schema['types'].select { |t| t['kind'] == kind }
+      end
+      # TODO: should the 'types' key be deleted now?
+
+      @processed_schema
     end
 
     private
