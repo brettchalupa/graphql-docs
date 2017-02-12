@@ -1,0 +1,31 @@
+## {{ type['name'] }}
+
+{{ type['description'] }}
+
+{% if type['interfaces'].size > 0 %}
+
+### Implements
+
+<ul>
+  {% for interface in type['interfaces'] %}
+    <li><code><a href="./interface/{{ interface['name'] | downcase | slugify }}">{{ interface['name'] }}</a></code></li>
+  {% endfor %}
+</ul>
+
+{% endif %}
+
+{% if type['connections'].size > 0 %}
+
+### Connections
+
+{% include 'connections' %}
+
+{% endif %}
+
+{% if type['fields'].size > 0 %}
+
+### Fields
+
+{% include includes/fields %}
+
+{% endif %}

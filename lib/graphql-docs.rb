@@ -1,4 +1,6 @@
 require 'graphql-docs/client'
+require 'graphql-docs/configuration'
+require 'graphql-docs/generator'
 require 'graphql-docs/parser'
 require 'graphql-docs/version'
 
@@ -28,6 +30,10 @@ module GraphQLDocs
 
       parser = GraphQLDocs::Parser.new(response, options)
       parsed_schema = parser.parse
+
+      generator = Generator.new(parsed_schema, options)
+
+      generator.generate
     end
   end
 end

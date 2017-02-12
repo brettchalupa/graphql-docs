@@ -23,11 +23,21 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'faraday', '~> 0.11'
   spec.add_dependency 'graphql', '~> 1.4'
 
+  # rendering
+  spec.add_dependency 'html-pipeline', '2.5.0'
+  spec.add_dependency 'html-pipeline-rouge_filter', '~> 1.0'
+  spec.add_dependency 'extended-markdown-filter', '~> 0.4'
+  spec.add_dependency 'gemoji', '2.1.0'
+  spec.add_dependency 'github-markdown', '0.6.9'
+  spec.add_dependency 'liquid', '~> 4.0'
+  spec.add_dependency 'page-toc-filter', '~> 0.0.1'
+
+  spec.add_development_dependency 'awesome_print'
   spec.add_development_dependency 'bundler', '~> 1.14'
-  spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'minitest-focus', '~> 1.1'
+  spec.add_development_dependency 'pry', '~> 0.10.0'
+  spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rubocop-github'
   spec.add_development_dependency 'webmock', '~> 2.3'
-  spec.add_development_dependency 'awesome_print'
 end

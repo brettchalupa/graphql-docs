@@ -1,0 +1,15 @@
+<div class="field-entry">
+  {% for connection in type['connections'] %}
+  <span class="field-name connection-name">{{ connection['name'] }} (<a href="./object/{{ connection['type']['ofType']['name'].parameterize }}"><code>{{ connection['type']['ofType']['name'] }}</code></a>)</span>
+
+  <div class="description-wrapper">
+    {{ connection['description'] }}
+
+    {% if args.count > 0 %}
+
+      {% include 'arguments' args: connection['args'] %}
+
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>

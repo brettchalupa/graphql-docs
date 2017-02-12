@@ -1,0 +1,29 @@
+<table class="arguments" markdown="1">
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for argument in args args.each do |argument| %}
+  <tr>
+    <td><code>{{ argument['name'] }}<code></td>
+    <td>
+
+      {% if argument['type']['name'] == "Non-Null" %}
+        {% capture arg_name %}argument['type']['ofType']['name']{% endcapture %}
+      {% else %}
+        <% capture arg_name %}argument['type']['name']{% endcapture %>
+      {% end %}
+
+      <code>{{ arg_name }}</code>
+    </td>
+    <td>
+      <p>{{ argument['description'] }}</p>
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
