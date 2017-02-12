@@ -3,7 +3,7 @@ require 'test_helper'
 class ParserTest < Minitest::Test
   def setup
     @json = File.read("#{fixtures_dir}/gh-api.json")
-    @parser = GraphQLDocs::Parser.new(@json)
+    @parser = GraphQLDocs::Parser.new(@json, {})
     @results = @parser.parse
     @issue = @results['types'].find { |t| t['name'] == 'Issue' }
   end

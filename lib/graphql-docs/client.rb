@@ -19,10 +19,6 @@ module GraphQLDocs
 
       @access_token = options[:access_token]
 
-      if options[:url].nil?
-        fail ArgumentError, 'No :url provided to the client!'
-      end
-
       @url = options[:url]
       @faraday = Faraday.new(url: @url)
 

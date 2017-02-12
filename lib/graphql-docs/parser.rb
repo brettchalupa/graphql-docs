@@ -2,7 +2,8 @@ module GraphQLDocs
   class Parser
     attr_reader :schema, :processed_schema
 
-    def initialize(response)
+    def initialize(response, options)
+      @options = options
       @schema = JSON.parse(response)['data']
       @processed_schema = @schema.dup['__schema']
     end

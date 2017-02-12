@@ -8,11 +8,26 @@ rescue LoadError; end
 
 module GraphQLDocs
   class << self
-    def generate(options)
-      client = GraphQLDocs::Client.new(options)
-      response = client.fetch
-      parser = GraphQLDocs::Parser.new(response)
-      parser.parse
+    def build(options)
+      options = GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge(options)
+
+      if options[:url].nil? && options[:path].nil?
+        fail ArgumentError, 'No :url or :path provided!'
+      end
+
+      if !options[:url].nil? && !options[:path].nil?
+        fail ArgumentError, 'You can\'t pass both :url and :path!'
+      end
+
+      if options[:url]
+        client = GraphQLDocs::Client.new(options)
+        response = client.fetch
+      else
+        response = File.read(options[:path])
+      end
+
+      parser = GraphQLDocs::Parser.new(response, options)
+      parsed_schema = parser.parse
     end
   end
 end

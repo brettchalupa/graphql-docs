@@ -7,12 +7,6 @@ class ClientTest < Minitest::Test
     stub_request(:post, @url)
   end
 
-  def test_that_it_requires_a_url
-    assert_raises ArgumentError do
-      GraphQLDocs::Client.new
-    end
-  end
-
   def test_that_it_requires_both_the_basic_auth_params
     assert_raises ArgumentError do
       GraphQLDocs::Client.new(url: @url, login: 'Biscotto')
