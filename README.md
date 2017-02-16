@@ -79,6 +79,8 @@ generator.generate
 
 The HTML generation process uses [html-pipeline](https://github.com/jch/html-pipeline) and ERB to style the output. There are a bunch of default options provided for you, but feel free to override any of these. The *Configuration* section below has more information on what you can change.
 
+### Herlper methods
+
 ## Development
 
 After checking out the repo, run `script/bootstrap` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

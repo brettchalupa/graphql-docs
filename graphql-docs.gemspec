@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'extended-markdown-filter', '~> 0.4'
   spec.add_dependency 'gemoji', '2.1.0'
   spec.add_dependency 'github-markdown', '0.6.9'
-  spec.add_dependency 'liquid', '~> 4.0'
+  spec.add_dependency 'commonmarker', '0.14.3'
   spec.add_dependency 'page-toc-filter', '~> 0.0.1'
 
   spec.add_development_dependency 'awesome_print'

@@ -1,0 +1,9 @@
+## <%= type['name'] %>
+
+<%= type['description'] %>
+
+<% unless type['enumValues'].empty? %>
+
+<%= include.('values.html', values: type['enumValues']) %>
+
+<% end %>

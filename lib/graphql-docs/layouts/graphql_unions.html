@@ -1,0 +1,9 @@
+## <%= type['name'] %>
+
+<%= type['description'] %>
+
+<% unless type['possibleTypes'].empty? %>
+
+<%= include.('possible_types.html', possible_types: type['possibleTypes']) %>
+
+<% end %>

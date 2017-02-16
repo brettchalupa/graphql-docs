@@ -1,0 +1,9 @@
+<h3 id="fields">Possible Types</h3>
+
+<ul>
+
+<% possible_types.each do |possible_type| %>
+  <li><a href="./<%= slugify.(possible_type['name']) %>"><%= possible_type['name'] %></a></li>
+<% end %>
+
+</ul>

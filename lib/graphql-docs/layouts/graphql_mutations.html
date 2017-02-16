@@ -1,20 +1,11 @@
-## {{ type['name'] }}
+## <%= type['name'] %>
 
-{{ type['description'] }}
+<%= type['description'] %>
 
-{% if input['inputFields'].size > 0 %}
+## Input fields
 
-### Input fields
+<%= include.('/fields.html', fields: input_fields['inputFields']) %>
 
-{% include 'fields' %}
+## Return fields
 
-{% endif %}
-
-{% if return['fields'].size > 0 %}
-
-### Return fields
-
-{% capture fields %}{{ return['inputFields'] }}{% endcapture %}
-{% include 'fields' %}
-
-{% endif %}
+<%= include.('/fields.html', fields: return_fields['fields']) %>

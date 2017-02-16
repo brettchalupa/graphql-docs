@@ -7,23 +7,25 @@
     </tr>
   </thead>
   <tbody>
-  {% for argument in args %}
+  <% args.each do |argument| %>
   <tr>
-    <td><code>{{ argument['name'] }}<code></td>
+    <td><code><%= argument['name'] %><code></td>
     <td>
 
-      {% if argument['type']['name'] == "Non-Null" %}
-        {% capture arg_name %}argument['type']['ofType']['name']{% endcapture %}
-      {% else %}
-        <% capture arg_name %}argument['type']['name']{% endcapture %>
-      {% end %}
+      <% if argument['type']['name'] == "Non-Null" %>
+        <% @arg_path = argument['type']['ofType']['kind'] %>
+        <% @arg_name = argument['type']['ofType']['name'] %>
+      <% else %>
+        <% @arg_path = argument['type']['kind'] %>
+        <% @arg_name = argument['type']['name'] %>
+      <% end %>
 
-      <code>{{ arg_name }}</code>
+      <code><%= @arg_name %></code>
     </td>
     <td>
-      <p>{{ argument['description'] }}</p>
+      <p><%= markdown.(argument['description']) %></p>
     </td>
   </tr>
-  {% endfor %}
+  <% end %>
   </tbody>
 </table>

@@ -1,32 +1,31 @@
-## {{ type['name'] }}
+## <%= type['name'] %>
 
-{{ type['description'] }}
+<%= type['description'] %>
 
-{% if type['interfaces'].size > 0 %}
+<% unless type['interfaces'].empty? %>
 
 ### Implements
 
 <ul>
-  {% for interface in type['interfaces'] %}
-    <li><code><a href="./interface/{{ interface['name'] | downcase | slugify }}">{{ interface['name'] }}</a></code></li>
-  {% endfor %}
+  <% type['interfaces'].each do |interface| %>
+    <li><code><a href="./interface/<%= slugify.(interface['name']) %>"><%= interface['name'] %></a></code></li>
+  <% end %>
 </ul>
 
-{% endif %}
+<% end %>
 
-{% if type['connections'].size > 0 %}
+<% unless type['connections'].empty? %>
 
 ### Connections
 
-{% include 'connections' %}
+<%= include.('connections.html', connections: type['connections']) %>
 
-{% endif %}
+<% end %>
 
-{% if type['fields'].size > 0 %}
+<% unless type['fields'].empty? %>
 
 ### Fields
 
-{% capture fields %}{{ type['fields'] }}{% endcapture %}
-{% include 'fields' %}
+<%= include.('fields.html', fields: type['fields']) %>
 
-{% endif %}
+<% end %>

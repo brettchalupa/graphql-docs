@@ -1,15 +1,17 @@
-<div class="field-entry">
-  {% for connection in type['connections'] %}
-  <span class="field-name connection-name">{{ connection['name'] }} (<a href="./object/{{ connection['type']['ofType']['name'].parameterize }}"><code>{{ connection['type']['ofType']['name'] }}</code></a>)</span>
+<% connections.each do |connection| %>
+
+<div class="field-entry my-4">
+  <span class="field-name connection-name"><%= connection['name'] %> (<a href="/early-access/graphql/object/<%= slugify.(connection['type']['ofType']['name']) %>" class="js-connection-name"><code><%= connection['type']['ofType']['name'] %></code></a>)</span>
 
   <div class="description-wrapper">
-    {{ connection['description'] }}
+    <%= connection['description'] %>
 
-    {% if connection['args'].count > 0 %}
+    <% unless connection['args'].empty? %>
 
-      {% include 'arguments' args: connection['args'] %}
+      <%= include.('arguments.html', args: connection['args']) %>
 
-    {% endif %}
+    <% end %>
   </div>
-  {% endfor %}
 </div>
+
+<% end %>

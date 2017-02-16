@@ -1,0 +1,11 @@
+<h3 id="fields">Values</h3>
+
+<% values.each do |value| %>
+
+  <h4 class="name"><%= value['name'] %></h4>
+
+  <div class="description-wrapper">
+    <%= value['description'] %>
+  </div>
+
+<% end %>
