@@ -5,7 +5,7 @@
   <div class="description-wrapper">
     {{ connection['description'] }}
 
-    {% if args.count > 0 %}
+    {% if connection['args'].count > 0 %}
 
       {% include 'arguments' args: connection['args'] %}
 

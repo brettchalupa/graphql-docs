@@ -26,6 +26,7 @@
 
 ### Fields
 
-{% include includes/fields %}
+{% capture fields %}{{ type['fields'] }}{% endcapture %}
+{% include 'fields' %}
 
 {% endif %}

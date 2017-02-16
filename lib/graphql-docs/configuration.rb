@@ -27,7 +27,8 @@ module GraphQLDocs
       },
       templates: {
         includes: "#{File.dirname(__FILE__)}/layouts/includes",
-        objects: "#{File.dirname(__FILE__)}/layouts/graphql_objects.html"
+        objects: "#{File.dirname(__FILE__)}/layouts/graphql_objects.html",
+        mutations: "#{File.dirname(__FILE__)}/layouts/graphql_mutations.html"
       }
     }
   end

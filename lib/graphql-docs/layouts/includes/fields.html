@@ -1,0 +1,53 @@
+{{ fields |  prepend: 'Made a great ' }}
+{% for field in fields | json %}
+
+{% if field['type']['ofType']['name'] contains "Connection" %}
+  {% continue %}
+{% endif %}
+
+
+{% if field['name'] == "id" or field['name'] == "" or field['name'] == null %}
+  {% continue %}
+{% endif %}
+
+<div class="field-entry">
+  {% if field['type']['ofType'] and field['type']['ofType']['ofType'] != null %}
+    {% if field['type']['ofType']['ofType']['ofType'] != null %}
+      {% capture type_path %}{{ field['type']['ofType']['ofType']['ofType']['kind'] }}{% endcapture %}
+      {% capture type_name %}{{ field['type']['ofType']['ofType']['ofType']['name'] }}{% endcapture %}
+    {% else %}
+      {% capture type_path %}{{ field['type']['ofType']['ofType']['kind'] }}{% endcapture %}
+      {% capture type_name %}{{ field['type']['ofType']['ofType']['name'] }}{% endcapture %}
+    {% endif %}
+  {% elsif field['type']['ofType'] == null %}
+    {% capture type_path %}{{ field['type']['kind'] }}{% endcapture %}
+    {% capture type_name %}{{ field['type']['name'] }}{% endcapture %}
+  {% elsif field['type']['name'] == "Non-Null" or field['type']['ofType']['name'] == "Non-Null" %}
+    {% capture type_path %}{{ field['type']['ofType']['kind'] }}{% endcapture %}
+    {% capture type_name %}{{ field['type']['ofType']['name'] }}{% endcapture %}
+  {% else %}
+    {% capture type_path %}{{ field['type']['ofType']['kind'] }}{% endcapture %}
+    {% capture type_name %}{{ field['type']['ofType']['name'] }}{% endcapture %}
+  {% endif %}
+
+  <span class="field-name">{{ field['name'] }} (<code><a href="./{{ type_path | downcase }}/{{ type_name | downcase | slugify }}">{{ type_name }}</a></code>)</span>
+
+  <div class="description-wrapper">
+    {% if field['isDeprecated'] %}
+      <div class="deprecation-notice">
+        <span class="deprecation-title">Deprecation notice</span>
+        {{ field['deprecationReason'] }}
+      </div>
+    {% endif %}
+
+    {{ field['description'] }}
+
+    {% if field['args'].count > 0 %}
+
+      {% include 'arguments' %}
+
+    {% endif %}
+  </div>
+</div>
+
+{% endfor %}

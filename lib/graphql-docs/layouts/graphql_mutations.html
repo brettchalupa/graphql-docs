@@ -1,0 +1,20 @@
+## {{ type['name'] }}
+
+{{ type['description'] }}
+
+{% if input['inputFields'].size > 0 %}
+
+### Input fields
+
+{% include 'fields' %}
+
+{% endif %}
+
+{% if return['fields'].size > 0 %}
+
+### Return fields
+
+{% capture fields %}{{ return['inputFields'] }}{% endcapture %}
+{% include 'fields' %}
+
+{% endif %}
