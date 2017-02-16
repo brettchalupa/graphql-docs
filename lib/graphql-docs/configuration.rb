@@ -20,6 +20,9 @@ module GraphQLDocs
           asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'
         }
       },
+
+      renderer: GraphQLDocs::Renderer,
+
       templates: {
         includes: "#{File.dirname(__FILE__)}/layouts/includes",
         objects: "#{File.dirname(__FILE__)}/layouts/graphql_objects.html",

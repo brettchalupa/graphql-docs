@@ -37,7 +37,7 @@ class ClientTest < Minitest::Test
                                 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', \
                                 'Authorization'=>'Basic QmlzY290dG86MTIzNA==',
                                 'Content-Type'=>'application/json',
-                                'User-Agent'=>'Faraday v0.11.0' },
+                                'User-Agent'=>'Faraday v0.9.2' },
                       body: "{ \"query\": \"#{GraphQL::Introspection::INTROSPECTION_QUERY.gsub("\n", '')}\" }"
   end
 
@@ -49,7 +49,7 @@ class ClientTest < Minitest::Test
                                 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', \
                                 'Authorization'=>'token 87614b09dd141c22800f96f11737ade5226d7ba8',
                                 'Content-Type'=>'application/json',
-                                'User-Agent'=>'Faraday v0.11.0' },
+                                'User-Agent'=>'Faraday v0.9.2' },
                       body: "{ \"query\": \"#{GraphQL::Introspection::INTROSPECTION_QUERY.gsub("\n", '')}\" }"
   end
 end

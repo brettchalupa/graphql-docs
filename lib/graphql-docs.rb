@@ -1,8 +1,8 @@
 require 'graphql-docs/client'
+require 'graphql-docs/renderer'
 require 'graphql-docs/configuration'
 require 'graphql-docs/generator'
 require 'graphql-docs/parser'
-require 'graphql-docs/renderer'
 require 'graphql-docs/version'
 
 begin

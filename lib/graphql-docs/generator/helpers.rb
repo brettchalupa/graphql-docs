@@ -16,6 +16,12 @@ module GraphQLDocs
         template.result(OpenStruct.new(opts.merge(helper_methods)).instance_eval { binding })
       end
 
+      def markdown(string)
+        GitHub::Markdown.render(string || 'n/a')
+      end
+
+      private
+
       def fetch_include(filename)
         @templates ||= {}
 
@@ -23,10 +29,6 @@ module GraphQLDocs
 
         @templates[filename] = ERB.new(File.read(File.join(@options[:templates][:includes], filename)))
         @templates[filename]
-      end
-
-      def markdown(string)
-        GitHub::Markdown.render(string || 'n/a')
       end
 
       def helper_methods
