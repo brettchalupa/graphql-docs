@@ -12,15 +12,11 @@ module GraphQLDocs
       output_dir: './output/',
       pipeline_config: {
         pipeline:
-          %w(ExtendedMarkdownFilter
-           HTTPSFilter
-           RougeFilter
+          %i(ExtendedMarkdownFilter
            EmojiFilter
            PageTocFilter),
         context: {
           gfm: false,
-          http_url: 'https://github.com',
-          base_url: '/',
           asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'
         }
       },

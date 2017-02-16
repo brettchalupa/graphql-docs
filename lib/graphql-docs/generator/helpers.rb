@@ -1,5 +1,3 @@
-require 'commonmarker'
-
 module GraphQLDocs
   class Generator
     module Helpers
@@ -28,7 +26,7 @@ module GraphQLDocs
       end
 
       def markdown(string)
-        CommonMarker.render_html(string || 'n/a')
+        GitHub::Markdown.render(string || 'n/a')
       end
 
       def helper_methods

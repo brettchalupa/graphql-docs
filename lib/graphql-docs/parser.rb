@@ -15,7 +15,7 @@ module GraphQLDocs
       # fetch the connections
       @processed_schema['types'].each do |object|
         next if object['fields'].nil?
-        object['connections'] = object['fields'].select { |f| next if f.is_a?(Array); is_connection?(f) }
+        object['connections'] = object['fields'].select { |f| next if f.is_a?(Array); connection?(f) }
       end
 
       # fetch the kinds of items
@@ -30,7 +30,7 @@ module GraphQLDocs
 
     private
 
-    def is_connection?(hash)
+    def connection?(hash)
       if hash['type']['ofType'] && hash['type']['ofType']['name'] && hash['type']['ofType']['name'].end_with?('Connection')
         true
       else

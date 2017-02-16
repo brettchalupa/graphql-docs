@@ -1,4 +1,3 @@
-require 'html/pipeline'
 require 'erb'
 require 'graphql-docs/generator/helpers'
 
@@ -9,8 +8,8 @@ module GraphQLDocs
     def initialize(parsed_schema, options)
       @parsed_schema = parsed_schema
       @options = options
-      @pipeline_config = @options[:pipeline_config]
-      @pipeline = HTML::Pipeline.new(@pipeline_config[:pipeline], @pipeline_config[:context])
+
+      @renderer = Renderer.new(@options)
 
       @graphql_object_template = ERB.new(File.read(@options[:templates][:objects]))
       @graphql_mutations_template = ERB.new(File.read(@options[:templates][:mutations]))
@@ -134,11 +133,8 @@ module GraphQLDocs
     def write_file(type, name, contents)
       path = File.join(@options[:output_dir], type, name.downcase)
       FileUtils.mkdir_p(path)
+      contents = @renderer.render(contents)
       File.write(File.join(path, 'index.html'), contents)
-    end
-
-    def render
-
     end
   end
 end
