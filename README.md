@@ -26,12 +26,6 @@ Simple! Call `GraphQLDocs.generate`, taking care to pass in the GraphQL endpoint
 GraphQLDocs.build(url: "http://graphql.org/swapi-graphql/")
 ```
 
-If you already have the JSON locally, great! Call the same method with `path` instead:
-
-``` ruby
-GraphQLDocs.build(path: "location/to/sw-api.json")
-```
-
 If your GraphQL endpoint requires authentication, you can provide a username or password, or an access token:
 
 ``` ruby
@@ -50,13 +44,20 @@ options = {
 GraphQLDocs.build(options)
 ```
 
+If you already have the JSON locally, great! Call the same method with `path` instead:
+
+``` ruby
+GraphQLDocs.build(path: 'location/to/sw-api.json')
+```
+
 ## Breakdown
 
-There are three phases going on in one little `GraphQLDocs.build` call:
+There are several phaseses going on in one little `GraphQLDocs.build` call:
 
 * The GraphQL JSON is _fetched_ (if you passed `url`) through `GraphQL::Client` (or simply read if you passed `path`).
 * `GraphQL::Parser` manipulates that JSON into a slightly saner format.
 * `GraphQL::Generator` takes that JSON and converts it into HTML.
+* `GraphQL::Parser` technically runs as part of the generation phase. It passes the contents of each page through a Markdown renderer.
 
 If you wanted to, you could break these calls up individually:
 
@@ -64,22 +65,68 @@ If you wanted to, you could break these calls up individually:
 client = GraphQLDocs::Client.new(options)
 response = client.fetch
 
-# do something
+# do something else...
 
 parser = GraphQLDocs::Parser.new(response, options)
 parsed_schema = parser.parse
 
-# do something else
-generator = Generator.new(parsed_schema, options)
+my_renderer = MySuperCoolParser(options)
+options[:renderer] = my_renderer
+
+generator = GraphQLDocs::Generator.new(parsed_schema, options)
 
 generator.generate
 ```
 
 ## Generating output
 
-The HTML generation process uses [html-pipeline](https://github.com/jch/html-pipeline) and ERB to style the output. There are a bunch of default options provided for you, but feel free to override any of these. The *Configuration* section below has more information on what you can change.
+By default, the HTML generation process uses ERB to layout the content. There are a bunch of default options provided for you, but feel free to override any of these. The *Configuration* section below has more information on what you can change.
 
-### Herlper methods
+It also uses [html-pipeline](https://github.com/jch/html-pipeline) to perform the Markdown rendering by default. You can override this by providing a custom rendering class. The initialize must take one argument, which are the configuration options, and must implement one method, `render`, which takes a string and converts it. For example:
+
+``` ruby
+class CustomRenderer
+  def initialize(options)
+    @options = options
+  end
+
+  def render(string)
+    string.sub(/Repository/i, 'Meow Woof!')
+  end
+end
+
+options[:path] = 'location/to/sw-api.json'
+options[:renderer] = CustomRenderer
+
+GraphQLDocs.build(options)
+```
+
+### Helper methods
+
+In your ERB layouts, there are several helper methods you can use. The helper methods are:
+
+* `slugify(str)` - This slugifies the given string.
+* `include(filename, opts)` - This embeds a template from your `includes` folder, passing along the local options provided.
+* `markdown(string)` - This converts a string from Markdown to HTML.
+
+To call these methods, you must use the dot notation, such as `<%= slugify.(text) %>`.
+
+## Configuration
+
+The following options are available:
+
+
+| Option | Description | Default |
+| :----- | :---------- | :------ |
+| `access_token` | Uses this token while making requests through `GraphQLDocs::Client`. | `nil` |
+| `login` | Uses this login while making requests through `GraphQLDocs::Client`. | `nil` |
+| `password` | Uses this password while making requests through `GraphQLDocs::Client`. | `nil` |
+| `path` | `GraphQLDocs::Client` loads a JSON file found at this location, representing the response from an introspection query. | `nil` |
+| `url` | `GraphQLDocs::Client` makes a `POST` request to this URL, passing along the introspection query. | `nil` |
+| `output_dir` | The location of the output HTML. | `./output/` |
+| `pipeline_config` | Defines two sub-keys, `pipeline` and `context`, which are used by `html-pipeline` when rendering your output. | `pipeline` has `ExtendedMarkdownFilter`, `EmojiFilter`, and `PageTocFilter`. `context` has `gfm: false`, `asset_root: `'https://a248.e.akamai.net/assets.github.com/images/icons'` |
+| `renderer` | The rendering class to use. | `GraphQLDocs::Renderer`
+| `templates` | The templates to use when generating HTML. You may override any of the following keys: `includes`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`. | The default gem ones are found in _layouts/_.
 
 ## Development
 
