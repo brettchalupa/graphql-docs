@@ -1,0 +1,59 @@
+#top-nav {
+  height: 30px;
+  line-height: 30px;
+  background-color: #27272b;
+  a {
+    text-decoration: none;
+  }
+}
+#top-nav-links {
+  list-style-type: none;
+  position: absolute;
+  top: 0;
+  right: 30px;
+  li {
+    float: left;
+    margin-left: 20px;
+  }
+  a {
+    display: inline-block;
+    height: 30px;
+    padding: 0 5px;
+    color: #fff;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+}
+#site-nav {
+  position: relative;
+  height: 70px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 14px 30px;
+  a {
+    vertical-align: bottom;
+  }
+  span {
+    vertical-align: bottom;
+  }
+  select {
+    vertical-align: bottom;
+  }
+  .sub-title {
+    margin: 0 8px;
+    position: relative;
+    top: 1px;
+  }
+  .logo {
+    img {
+      height: 50px;
+      margin-bottom: -20px;
+    }
+  }
+  .search-box {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+  }
+}

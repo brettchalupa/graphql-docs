@@ -1,0 +1,497 @@
+#content {
+  padding: 20px 30px;
+  max-width: 760px;
+  margin: 0px auto;
+  -webkit-text-size-adjust: 100%;
+  em {
+    font-style: italic;
+  }
+  strong {
+    font-family: 'ProximaNova-Bold';
+  }
+  h1 {
+    margin: 15px 0;
+    line-height: 1.4em;
+    font-size: 2em;
+    margin-top: 0;
+    margin-bottom: 30px;
+  }
+  h2 {
+    margin: 15px 0;
+    line-height: 1.4em;
+    font-size: 1.5em;
+    margin-top: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    .anchor {
+      opacity: 0;
+      position: absolute;
+      font-size: 16px;
+      top: 2px;
+      left: -21px;
+    }
+    &:hover {
+      .anchor {
+        opacity: 1;
+      }
+    }
+  }
+  h3 {
+    margin: 15px 0;
+    line-height: 1.4em;
+    font-size: 1.2em;
+    margin-top: 30px;
+    position: relative;
+    .anchor {
+      opacity: 0;
+      position: absolute;
+      font-size: 16px;
+      top: 2px;
+      left: -21px;
+    }
+    &:hover {
+      .anchor {
+        opacity: 1;
+      }
+    }
+  }
+  h4 {
+    margin: 15px 0;
+    line-height: 1.4em;
+  }
+  h5 {
+    margin: 15px 0;
+    line-height: 1.4em;
+  }
+  h6 {
+    margin: 15px 0;
+    line-height: 1.4em;
+  }
+  p {
+    margin: 15px 0;
+    line-height: 1.4em;
+  }
+  ul {
+    margin: 15px 0;
+    line-height: 1.4em;
+    padding-left: 1.5em;
+    list-style-type: disc;
+    li {
+      margin-bottom: 5px;
+    }
+  }
+  ol {
+    margin: 15px 0;
+    line-height: 1.4em;
+    padding-left: 1.5em;
+    list-style-type: decimal;
+    li {
+      margin-bottom: 5px;
+    }
+  }
+  figure {
+    margin: 15px 0;
+    line-height: 1.4em;
+  }
+  a {
+    color: #de4f4f;
+  }
+  img {
+    max-width: 100%;
+  }
+  code {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 0.8em;
+    line-height: 1.6em;
+    padding: 1px 4px;
+    background-color: #eee;
+    margin: 0 2px;
+  }
+  blockquote {
+    padding-left: 1.3em;
+    border-left: #eee solid 0.2em;
+    font-style: italic;
+  }
+  blockquote.warning {
+    border-color: #f00;
+    color: #f00;
+  }
+  dl {
+    margin-left: 1.5em;
+    dt {
+      .name {
+        font-family: monospace;
+      }
+      .type {
+        margin-left: 0.5em;
+      }
+    }
+    dd {
+      margin-left: 1.5em;
+    }
+  }
+  .edit-discuss-links {
+    margin-top: -25px;
+    margin-bottom: 40px;
+  }
+  table {
+    margin-top: 10px;
+    td p {
+      padding: 0 25px 0 25px;
+    }
+  }
+  pre {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    line-height: 1.6em;
+    margin: 20px 0;
+    overflow-x: auto;
+    position: relative;
+    padding: 20px 30px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      padding: 0;
+      margin: 0;
+    }
+    tr {
+      width: 100%;
+      border-collapse: collapse;
+      padding: 0;
+      margin: 0;
+    }
+    td {
+      width: 100%;
+      border-collapse: collapse;
+      padding: 0;
+      margin: 0;
+    }
+    code {
+      background-color: #272822;
+      padding: 0;
+      margin: 0;
+    }
+    .gutter {
+      user-select: none;
+      width: 1.5em;
+      padding-right: 30px;
+    }
+  }
+  .highlight.html {
+    .code {
+      &:after {
+        font-family: 'ProximaNova-Semibold';
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #ccc;
+        text-align: right;
+        font-size: 0.75em;
+        padding: 5px 10px 0;
+        letter-spacing: 1.5px;
+        line-height: 15px;
+        height: 15px;
+        font-weight: 600;
+      }
+    }
+  }
+  .highlight.js {
+    .code {
+      &:after {
+        font-family: 'ProximaNova-Semibold';
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #ccc;
+        text-align: right;
+        font-size: 0.75em;
+        padding: 5px 10px 0;
+        letter-spacing: 1.5px;
+        line-height: 15px;
+        height: 15px;
+        font-weight: 600;
+      }
+    }
+  }
+  .highlight.bash {
+    .code {
+      &:after {
+        font-family: 'ProximaNova-Semibold';
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #ccc;
+        text-align: right;
+        font-size: 0.75em;
+        padding: 5px 10px 0;
+        letter-spacing: 1.5px;
+        line-height: 15px;
+        height: 15px;
+        font-weight: 600;
+      }
+    }
+  }
+  .highlight.css {
+    .code {
+      &:after {
+        font-family: 'ProximaNova-Semibold';
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #ccc;
+        text-align: right;
+        font-size: 0.75em;
+        padding: 5px 10px 0;
+        letter-spacing: 1.5px;
+        line-height: 15px;
+        height: 15px;
+        font-weight: 600;
+      }
+    }
+  }
+  .highlight.jsx {
+    .code {
+      &:after {
+        font-family: 'ProximaNova-Semibold';
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #ccc;
+        text-align: right;
+        font-size: 0.75em;
+        padding: 5px 10px 0;
+        letter-spacing: 1.5px;
+        line-height: 15px;
+        height: 15px;
+        font-weight: 600;
+      }
+    }
+  }
+  .highlight.html.html {
+    .code {
+      &:after {
+        content: 'HTML';
+      }
+    }
+  }
+  .highlight.js.html {
+    .code {
+      &:after {
+        content: 'HTML';
+      }
+    }
+  }
+  .highlight.bash.html {
+    .code {
+      &:after {
+        content: 'HTML';
+      }
+    }
+  }
+  .highlight.css.html {
+    .code {
+      &:after {
+        content: 'HTML';
+      }
+    }
+  }
+  .highlight.jsx.html {
+    .code {
+      &:after {
+        content: 'HTML';
+      }
+    }
+  }
+  .highlight.html.js {
+    .code {
+      &:after {
+        content: 'JS';
+      }
+    }
+  }
+  .highlight.js.js {
+    .code {
+      &:after {
+        content: 'JS';
+      }
+    }
+  }
+  .highlight.bash.js {
+    .code {
+      &:after {
+        content: 'JS';
+      }
+    }
+  }
+  .highlight.css.js {
+    .code {
+      &:after {
+        content: 'JS';
+      }
+    }
+  }
+  .highlight.jsx.js {
+    .code {
+      &:after {
+        content: 'JS';
+      }
+    }
+  }
+  .highlight.html.bash {
+    .code {
+      &:after {
+        content: 'Shell';
+      }
+    }
+  }
+  .highlight.js.bash {
+    .code {
+      &:after {
+        content: 'Shell';
+      }
+    }
+  }
+  .highlight.bash.bash {
+    .code {
+      &:after {
+        content: 'Shell';
+      }
+    }
+  }
+  .highlight.css.bash {
+    .code {
+      &:after {
+        content: 'Shell';
+      }
+    }
+  }
+  .highlight.jsx.bash {
+    .code {
+      &:after {
+        content: 'Shell';
+      }
+    }
+  }
+  .highlight.html.css {
+    .code {
+      &:after {
+        content: 'CSS';
+      }
+    }
+  }
+  .highlight.js.css {
+    .code {
+      &:after {
+        content: 'CSS';
+      }
+    }
+  }
+  .highlight.bash.css {
+    .code {
+      &:after {
+        content: 'CSS';
+      }
+    }
+  }
+  .highlight.css.css {
+    .code {
+      &:after {
+        content: 'CSS';
+      }
+    }
+  }
+  .highlight.jsx.css {
+    .code {
+      &:after {
+        content: 'CSS';
+      }
+    }
+  }
+  .highlight.html.jsx {
+    .code {
+      &:after {
+        content: 'JSX';
+      }
+    }
+  }
+  .highlight.js.jsx {
+    .code {
+      &:after {
+        content: 'JSX';
+      }
+    }
+  }
+  .highlight.bash.jsx {
+    .code {
+      &:after {
+        content: 'JSX';
+      }
+    }
+  }
+  .highlight.css.jsx {
+    .code {
+      &:after {
+        content: 'JSX';
+      }
+    }
+  }
+  .highlight.jsx.jsx {
+    .code {
+      &:after {
+        content: 'JSX';
+      }
+    }
+  }
+  >table {
+    width: 100%;
+    margin: 20px 0;
+    tr {
+      border-top: 1px solid #eee;
+      &:nth-child(2n) {
+        background-color: #f8f8f8;
+      }
+    }
+    th {
+      font-family: 'ProximaNova-Semibold';
+      padding: 12px 13px;
+      border: 1px solid #eee;
+      vertical-align: middle;
+    }
+    td {
+      border: 1px solid #eee;
+      vertical-align: middle;
+      padding: 6px 13px;
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.8em;
+      line-height: 1.6em;
+    }
+  }
+  .bottom-nav {
+    height: 44px;
+    margin: 30px 0 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 25px;
+    a {
+      font-family: 'ProximaNova-Semibold';
+      margin: 0 5px;
+    }
+  }
+  .edit-link {
+    text-align: center;
+    a {
+      color: #aaa;
+      font-family: 'ProximaNova-Semibold';
+      &:before {
+        content: '';
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background-size: 16px;
+        opacity: 0.3;
+        margin-right: 8px;
+        position: relative;
+        top: 2px;
+      }
+    }
+  }
+}

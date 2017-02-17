@@ -1,0 +1,75 @@
+.api {
+  background: #fafafa;
+  h3 {
+    padding: 5px 10px;
+  }
+  h3.api-title {
+    margin: 0;
+    overflow: auto;
+  }
+  h4 {
+    font-weight: normal;
+    font-style: italic;
+    margin-bottom: 0.25em;
+    text-decoration: underline;
+    margin-left: 20px;
+  }
+  dl {
+    margin-top: 0.25em;
+  }
+  dl.args {
+    margin-left: 40px;
+  }
+  dl.constants {
+    margin-left: 20px;
+  }
+  dt {
+    margin-top: 1em;
+    .name {
+      font-weight: bold;
+    }
+    .type {
+      margin-left: 15px;
+      font-size: 0.9em;
+      font-weight: 200;
+      color: #000;
+    }
+  }
+  dd {
+    margin-bottom: 1em;
+    margin-left: 0;
+  }
+  .desc {
+    margin: 1em;
+  }
+  pre {
+    margin-right: 10px;
+  }
+}
+h3.api-title {
+  padding: 5px 10px;
+  margin-top: 2em;
+}
+.api-title {
+  .locus {
+    float: right;
+    font-weight: normal;
+    padding-right: 5px;
+    font-style: italic;
+  }
+  .subtext {
+    font-size: 11px;
+    text-align: left;
+    clear: both;
+    display: block;
+    font-weight: normal;
+    >code {
+      font-size: 11px;
+      margin-right: 12px;
+    }
+  }
+  .src-code {
+    color: #20338a !important;
+    border-bottom: none !important;
+  }
+}
