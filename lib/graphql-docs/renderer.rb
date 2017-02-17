@@ -1,6 +1,5 @@
 require 'html/pipeline'
 require 'extended-markdown-filter'
-require 'page-toc-filter'
 
 module GraphQLDocs
   class Renderer

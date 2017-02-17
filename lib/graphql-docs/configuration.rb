@@ -14,7 +14,7 @@ module GraphQLDocs
         pipeline:
           %i(ExtendedMarkdownFilter
            EmojiFilter
-           PageTocFilter),
+           TableOfContentsFilter),
         context: {
           gfm: false,
           asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'
