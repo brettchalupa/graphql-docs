@@ -9,3 +9,5 @@
 /tmp/
 /output/
 /test/graphql-docs/fixtures/output/
+/.sass-cache/
+/sample/
