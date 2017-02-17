@@ -125,7 +125,7 @@ The following options are available:
 | `path` | `GraphQLDocs::Client` loads a JSON file found at this location, representing the response from an introspection query. | `nil` |
 | `url` | `GraphQLDocs::Client` makes a `POST` request to this URL, passing along the introspection query. | `nil` |
 | `output_dir` | The location of the output HTML. | `./output/` |
-| `pipeline_config` | Defines two sub-keys, `pipeline` and `context`, which are used by `html-pipeline` when rendering your output. | `pipeline` has `ExtendedMarkdownFilter`, `EmojiFilter`, and `PageTocFilter`. `context` has `gfm: false`, `asset_root: `'https://a248.e.akamai.net/assets.github.com/images/icons'` |
+| `pipeline_config` | Defines two sub-keys, `pipeline` and `context`, which are used by `html-pipeline` when rendering your output. | `pipeline` has `ExtendedMarkdownFilter`, `EmojiFilter`, and `PageTocFilter`. `context` has `gfm: false`, `asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'` |
 | `renderer` | The rendering class to use. | `GraphQLDocs::Renderer`
 | `templates` | The templates to use when generating HTML. You may override any of the following keys: `includes`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`. | The default gem ones are found in _layouts/_.
 
