@@ -5,6 +5,8 @@ module GraphQLDocs
   class Generator
     include Helpers
 
+    attr_accessor :parsed_schema
+
     def initialize(parsed_schema, options)
       @parsed_schema = parsed_schema
       @options = options
@@ -45,8 +47,10 @@ module GraphQLDocs
 
     def create_graphql_mutation_pages
       graphql_mutation_types.each do |mutation|
-        input = graphql_input_object_types.find { |t| t['name'] = mutation['args'].first['type']['ofType']['name'] }
-        payload = graphql_object_types.find { |t| t['name'] == mutation['type']['name'] }
+        input_name = mutation['args'].first['type']['ofType']['name']
+        return_name = mutation['type']['name']
+        input = graphql_input_object_types.find { |t| t['name'] == input_name }
+        payload = graphql_object_types.find { |t| t['name'] == return_name }
 
         opts = { type: mutation, input_fields: input, return_fields: payload }.merge(helper_methods)
 
@@ -100,10 +104,8 @@ module GraphQLDocs
       end
     end
 
-    private
-
     def graphql_mutation_types
-      graphql_object_types.find { |t| t['name'] == 'Mutation' }['fields']
+      @parsed_schema['mutation_types']
     end
 
     def graphql_object_types

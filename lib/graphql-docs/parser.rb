@@ -23,6 +23,9 @@ module GraphQLDocs
       type_kinds.each do |kind|
         @processed_schema["#{kind.downcase}_types"] = @processed_schema['types'].select { |t| t['kind'] == kind }
       end
+      @processed_schema['mutation_types'] = @processed_schema['object_types'].select do |t|
+        t['name'] == 'Mutation'
+      end.first['fields']
       # TODO: should the 'types' key be deleted now?
 
       @processed_schema
