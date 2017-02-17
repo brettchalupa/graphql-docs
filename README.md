@@ -52,12 +52,12 @@ GraphQLDocs.build(path: 'location/to/sw-api.json')
 
 ## Breakdown
 
-There are several phaseses going on in one little `GraphQLDocs.build` call:
+There are several phases going on in one little `GraphQLDocs.build` call:
 
 * The GraphQL JSON is _fetched_ (if you passed `url`) through `GraphQL::Client` (or simply read if you passed `path`).
 * `GraphQL::Parser` manipulates that JSON into a slightly saner format.
 * `GraphQL::Generator` takes that JSON and converts it into HTML.
-* `GraphQL::Parser` technically runs as part of the generation phase. It passes the contents of each page through a Markdown renderer.
+* `GraphQL::Renderer` technically runs as part of the generation phase. It passes the contents of each page through a Markdown renderer.
 
 If you wanted to, you could break these calls up individually. For example:
 
@@ -110,13 +110,13 @@ In your ERB layouts, there are several helper methods you can use. The helper me
 * `slugify(str)` - This slugifies the given string.
 * `include(filename, opts)` - This embeds a template from your `includes` folder, passing along the local options provided.
 * `markdown(string)` - This converts a string from Markdown to HTML.
+* `graphql_mutation_types`, `graphql_object_types`, `graphql_interface_types`, `graphql_enum_types`, `graphql_union_types`, `graphql_input_object_types`, `graphql_scalar_types` - Collections of the various GraphQL types.
 
-To call these methods, you must use the dot notation, such as `<%= slugify.(text) %>`.
+To call these methods within templates, you must use the dot notation, such as `<%= slugify.(text) %>`.
 
 ## Configuration
 
 The following options are available:
-
 
 | Option | Description | Default |
 | :----- | :---------- | :------ |
@@ -129,11 +129,11 @@ The following options are available:
 | `delete_output` | Deletes `output_dir` before generating content. | `false` |
 | `pipeline_config` | Defines two sub-keys, `pipeline` and `context`, which are used by `html-pipeline` when rendering your output. | `pipeline` has `ExtendedMarkdownFilter`, `EmojiFilter`, and `TableOfContentsFilter`. `context` has `gfm: false` and `asset_root` set to GitHub's CDN. |
 | `renderer` | The rendering class to use. | `GraphQLDocs::Renderer`
-| `templates` | The templates to use when generating HTML. You may override any of the following keys: `includes`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`. | The default gem ones are found in _layouts/_.
+| `templates` | The templates to use when generating HTML. You may override any of the following keys: `includes`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`. | The default gem ones are found in _lib/graphql-docs/layouts/_.
 
 ## Development
 
-After checking out the repo, run `script/bootstrap` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `script/bootstrap` to install dependencies. Then, run `rake test` to run the tests. You can also run `bundle exec rake console` for an interactive prompt that will allow you to experiment.
 
 ## Sample site
 
