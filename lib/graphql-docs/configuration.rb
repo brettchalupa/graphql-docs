@@ -33,6 +33,6 @@ module GraphQLDocs
         input_objects: "#{File.dirname(__FILE__)}/layouts/graphql_input_objects.html",
         scalars: "#{File.dirname(__FILE__)}/layouts/graphql_scalars.html"
       }
-    }
+    }.freeze
   end
 end

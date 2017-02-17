@@ -130,6 +130,8 @@ module GraphQLDocs
       @parsed_schema['scalar_types']
     end
 
+    private
+
     def write_file(type, name, contents)
       path = File.join(@options[:output_dir], type, name.downcase)
       FileUtils.mkdir_p(path)

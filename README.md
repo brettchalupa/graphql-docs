@@ -59,19 +59,20 @@ There are several phaseses going on in one little `GraphQLDocs.build` call:
 * `GraphQL::Generator` takes that JSON and converts it into HTML.
 * `GraphQL::Parser` technically runs as part of the generation phase. It passes the contents of each page through a Markdown renderer.
 
-If you wanted to, you could break these calls up individually:
+If you wanted to, you could break these calls up individually. For example:
 
 ``` ruby
-client = GraphQLDocs::Client.new(options)
-response = client.fetch
+options = {}
+options[:path] = "#{File.dirname(__FILE__)}/../data/graphql/docs.json"
+my_renderer = MySuperCoolRenderer(options)
+options[:renderer] = my_renderer
 
-# do something else...
+options = GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge(options)
+
+response = File.read(options[:path])
 
 parser = GraphQLDocs::Parser.new(response, options)
 parsed_schema = parser.parse
-
-my_renderer = MySuperCoolParser(options)
-options[:renderer] = my_renderer
 
 generator = GraphQLDocs::Generator.new(parsed_schema, options)
 
