@@ -1,5 +1,4 @@
 require 'erb'
-require 'graphql-docs/generator/helpers'
 
 module GraphQLDocs
   class Generator
@@ -11,7 +10,7 @@ module GraphQLDocs
       @parsed_schema = parsed_schema
       @options = options
 
-      @renderer = @options[:renderer].new(@options)
+      @renderer = @options[:renderer].new(@options, @parsed_schema)
 
       @graphql_object_template = ERB.new(File.read(@options[:templates][:objects]))
       @graphql_mutations_template = ERB.new(File.read(@options[:templates][:mutations]))
@@ -23,7 +22,7 @@ module GraphQLDocs
     end
 
     def generate
-      FileUtils.rm_rf(@options[:output_dir])
+      FileUtils.rm_rf(@options[:output_dir]) if @options[:delete_output]
 
       create_graphql_object_pages
       create_graphql_mutation_pages
@@ -104,40 +103,12 @@ module GraphQLDocs
       end
     end
 
-    def graphql_mutation_types
-      @parsed_schema['mutation_types']
-    end
-
-    def graphql_object_types
-      @parsed_schema['object_types']
-    end
-
-    def graphql_interface_types
-      @parsed_schema['interface_types']
-    end
-
-    def graphql_enum_types
-      @parsed_schema['enum_types']
-    end
-
-    def graphql_union_types
-      @parsed_schema['union_types']
-    end
-
-    def graphql_input_object_types
-      @parsed_schema['input_object_types']
-    end
-
-    def graphql_scalar_types
-      @parsed_schema['scalar_types']
-    end
-
     private
 
     def write_file(type, name, contents)
       path = File.join(@options[:output_dir], type, name.downcase)
       FileUtils.mkdir_p(path)
-      contents = @renderer.render(contents, type, name)
+      contents = @renderer.render(type, name, contents)
       File.write(File.join(path, 'index.html'), contents) unless contents.nil?
     end
   end

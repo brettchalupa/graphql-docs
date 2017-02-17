@@ -9,5 +9,5 @@ require 'webmock/minitest'
 WebMock.disable_net_connect!
 
 def fixtures_dir
-  "#{File.dirname(__FILE__)}/graphql-docs/fixtures"
+  File.join(File.dirname(__FILE__), 'graphql-docs', 'fixtures')
 end

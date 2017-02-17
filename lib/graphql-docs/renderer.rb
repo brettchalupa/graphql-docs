@@ -3,8 +3,15 @@ require 'extended-markdown-filter'
 
 module GraphQLDocs
   class Renderer
-    def initialize(options)
+    include Helpers
+
+    def initialize(options, parsed_schema)
       @options = options
+      @parsed_schema = parsed_schema
+
+      unless @options[:templates][:default].nil?
+        @graphql_default_layout = ERB.new(File.read(@options[:templates][:default]))
+      end
 
       @pipeline_config = @options[:pipeline_config]
 
@@ -26,8 +33,11 @@ module GraphQLDocs
       @pipeline = HTML::Pipeline.new(filters, @pipeline_config[:context])
     end
 
-    def render(contents, type, name)
-      @pipeline.to_html(contents)
+    def render(type, name, contents)
+      contents = @pipeline.to_html(contents)
+      return contents if @graphql_default_layout.nil?
+      opts = { contents: contents, type: type, name: name}.merge(helper_methods)
+      @graphql_default_layout.result(OpenStruct.new(opts).instance_eval { binding })
     end
 
     private

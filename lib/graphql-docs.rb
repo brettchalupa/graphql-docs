@@ -1,4 +1,5 @@
 require 'graphql-docs/client'
+require 'graphql-docs/helpers'
 require 'graphql-docs/renderer'
 require 'graphql-docs/configuration'
 require 'graphql-docs/generator'

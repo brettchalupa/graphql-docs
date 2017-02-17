@@ -9,6 +9,7 @@ module GraphQLDocs
       url: nil,
 
       # Generating
+      delete_output: false,
       output_dir: './output/',
       pipeline_config: {
         pipeline:
@@ -20,10 +21,10 @@ module GraphQLDocs
           asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'
         }
       },
-
       renderer: GraphQLDocs::Renderer,
 
       templates: {
+        default: "#{File.dirname(__FILE__)}/layouts/default.html",
         includes: "#{File.dirname(__FILE__)}/layouts/includes",
         objects: "#{File.dirname(__FILE__)}/layouts/graphql_objects.html",
         mutations: "#{File.dirname(__FILE__)}/layouts/graphql_mutations.html",

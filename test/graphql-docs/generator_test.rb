@@ -2,11 +2,10 @@ require 'test_helper'
 
 class GeneratorTest < Minitest::Test
   class CustomRenderer
-    def initialize(options)
-      @options = options
+    def initialize(_, _)
     end
 
-    def render(contents, type, name)
+    def render(type, name, contents)
       contents.sub(/Repository/i, 'Meow Woof!')
     end
   end
@@ -29,6 +28,13 @@ class GeneratorTest < Minitest::Test
     assert_raises Errno::ENOENT do
       GraphQLDocs::Generator.new(@results, config)
     end
+  end
+
+  def test_that_it_does_not_require_default
+    config = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    config[:templates][:default] = nil
+
+    GraphQLDocs::Generator.new(@results, config)
   end
 
   def test_that_it_works

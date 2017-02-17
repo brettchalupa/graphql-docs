@@ -83,16 +83,17 @@ generator.generate
 
 By default, the HTML generation process uses ERB to layout the content. There are a bunch of default options provided for you, but feel free to override any of these. The *Configuration* section below has more information on what you can change.
 
-It also uses [html-pipeline](https://github.com/jch/html-pipeline) to perform the Markdown rendering by default. You can override this by providing a custom rendering class. The initialize must take at least one argument, which are the configuration options, and must implement one method, `render`, which takes a string, the GraphQL type, and the name. For example:
+It also uses [html-pipeline](https://github.com/jch/html-pipeline) to perform the Markdown rendering by default. You can override this by providing a custom rendering class. `initialize` takes two arguments, the configuration options and the parsed schema. You must implement at least one method, `render`, which takes the GraphQL type, the name, and the layout contents. For example:
 
 ``` ruby
 class CustomRenderer
-  def initialize(options)
+  def initialize(options, parsed_schema)
     @options = options
+    @parsed_schema = parsed_schema
   end
 
-  def render(string, type, name)
-    string.sub(/Repository/i, 'Meow Woof!')
+  def render(type, name, contents)
+    contents.sub(/Repository/i, 'Meow Woof!')
   end
 end
 
@@ -125,7 +126,8 @@ The following options are available:
 | `path` | `GraphQLDocs::Client` loads a JSON file found at this location, representing the response from an introspection query. | `nil` |
 | `url` | `GraphQLDocs::Client` makes a `POST` request to this URL, passing along the introspection query. | `nil` |
 | `output_dir` | The location of the output HTML. | `./output/` |
-| `pipeline_config` | Defines two sub-keys, `pipeline` and `context`, which are used by `html-pipeline` when rendering your output. | `pipeline` has `ExtendedMarkdownFilter`, `EmojiFilter`, and `PageTocFilter`. `context` has `gfm: false` and `asset_root` set to GitHub's CDN. |
+| `delete_output` | Deletes `output_dir` before generating content. | `false` |
+| `pipeline_config` | Defines two sub-keys, `pipeline` and `context`, which are used by `html-pipeline` when rendering your output. | `pipeline` has `ExtendedMarkdownFilter`, `EmojiFilter`, and `TableOfContentsFilter`. `context` has `gfm: false` and `asset_root` set to GitHub's CDN. |
 | `renderer` | The rendering class to use. | `GraphQLDocs::Renderer`
 | `templates` | The templates to use when generating HTML. You may override any of the following keys: `includes`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`. | The default gem ones are found in _layouts/_.
 
