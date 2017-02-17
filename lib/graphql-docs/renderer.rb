@@ -26,8 +26,8 @@ module GraphQLDocs
       @pipeline = HTML::Pipeline.new(filters, @pipeline_config[:context])
     end
 
-    def render(string)
-      @pipeline.to_html(string)
+    def render(contents, type, name)
+      @pipeline.to_html(contents)
     end
 
     private

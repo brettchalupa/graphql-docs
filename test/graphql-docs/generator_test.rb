@@ -6,8 +6,8 @@ class GeneratorTest < Minitest::Test
       @options = options
     end
 
-    def render(string)
-      string.sub(/Repository/i, 'Meow Woof!')
+    def render(contents, type, name)
+      contents.sub(/Repository/i, 'Meow Woof!')
     end
   end
 

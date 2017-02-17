@@ -137,8 +137,8 @@ module GraphQLDocs
     def write_file(type, name, contents)
       path = File.join(@options[:output_dir], type, name.downcase)
       FileUtils.mkdir_p(path)
-      contents = @renderer.render(contents)
-      File.write(File.join(path, 'index.html'), contents)
+      contents = @renderer.render(contents, type, name)
+      File.write(File.join(path, 'index.html'), contents) unless contents.nil?
     end
   end
 end

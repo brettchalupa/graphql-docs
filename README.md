@@ -83,7 +83,7 @@ generator.generate
 
 By default, the HTML generation process uses ERB to layout the content. There are a bunch of default options provided for you, but feel free to override any of these. The *Configuration* section below has more information on what you can change.
 
-It also uses [html-pipeline](https://github.com/jch/html-pipeline) to perform the Markdown rendering by default. You can override this by providing a custom rendering class. The initialize must take one argument, which are the configuration options, and must implement one method, `render`, which takes a string and converts it. For example:
+It also uses [html-pipeline](https://github.com/jch/html-pipeline) to perform the Markdown rendering by default. You can override this by providing a custom rendering class. The initialize must take at least one argument, which are the configuration options, and must implement one method, `render`, which takes a string, the GraphQL type, and the name. For example:
 
 ``` ruby
 class CustomRenderer
@@ -91,7 +91,7 @@ class CustomRenderer
     @options = options
   end
 
-  def render(string)
+  def render(string, type, name)
     string.sub(/Repository/i, 'Meow Woof!')
   end
 end
