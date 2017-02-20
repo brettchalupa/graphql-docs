@@ -30,10 +30,11 @@ module GraphQLDocs
     end
 
     def fetch
-      @faraday.post do |req|
+      res = @faraday.post do |req|
         req.headers['Content-Type'] = 'application/json'
         req.body = "{ \"query\": \"#{GraphQL::Introspection::INTROSPECTION_QUERY.gsub("\n", '')}\" }"
       end
+      res.body
     end
 
     def inspect
