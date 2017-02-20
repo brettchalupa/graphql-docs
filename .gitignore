@@ -10,4 +10,5 @@
 /output/
 /test/graphql-docs/fixtures/output/
 /.sass-cache/
-/sample/
+/sample/assets/
+/sample/output/
