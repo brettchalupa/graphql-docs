@@ -27,7 +27,7 @@ task :sample do
   require 'sass'
 
   options = {}
-  options[:output_dir] = 'sample'
+  options[:output_dir] = 'sample/output'
   options[:delete_output] = true
   options[:path] = File.join(File.dirname(__FILE__), 'test', 'graphql-docs', 'fixtures', 'gh-api.json')
 
@@ -36,12 +36,12 @@ task :sample do
   assets_dir = File.join('sample', 'assets')
   FileUtils.mkdir_p(assets_dir)
 
-  sass = File.join('sample_assets', 'css', 'screen.scss')
+  sass = File.join('sample', 'css', 'screen.scss')
   system `sass --sourcemap=none #{sass}:style.css`
 
   FileUtils.mv('style.css', File.join('sample', 'assets/style.css'))
 
-  starting_dir = 'sample'
+  starting_dir = File.join('sample', 'output')
   starting_file = File.join(starting_dir, 'object', 'repository', 'index.html')
 
   puts 'Navigate to http://localhost:3000 to see the sample docs'
