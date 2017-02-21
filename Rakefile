@@ -23,29 +23,32 @@ task :console do
 end
 
 task :sample do
+  require 'webrick'
   require 'graphql-docs'
   require 'sass'
 
   options = {}
-  options[:output_dir] = 'sample/output'
   options[:delete_output] = true
   options[:path] = File.join(File.dirname(__FILE__), 'test', 'graphql-docs', 'fixtures', 'gh-api.json')
 
   GraphQLDocs.build(options)
 
-  assets_dir = File.join('sample', 'assets')
-  FileUtils.mkdir_p(assets_dir)
+  assets_dir = File.join(File.dirname(__FILE__), 'lib', 'graphql-docs', 'layouts', 'assets')
+  FileUtils.mkdir_p(File.join('output', 'assets'))
 
-  sass = File.join('sample', 'css', 'screen.scss')
-  system `sass --sourcemap=none #{sass}:style.css`
+  sass = File.join(assets_dir, 'css', 'screen.scss')
+  system `sass --sourcemap=none #{sass}:output/assets/style.css`
 
-  FileUtils.mv('style.css', File.join('sample', 'assets/style.css'))
+  FileUtils.cp_r(File.join(assets_dir, 'images'), File.join('output', 'assets'))
+  FileUtils.cp_r(File.join(assets_dir, 'javascripts'), File.join('output', 'assets'))
+  FileUtils.cp_r(File.join(assets_dir, 'webfonts'), File.join('output', 'assets'))
 
-  starting_dir = File.join('sample', 'output')
-  starting_file = File.join(starting_dir, 'object', 'repository', 'index.html')
+  starting_file = File.join('output', 'index.html')
 
   puts 'Navigate to http://localhost:3000 to see the sample docs'
-  puts "Launching #{starting_file}"
-  system "open #{starting_file}"
-  system "ruby -run -e httpd #{starting_dir} -p 3000"
+
+  server = WEBrick::HTTPServer.new Port: 3000
+  server.mount '/', WEBrick::HTTPServlet::FileHandler, 'output'
+  trap('INT') { server.stop }
+  server.start
 end

@@ -32,6 +32,10 @@ module GraphQLDocs
       create_graphql_input_object_pages
       create_graphql_scalar_pages
 
+      unless @options[:templates][:index].nil?
+        write_file('static', 'index', File.read(@options[:templates][:index]))
+      end
+
       true
     end
 
@@ -106,8 +110,16 @@ module GraphQLDocs
     private
 
     def write_file(type, name, contents)
-      path = File.join(@options[:output_dir], type, name.downcase)
-      FileUtils.mkdir_p(path)
+      if type == 'static'
+        if name == 'index'
+          path = @options[:output_dir]
+        else
+          path = File.join(@options[:output_dir], name)
+        end
+      else
+        path = File.join(@options[:output_dir], type, name.downcase)
+        FileUtils.mkdir_p(path)
+      end
       contents = @renderer.render(type, name, contents)
       File.write(File.join(path, 'index.html'), contents) unless contents.nil?
     end
