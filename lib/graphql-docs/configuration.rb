@@ -25,6 +25,7 @@ module GraphQLDocs
 
       templates: {
         default: "#{File.dirname(__FILE__)}/layouts/default.html",
+
         includes: "#{File.dirname(__FILE__)}/layouts/includes",
         objects: "#{File.dirname(__FILE__)}/layouts/graphql_objects.html",
         mutations: "#{File.dirname(__FILE__)}/layouts/graphql_mutations.html",
@@ -32,7 +33,9 @@ module GraphQLDocs
         enums: "#{File.dirname(__FILE__)}/layouts/graphql_enums.html",
         unions: "#{File.dirname(__FILE__)}/layouts/graphql_unions.html",
         input_objects: "#{File.dirname(__FILE__)}/layouts/graphql_input_objects.html",
-        scalars: "#{File.dirname(__FILE__)}/layouts/graphql_scalars.html"
+        scalars: "#{File.dirname(__FILE__)}/layouts/graphql_scalars.html",
+
+        index: "#{File.dirname(__FILE__)}/layouts/index.md",
       }
     }.freeze
   end
