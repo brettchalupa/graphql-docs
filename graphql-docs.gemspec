@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test|spec|features)/})
   end
   spec.bindir        = 'bin'
-  spec.executables   << 'graphql-docs.rb'
+  spec.executables   << 'gqldocs'
   spec.require_paths = ['lib']
 
   spec.add_dependency 'faraday', '< 0.10'#'~> 0.9'
