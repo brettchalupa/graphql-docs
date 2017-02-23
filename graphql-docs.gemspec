@@ -23,7 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'faraday', '< 0.10'#'~> 0.9'
   spec.add_dependency 'graphql', '~> 1.4'
   spec.add_dependency 'thor', '0.19.4'
-  spec.add_dependency 'sass', '3.4.23'
 
   # rendering
   spec.add_dependency 'html-pipeline', '~> 2.2'

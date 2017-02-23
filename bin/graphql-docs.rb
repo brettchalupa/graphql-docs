@@ -3,12 +3,9 @@
 require "bundler/setup"
 require 'thor'
 require 'graphql-docs'
-require 'logger'
 
 class GraphQLDocsCLI < Thor
   include GraphQLDocs
-
-  @@cli_logger = Logger.new(STDOUT)
 
   class_option :verbose, :type => :boolean
   desc "generate", "generate docs for a graphql API"
@@ -16,7 +13,6 @@ class GraphQLDocsCLI < Thor
   option :path, :type => :string, :desc => "Path to the JSON that results from the introspection query"
   option :output_dir, :type => :string, :desc => "Path to output generated docs", :default => File.join(Dir.pwd, 'output')
   option :delete_output, :type => :boolean, :desc => "Delete the output dir before generating", :default => false
-  #option :include_assets, :type => :boolean, :desc => "Include CSS and JS assets in the output", :default => true
 
   def generate
     if options[:path].nil? && options[:url].nil?
@@ -30,7 +26,6 @@ class GraphQLDocsCLI < Thor
             path: options[:path],
             output_dir: options[:output_dir],
             delete_output: options[:delete_output],
-            include_assets: options[:include_assets],
         }
     )
 
