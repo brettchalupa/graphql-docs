@@ -40,7 +40,7 @@ task :sample do
   system `sass --sourcemap=none #{sass}:output/assets/style.css`
 
   FileUtils.cp_r(File.join(assets_dir, 'images'), File.join('output', 'assets'))
-  FileUtils.cp_r(File.join(assets_dir, 'javascripts'), File.join('output', 'assets'))
+  # FileUtils.cp_r(File.join(assets_dir, 'javascripts'), File.join('output', 'assets'))
   FileUtils.cp_r(File.join(assets_dir, 'webfonts'), File.join('output', 'assets'))
 
   starting_file = File.join('output', 'index.html')
