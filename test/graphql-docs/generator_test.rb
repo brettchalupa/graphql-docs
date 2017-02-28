@@ -93,4 +93,17 @@ class GeneratorTest < Minitest::Test
 
     assert_match /Meow Woof!/, contents
   end
+
+  def test_ensure_no_broken_links
+    require 'html-proofer'
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+    options[:delete_output] = true
+
+    generator = GraphQLDocs::Generator.new(@results, options)
+    generator.generate
+
+    proofer_options = { disable_external: true, assume_extension: true }
+    HTMLProofer.check_directory(@output_dir, proofer_options).run
+  end
 end

@@ -1,4 +1,5 @@
 require 'erb'
+require 'sass'
 
 module GraphQLDocs
   class Generator
