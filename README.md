@@ -2,6 +2,8 @@
 
 Easily generate beautiful documentation from your GraphQL schema.
 
+![sample](https://cloud.githubusercontent.com/assets/64050/23438604/6a23add0-fdc7-11e6-8852-ef41e8451033.png)
+
 ## Installation
 
 Add this line to your application's Gemfile:
