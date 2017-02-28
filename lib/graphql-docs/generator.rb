@@ -36,6 +36,17 @@ module GraphQLDocs
         write_file('static', 'index', File.read(@options[:templates][:index]))
       end
 
+      if @options[:use_default_styles]
+        assets_dir = File.join(File.dirname(__FILE__), 'layouts', 'assets')
+        FileUtils.mkdir_p(File.join(@options[:output_dir], 'assets'))
+
+        sass = File.join(assets_dir, 'css', 'screen.scss')
+        system `sass --sourcemap=none #{sass}:#{@options[:output_dir]}/assets/style.css`
+
+        FileUtils.cp_r(File.join(assets_dir, 'images'), File.join(@options[:output_dir], 'assets'))
+        FileUtils.cp_r(File.join(assets_dir, 'webfonts'), File.join(@options[:output_dir], 'assets'))
+      end
+
       true
     end
 

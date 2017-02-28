@@ -11,3 +11,5 @@ WebMock.disable_net_connect!
 def fixtures_dir
   File.join(File.dirname(__FILE__), 'graphql-docs', 'fixtures')
 end
+
+FileUtils.rm_rf(File.join(fixtures_dir, 'output'))

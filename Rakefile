@@ -33,16 +33,6 @@ task :sample do
 
   GraphQLDocs.build(options)
 
-  assets_dir = File.join(File.dirname(__FILE__), 'lib', 'graphql-docs', 'layouts', 'assets')
-  FileUtils.mkdir_p(File.join('output', 'assets'))
-
-  sass = File.join(assets_dir, 'css', 'screen.scss')
-  system `sass --sourcemap=none #{sass}:output/assets/style.css`
-
-  FileUtils.cp_r(File.join(assets_dir, 'images'), File.join('output', 'assets'))
-  # FileUtils.cp_r(File.join(assets_dir, 'javascripts'), File.join('output', 'assets'))
-  FileUtils.cp_r(File.join(assets_dir, 'webfonts'), File.join('output', 'assets'))
-
   starting_file = File.join('output', 'index.html')
 
   puts 'Navigate to http://localhost:3000 to see the sample docs'

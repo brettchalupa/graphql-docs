@@ -44,13 +44,27 @@ class GeneratorTest < Minitest::Test
     generator = GraphQLDocs::Generator.new(@results, options)
     generator.generate
 
-    assert File.join(@output_dir, 'enum', 'issuestate', 'index.html')
-    assert File.join(@output_dir, 'input_object', 'projectorder', 'index.html')
-    assert File.join(@output_dir, 'interface', 'reactable', 'index.html')
-    assert File.join(@output_dir, 'mutation', 'addcomment', 'index.html')
-    assert File.join(@output_dir, 'object', 'repository', 'index.html')
-    assert File.join(@output_dir, 'scalar', 'boolean', 'index.html')
-    assert File.join(@output_dir, 'union', 'issuetimelineitem', 'index.html')
+    assert File.exist? File.join(@output_dir, 'index.html')
+    assert File.exist? File.join(@output_dir, 'assets', 'style.css')
+    assert File.exist? File.join(@output_dir, 'enum', 'issuestate', 'index.html')
+    assert File.exist? File.join(@output_dir, 'input_object', 'projectorder', 'index.html')
+    assert File.exist? File.join(@output_dir, 'interface', 'reactable', 'index.html')
+    assert File.exist? File.join(@output_dir, 'mutation', 'addcomment', 'index.html')
+    assert File.exist? File.join(@output_dir, 'object', 'repository', 'index.html')
+    assert File.exist? File.join(@output_dir, 'scalar', 'boolean', 'index.html')
+    assert File.exist? File.join(@output_dir, 'union', 'issuetimelineitem', 'index.html')
+  end
+
+  def test_that_turning_off_styles_works
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+    options[:delete_output] = true
+    options[:use_default_styles] = false
+
+    generator = GraphQLDocs::Generator.new(@results, options)
+    generator.generate
+
+    refute File.exist? File.join(@output_dir, 'assets', 'style.css')
   end
 
   def test_that_custom_renderer_can_be_used
