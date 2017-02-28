@@ -12,6 +12,7 @@ module GraphQLDocs
 
     def include(filename, opts = {})
       template = fetch_include(filename)
+      opts = { base_url: @options[:base_url] }.merge(opts)
       template.result(OpenStruct.new(opts.merge(helper_methods)).instance_eval { binding })
     end
 

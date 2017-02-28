@@ -36,8 +36,7 @@ module GraphQLDocs
     def render(type, name, contents)
       contents = @pipeline.to_html(contents)
       return contents if @graphql_default_layout.nil?
-      opts = @options
-      opts = opts.merge({ contents: contents, type: type, name: name}).merge(helper_methods)
+      opts = { base_url: @options[:base_url] }.merge({ contents: contents, type: type, name: name}).merge(helper_methods)
       @graphql_default_layout.result(OpenStruct.new(opts).instance_eval { binding })
     end
 

@@ -46,7 +46,7 @@ end
 
 desc 'Generate and publish docs to gh-pages'
 task :publish do
-  Rake::Task[:generate_sample].invoke('https://www.gjtorikian.com/graphql-docs/')
+  Rake::Task[:generate_sample].invoke('https://www.gjtorikian.com/graphql-docs')
   Dir.mktmpdir do |tmp|
     system "mv output/* #{tmp}"
     system 'git checkout gh-pages'

@@ -78,6 +78,9 @@ class GeneratorTest < Minitest::Test
 
     contents = File.read File.join(@output_dir, 'index.html')
     assert_match %r{<link rel="stylesheet" href="wowzers/assets/style.css">}, contents
+
+    contents = File.read File.join(@output_dir, 'object', 'repository', 'index.html')
+    assert_match %r{href="wowzers/object/mutation" class="sidebar-link">}, contents
   end
 
   def test_that_custom_renderer_can_be_used
