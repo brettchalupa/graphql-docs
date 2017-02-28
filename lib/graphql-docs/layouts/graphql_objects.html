@@ -8,7 +8,7 @@
 
 <ul>
   <% type['interfaces'].each do |interface| %>
-    <li><code><a href="./interface/<%= slugify.(interface['name']) %>"><%= interface['name'] %></a></code></li>
+    <li><code><a href="<%= base_url %>/interface/<%= slugify.(interface['name']) %>"><%= interface['name'] %></a></code></li>
   <% end %>
 </ul>
 

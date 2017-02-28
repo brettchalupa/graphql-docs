@@ -24,7 +24,7 @@
     <% @type_name = field['type']['ofType']['name'] %>
   <% end %>
 
-  <span class="field-name"><%= field['name'] %> (<code><a href="./<%= @type_path.downcase %>/<%= slugify.(@type_name) %>"><%= @type_name %></a></code>)</span>
+  <span class="field-name"><%= field['name'] %> (<code><a href="<%= base_url %>/<%= @type_path.downcase %>/<%= slugify.(@type_name) %>"><%= @type_name %></a></code>)</span>
 
   <div class="description-wrapper">
     <% if field['isDeprecated'] %>

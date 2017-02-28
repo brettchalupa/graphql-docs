@@ -23,6 +23,7 @@ module GraphQLDocs
       },
       renderer: GraphQLDocs::Renderer,
       use_default_styles: true,
+      base_url: '',
 
       templates: {
         default: "#{File.dirname(__FILE__)}/layouts/default.html",

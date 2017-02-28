@@ -67,6 +67,19 @@ class GeneratorTest < Minitest::Test
     refute File.exist? File.join(@output_dir, 'assets', 'style.css')
   end
 
+  def test_that_setting_base_url_works
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+    options[:delete_output] = true
+    options[:base_url] = 'wowzers'
+
+    generator = GraphQLDocs::Generator.new(@results, options)
+    generator.generate
+
+    contents = File.read File.join(@output_dir, 'index.html')
+    assert_match %r{<link rel="stylesheet" href="wowzers/assets/style.css">}, contents
+  end
+
   def test_that_custom_renderer_can_be_used
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir

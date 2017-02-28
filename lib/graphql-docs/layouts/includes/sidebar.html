@@ -10,12 +10,12 @@
     <p>Queries</p>
     <ul class="menu-root">
       <li>
-        <a href="../../object/query/" class="sidebar-link<% if title == "Query" %> current<% end %>">
+        <a href="<%= base_url %>/object/query/" class="sidebar-link<% if title == "Query" %> current<% end %>">
           RootQuery
         </a>
       </li>
       <li>
-        <a href="../../object/mutation" class="sidebar-link<% if title == "Mutation" %> current<% end %>">
+        <a href="<%= base_url %>/object/mutation" class="sidebar-link<% if title == "Mutation" %> current<% end %>">
           Mutation
         </a>
       </li>
@@ -43,7 +43,7 @@
         <% end %>
 
       <li>
-        <a href="../../object/<%= @name.downcase %>/index.html" class="sidebar-link<% if title == @name %> current<% end %>">
+        <a href="<%= base_url %>/object/<%= @name.downcase %>/index.html" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
         </a>
       </li>
@@ -57,7 +57,7 @@
       <% graphql_interface_types.().each do |type| %>
         <% @name = type["name"] %>
         <li>
-          <a href="../../interface/<%= @name.downcase %>/index.html" class="sidebar-link<% if title == @name %> current<% end %>">
+          <a href="<%= base_url %>/interface/<%= @name.downcase %>/index.html" class="sidebar-link<% if title == @name %> current<% end %>">
             <%= @name %>
           </a>
         </li>
@@ -75,7 +75,7 @@
         <% next %>
       <% end %>
       <li>
-        <a href="../../enum/<%= @name.downcase %>/index.html" class="sidebar-link<% if title == @name %> current<% end %>">
+        <a href="<%= base_url %>/enum/<%= @name.downcase %>/index.html" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
         </a>
       </li>
@@ -89,7 +89,7 @@
       <% graphql_union_types.().each do |type| %>
       <% @name = type["name"] %>
       <li>
-        <a href="../../union/<%= @name.downcase %>/index.html" class="sidebar-link<% if title == @name %> current<% end %>">
+        <a href="<%= base_url %>/union/<%= @name.downcase %>/index.html" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
         </a>
       </li>
@@ -103,7 +103,7 @@
       <% graphql_input_object_types.().each do |type| %>
       <% @name = type["name"] %>
       <li>
-        <a href="../../input_object/<%= @name.downcase %>/index.html" class="sidebar-link<% if title == @name %> current<% end %>">
+        <a href="<%= base_url %>/input_object/<%= @name.downcase %>/index.html" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
         </a>
       </li>
@@ -117,7 +117,7 @@
       <% graphql_scalar_types.().each do |type| %>
       <% @name = type["name"] %>
       <li>
-        <a href="../../scalar/<%= @name.downcase %>/index.html" class="sidebar-link<% if title == @name %> current<% end %>">
+        <a href="<%= base_url %>/scalar/<%= @name.downcase %>/index.html" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
         </a>
       </li>

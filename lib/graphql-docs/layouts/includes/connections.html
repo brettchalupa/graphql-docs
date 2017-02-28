@@ -1,7 +1,7 @@
 <% connections.each do |connection| %>
 
 <div class="field-entry my-4">
-  <span class="field-name connection-name"><%= connection['name'] %> (<a href="./object/<%= slugify.(connection['type']['ofType']['name']) %>" class="js-connection-name"><code><%= connection['type']['ofType']['name'] %></code></a>)</span>
+  <span class="field-name connection-name"><%= connection['name'] %> (<a href="<%= base_url %>/object/<%= slugify.(connection['type']['ofType']['name']) %>" class="js-connection-name"><code><%= connection['type']['ofType']['name'] %></code></a>)</span>
 
   <div class="description-wrapper">
     <%= connection['description'] %>
