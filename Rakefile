@@ -22,11 +22,12 @@ task :console do
   Pry.start
 end
 
-task :generate_sample do
+task :generate_sample, [:base_url] do |task, args|
   require 'graphql-docs'
 
   options = {}
   options[:delete_output] = true
+  options[:base_url] = args.base_url || ''
   options[:path] = File.join(File.dirname(__FILE__), 'test', 'graphql-docs', 'fixtures', 'gh-api.json')
 
   GraphQLDocs.build(options)
@@ -44,7 +45,8 @@ task :sample => [:generate_sample] do
 end
 
 desc 'Generate and publish docs to gh-pages'
-task :publish => [:generate_sample] do
+task :publish do
+  Rake::Task[:generate_sample].invoke('https://www.gjtorikian.com/graphql-docs/')
   Dir.mktmpdir do |tmp|
     system "mv output/* #{tmp}"
     system 'git checkout gh-pages'
