@@ -40,6 +40,7 @@ class GeneratorTest < Minitest::Test
   def test_that_it_works
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir
+    options[:delete_output] = true
 
     generator = GraphQLDocs::Generator.new(@results, options)
     generator.generate
@@ -95,6 +96,20 @@ class GeneratorTest < Minitest::Test
     contents = File.read(File.join(@output_dir, 'object', 'repository', 'index.html'))
 
     assert_match /Meow Woof!/, contents
+  end
+
+  def test_that_it_sets_classes
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+    options[:delete_output] = true
+    options[:classes][:field_entry] = 'my-4'
+
+    generator = GraphQLDocs::Generator.new(@results, options)
+    generator.generate
+
+    object = File.read File.join(@output_dir, 'object', 'commitcomment', 'index.html')
+
+    assert_match /<div class="field-entry my-4">/, object
   end
 
   def test_ensure_no_broken_links

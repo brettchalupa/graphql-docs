@@ -4,7 +4,7 @@
 
 <% next if field['type']['ofType'] && field['type']['ofType']['name'] && field['type']['ofType']['name'].end_with?('Connection') %>
 
-<div class="field-entry">
+<div class="field-entry <%= classes[:field_entry] %>">
   <% next if field['name'] == "id" || field['name'].blank? %>
 
   <% if field['type']['ofType'] && !field['type']['ofType']['ofType'].nil? %>
