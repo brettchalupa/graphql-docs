@@ -38,6 +38,11 @@ module GraphQLDocs
         scalars: "#{File.dirname(__FILE__)}/layouts/graphql_scalars.html",
 
         index: "#{File.dirname(__FILE__)}/layouts/index.md",
+      },
+
+      classes: {
+        field_entry: '',
+        deprecation_notice: ''
       }
     }.freeze
   end
