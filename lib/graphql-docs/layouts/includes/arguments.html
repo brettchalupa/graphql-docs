@@ -12,9 +12,9 @@
     <td><code><%= argument['name'] %></code></td>
     <td>
 
-      <% @type_path, @type_name = format_type.(argument) %>
+      <% @type_path, @type_name, @name_slug = format_type.(argument) %>
 
-      <code><a href="<%= base_url %>/<%= @type_path.downcase %>/<%= slugify.(@type_name) %>"><%= @type_name %></a></code>
+      <code><a href="<%= base_url %>/<%= @type_path %>/<%= @name_slug %>"><%= @type_name %></a></code>
     </td>
     <td>
       <p><%= markdown.(argument['description']) %></p>

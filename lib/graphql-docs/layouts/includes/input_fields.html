@@ -7,9 +7,9 @@
 <div class="field-entry <%= classes[:field_entry] %>">
   <% next if field['name'] == "id" || field['name'].blank? %>
 
-  <% @type_path, @type_name = format_type.(field) %>
+  <% @type_path, @type_name, @name_slug = format_type.(field) %>
 
-  <span class="field-name"><%= field['name'] %> (<a href="<%= base_url %>/<%= @type_path.downcase %>/<%= slugify.(@type_name) %>"><code><%= @type_name %></code></a>)</span>
+  <span class="field-name"><%= field['name'] %> (<a href="<%= base_url %>/<%= @type_path %>/<%= @name_slug %>"><code><%= @type_name %></code></a>)</span>
 
   <div class="description-wrapper">
     <%= field['description'] %>
