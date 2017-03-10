@@ -54,6 +54,13 @@ class GeneratorTest < Minitest::Test
     assert File.exist? File.join(@output_dir, 'object', 'repository', 'index.html')
     assert File.exist? File.join(@output_dir, 'scalar', 'boolean', 'index.html')
     assert File.exist? File.join(@output_dir, 'union', 'issuetimelineitem', 'index.html')
+
+    # content sanity checks
+    Dir.glob("#{@output_dir}/**/*.html") do |file|
+      contents = File.read(file)
+      # no empty types
+      refute_match %r{<code></code>}, contents
+    end
   end
 
   def test_that_turning_off_styles_works
