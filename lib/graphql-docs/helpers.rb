@@ -20,6 +20,54 @@ module GraphQLDocs
       GitHub::Markdown.render(string || 'n/a')
     end
 
+    # Do you think I am proud of this? I am not.
+    def format_type(field)
+      type_path = type_name = nil
+      if field['type']['kind'] == 'NON_NULL'
+        outer_required = true
+
+        if !field['type']['ofType']['ofType'].nil?
+          if field['type']['kind'] == 'LIST'
+            is_list = true
+          end
+          if !field['type']['ofType']['ofType']['ofType'].nil?
+            # A required list of required items: ![!Blah]
+            if field['type']['ofType']['ofType']['kind'] == 'NON_NULL'
+              inner_required = true
+            end
+            type_path = field['type']['ofType']['ofType']['ofType']['kind']
+            type_name = field['type']['ofType']['ofType']['ofType']['name']
+          else
+            # A required list of non-required items: ![Blah]
+            type_path = field['type']['ofType']['ofType']['kind']
+            type_name = field['type']['ofType']['ofType']['name']
+          end
+        else
+          # Simple non-null item
+          type_path = field['type']['ofType']['kind']
+          type_name = field['type']['ofType']['name']
+        end
+      elsif field['type']['kind'] == 'LIST'
+        is_list = true
+        if field['type']['ofType']['kind'] == 'NON_NULL'
+          # Nullable list of non-null items: [!Blah]
+          inner_required = true
+          type_path = field['type']['ofType']['ofType']['kind']
+          type_name = field['type']['ofType']['ofType']['name']
+        else
+          # Nullable list of nullable items: [Blah]
+          type_path = field['type']['ofType']['kind']
+          type_name = field['type']['ofType']['name']
+        end
+      else
+        # Simple nullable item
+        type_path = field['type']['kind']
+        type_name = field['type']['name']
+      end
+
+      [type_path, type_name]
+    end
+
     def graphql_mutation_types
       @parsed_schema['mutation_types']
     end

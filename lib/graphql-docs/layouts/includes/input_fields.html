@@ -7,24 +7,7 @@
 <div class="field-entry <%= classes[:field_entry] %>">
   <% next if field['name'] == "id" || field['name'].blank? %>
 
-  <% if field['type']['ofType'] && !field['type']['ofType']['ofType'].nil? %>
-    <% if !field['type']['ofType']['ofType']['ofType'].nil? %>
-      <% @type_path = field['type']['ofType']['ofType']['ofType']['kind'] %>
-      <% @type_name = field['type']['ofType']['ofType']['ofType']['name'] %>
-    <% else %>
-      <% @type_path = field['type']['ofType']['ofType']['kind'] %>
-      <% @type_name = field['type']['ofType']['ofType']['name'] %>
-    <% end %>
-  <% elsif field['type']['ofType'].blank? %>
-    <% @type_path = field['type']['kind'] %>
-    <% @type_name = field['type']['name'] %>
-  <% elsif field['type']['name'] == "Non-Null" || field['type']['ofType']['name'] == "Non-Null" %>
-    <% @type_path = field['type']['ofType']['kind'] %>
-    <% @type_name = field['type']['ofType']['name'] %>
-  <% else %>
-    <% @type_path = field['type']['ofType']['kind'] %>
-    <% @type_name = field['type']['ofType']['name'] %>
-  <% end %>
+  <% @type_path, @type_name = format_type.(field) %>
 
   <span class="field-name"><%= field['name'] %> (<a href="<%= base_url %>/<%= @type_path.downcase %>/<%= slugify.(@type_name) %>"><code><%= @type_name %></code></a>)</span>
 

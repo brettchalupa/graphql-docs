@@ -12,15 +12,9 @@
     <td><code><%= argument['name'] %></code></td>
     <td>
 
-      <% if argument['type']['name'] == "Non-Null" %>
-        <% @arg_path = argument['type']['ofType']['kind'] %>
-        <% @arg_name = argument['type']['ofType']['name'] %>
-      <% else %>
-        <% @arg_path = argument['type']['kind'] %>
-        <% @arg_name = argument['type']['name'] %>
-      <% end %>
+      <% @type_path, @type_name = format_type.(argument) %>
 
-      <code><%= @arg_name %></code>
+      <code><a href="<%= base_url %>/<%= @type_path.downcase %>/<%= slugify.(@type_name) %>"><%= @type_name %></a></code>
     </td>
     <td>
       <p><%= markdown.(argument['description']) %></p>
