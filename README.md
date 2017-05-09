@@ -112,6 +112,7 @@ In your ERB layouts, there are several helper methods you can use. The helper me
 * `slugify(str)` - This slugifies the given string.
 * `include(filename, opts)` - This embeds a template from your `includes` folder, passing along the local options provided.
 * `markdown(string)` - This converts a string from Markdown to HTML.
+* `format_type(field)` - This formats a type into an IDL-like representation. For example: `!Blah` or `[!Foo]`.
 * `graphql_mutation_types`, `graphql_object_types`, `graphql_interface_types`, `graphql_enum_types`, `graphql_union_types`, `graphql_input_object_types`, `graphql_scalar_types` - Collections of the various GraphQL types.
 
 To call these methods within templates, you must use the dot notation, such as `<%= slugify.(text) %>`.
