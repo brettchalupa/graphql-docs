@@ -26,40 +26,40 @@ module GraphQLDocs
       type_name = ''
 
       if field['type']['kind'] == 'NON_NULL'
-        type_name << '!'
-
         if !field['type']['ofType']['ofType'].nil?
           # we're going to be a list...but what kind?!
           type_name << '['
           if !field['type']['ofType']['ofType']['ofType'].nil?
-            # A required list of required items: ![!Blah]
-            if field['type']['ofType']['ofType']['kind'] == 'NON_NULL'
-              type_name << '!'
-            end
             type_path = field['type']['ofType']['ofType']['ofType']['kind']
             type_name << field['type']['ofType']['ofType']['ofType']['name']
             name_slug = field['type']['ofType']['ofType']['ofType']['name']
+            # A required list of required items: [Blah!]!
+            if field['type']['ofType']['ofType']['kind'] == 'NON_NULL'
+              type_name << '!'
+            end
           else
-            # A required list of non-required items: ![Blah]
+            # A required list of non-required items: [Blah]!
             type_path = field['type']['ofType']['ofType']['kind']
             type_name << field['type']['ofType']['ofType']['name']
             name_slug = field['type']['ofType']['ofType']['name']
           end
           type_name << ']'
+          type_name << '!'
         else
-          # Simple non-null item: !Blah
           type_path = field['type']['ofType']['kind']
           type_name << field['type']['ofType']['name']
           name_slug = field['type']['ofType']['name']
+          # Simple non-null item: Blah!
+          type_name << '!'
         end
       elsif field['type']['kind'] == 'LIST'
         type_name << '['
         if field['type']['ofType']['kind'] == 'NON_NULL'
-          # Nullable list of non-null items: [!Blah]
-          type_name << '!'
           type_path = field['type']['ofType']['ofType']['kind']
           type_name << field['type']['ofType']['ofType']['name']
           name_slug = field['type']['ofType']['ofType']['name']
+          # Nullable list of non-null items: [Blah!]
+          type_name << '!'
         else
           # Nullable list of nullable items: [Blah]
           type_path = field['type']['ofType']['kind']
