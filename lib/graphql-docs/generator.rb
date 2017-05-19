@@ -56,7 +56,11 @@ module GraphQLDocs
         next if object_type['name'].start_with?('__')
         opts = default_generator_options(type: object_type)
         contents = @graphql_object_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('object', object_type['name'], contents)
+        if object_type['name'] == 'Query'
+          write_file('static', 'query', contents)
+        else
+          write_file('object', object_type['name'], contents)
+        end
       end
     end
 
@@ -131,6 +135,7 @@ module GraphQLDocs
           path = @options[:output_dir]
         else
           path = File.join(@options[:output_dir], name)
+          FileUtils.mkdir_p(path)
         end
       else
         path = File.join(@options[:output_dir], type, name.downcase)
