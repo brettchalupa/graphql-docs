@@ -33,7 +33,7 @@ task :generate_sample, [:base_url] do |task, args|
   GraphQLDocs.build(options)
 end
 
-task :sample => [:generate_sample] do
+task sample: [:generate_sample] do
   require 'webrick'
 
   puts 'Navigate to http://localhost:3000 to see the sample docs'
