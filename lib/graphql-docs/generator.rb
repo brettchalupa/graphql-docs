@@ -90,7 +90,9 @@ module GraphQLDocs
           unless @options[:landing_pages][:query].nil?
             query_landing_page = @options[:landing_pages][:query]
             query_landing_page = File.read(query_landing_page)
-            if @renderer.has_yaml?(query_landing_page)
+            if @renderer.respond_to?(:has_yaml?) && \
+               @renderer.has_yaml?(query_landing_page) && \
+               @renderer.respond_to?(:yaml_split)
               pieces = @renderer.yaml_split(query_landing_page)
               pieces[2] = pieces[2].chomp
               metadata = pieces[1, 3].join("\n")
