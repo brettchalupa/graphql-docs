@@ -5,6 +5,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'minitest/focus'
 require 'webmock/minitest'
+require 'pry'
 
 WebMock.disable_net_connect!
 
