@@ -32,8 +32,8 @@
           <% next %>
         <% end %>
 
-        <!-- skip payload stuff -->
-        <% if @name.end_with?("Payload") %>
+        <!-- skip mutation stuff -->
+        <% if @name == "Mutation" || @name.end_with?("Payload") %>
           <% next %>
         <% end %>
 
