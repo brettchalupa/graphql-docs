@@ -10,12 +10,12 @@
     <p>Queries</p>
     <ul class="menu-root">
       <li>
-        <a href="<%= base_url %>/object/query/" class="sidebar-link<% if title == "Query" %> current<% end %>">
-          RootQuery
+        <a href="<%= base_url %>/query/" class="sidebar-link<% if title == "Query" %> current<% end %>">
+          Query
         </a>
       </li>
       <li>
-        <a href="<%= base_url %>/object/mutation" class="sidebar-link<% if title == "Mutation" %> current<% end %>">
+        <a href="<%= base_url %>/mutation" class="sidebar-link<% if title == "Mutation" %> current<% end %>">
           Mutation
         </a>
       </li>
@@ -23,12 +23,17 @@
   </li>
 
   <li>
-    <p>Objects</p>
+    <p><a href="<%= base_url %>/object">Objects</a></p>
     <ul class="menu-root">
       <% graphql_object_types.().each do |type| %>
         <% @name = type["name"] %>
         <!-- skip connection stuff -->
         <% if @name.end_with?("Connection") || @name.end_with?("Edge") %>
+          <% next %>
+        <% end %>
+
+        <!-- skip mutation stuff -->
+        <% if @name == "Mutation" || @name.end_with?("Payload") %>
           <% next %>
         <% end %>
 
@@ -38,7 +43,7 @@
         <% end %>
 
         <!-- skip root query stuff -->
-        <% if @name == "RootQuery" %>
+        <% if @name == "Query" %>
           <% next %>
         <% end %>
 
@@ -52,7 +57,25 @@
   </li>
 
   <li>
-    <p>Interfaces</p>
+    <p><a href="<%= base_url %>/mutation">Mutations</a></p>
+    <ul class="menu-root">
+      <% graphql_mutation_types.().each do |type| %>
+      <% @name = type["name"] %>
+      <!-- skip metadata stuff -->
+      <% if @name.start_with?("__") %>
+        <% next %>
+      <% end %>
+      <li>
+        <a href="<%= base_url %>/mutation/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
+          <%= @name %>
+        </a>
+      </li>
+      <% end %>
+    </ul>
+  </li>
+
+  <li>
+    <p><a href="<%= base_url %>/interface">Interfaces</a></p>
     <ul class="menu-root">
       <% graphql_interface_types.().each do |type| %>
         <% @name = type["name"] %>
@@ -66,7 +89,7 @@
   </li>
 
   <li>
-    <p>Enums</p>
+    <p><a href="<%= base_url %>/enum">Enums</a></p>
     <ul class="menu-root">
       <% graphql_enum_types.().each do |type| %>
       <% @name = type["name"] %>
@@ -84,7 +107,7 @@
   </li>
 
   <li>
-    <p>Unions</p>
+    <p><a href="<%= base_url %>/union">Unions</a></p>
     <ul class="menu-root">
       <% graphql_union_types.().each do |type| %>
       <% @name = type["name"] %>
@@ -98,7 +121,7 @@
   </li>
 
   <li>
-    <p>Input Objects</p>
+    <p><a href="<%= base_url %>/input_object">Input Objects</a></p>
     <ul class="menu-root">
       <% graphql_input_object_types.().each do |type| %>
       <% @name = type["name"] %>
@@ -112,7 +135,7 @@
   </li>
 
   <li>
-    <p>Scalars</p>
+    <p><a href="<%= base_url %>/scalar">Scalars</a></p>
     <ul class="menu-root">
       <% graphql_scalar_types.().each do |type| %>
       <% @name = type["name"] %>

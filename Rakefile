@@ -1,6 +1,10 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 
+require 'rubocop/rake_task'
+
+RuboCop::RakeTask.new(:rubocop)
+
 Rake::TestTask.new(:test) do |t|
   t.libs << 'test'
   t.libs << 'lib'
@@ -33,7 +37,7 @@ task :generate_sample, [:base_url] do |task, args|
   GraphQLDocs.build(options)
 end
 
-task :sample => [:generate_sample] do
+task sample: [:generate_sample] do
   require 'webrick'
 
   puts 'Navigate to http://localhost:3000 to see the sample docs'

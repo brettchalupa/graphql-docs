@@ -1,4 +1,5 @@
 require 'html/pipeline'
+require 'yaml'
 require 'extended-markdown-filter'
 
 module GraphQLDocs
@@ -34,10 +35,38 @@ module GraphQLDocs
     end
 
     def render(type, name, contents)
+      opts = { base_url: @options[:base_url] }.merge({ type: type, name: name}).merge(helper_methods)
+
+      if has_yaml?(contents)
+        # Split data
+        pieces = yaml_split(contents)
+        if pieces.size < 4
+          raise RuntimeError.new(
+            "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
+          )
+        end
+        # Parse
+        begin
+          meta = YAML.load(pieces[2]) || {}
+          opts = opts.merge(meta)
+        rescue Exception => e # rubocop:disable Lint/RescueException
+          raise "Could not parse YAML for #{name}: #{e.message}"
+        end
+        contents = pieces[4]
+      end
+
       contents = @pipeline.to_html(contents)
       return contents if @graphql_default_layout.nil?
-      opts = { base_url: @options[:base_url] }.merge({ contents: contents, type: type, name: name}).merge(helper_methods)
+      opts[:content] = contents
       @graphql_default_layout.result(OpenStruct.new(opts).instance_eval { binding })
+    end
+
+    def has_yaml?(contents)
+      contents =~ /\A-{3,5}\s*$/
+    end
+
+    def yaml_split(contents)
+      contents.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
     end
 
     private

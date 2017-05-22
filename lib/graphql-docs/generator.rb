@@ -33,8 +33,36 @@ module GraphQLDocs
       create_graphql_input_object_pages
       create_graphql_scalar_pages
 
-      unless @options[:templates][:index].nil?
-        write_file('static', 'index', File.read(@options[:templates][:index]))
+      unless @options[:landing_pages][:index].nil?
+        write_file('static', 'index', File.read(@options[:landing_pages][:index]))
+      end
+
+      unless @options[:landing_pages][:object].nil?
+        write_file('static', 'object', File.read(@options[:landing_pages][:object]))
+      end
+
+      unless @options[:landing_pages][:mutation].nil?
+        write_file('static', 'mutation', File.read(@options[:landing_pages][:mutation]))
+      end
+
+      unless @options[:landing_pages][:interface].nil?
+        write_file('static', 'interface', File.read(@options[:landing_pages][:interface]))
+      end
+
+      unless @options[:landing_pages][:enum].nil?
+        write_file('static', 'enum', File.read(@options[:landing_pages][:enum]))
+      end
+
+      unless @options[:landing_pages][:union].nil?
+        write_file('static', 'union', File.read(@options[:landing_pages][:union]))
+      end
+
+      unless @options[:landing_pages][:input_object].nil?
+        write_file('static', 'input_object', File.read(@options[:landing_pages][:input_object]))
+      end
+
+      unless @options[:landing_pages][:scalar].nil?
+        write_file('static', 'scalar', File.read(@options[:landing_pages][:scalar]))
       end
 
       if @options[:use_default_styles]
@@ -54,9 +82,32 @@ module GraphQLDocs
     def create_graphql_object_pages
       graphql_object_types.each do |object_type|
         next if object_type['name'].start_with?('__')
-        opts = default_generator_options(type: object_type)
-        contents = @graphql_object_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('object', object_type['name'], contents)
+        if object_type['name'] == 'Mutation'
+          next unless @options[:landing_pages][:mutation].nil?
+        end
+        if object_type['name'] == 'Query'
+          metadata = ''
+          unless @options[:landing_pages][:query].nil?
+            query_landing_page = @options[:landing_pages][:query]
+            query_landing_page = File.read(query_landing_page)
+            if @renderer.respond_to?(:has_yaml?) && \
+               @renderer.has_yaml?(query_landing_page) && \
+               @renderer.respond_to?(:yaml_split)
+              pieces = @renderer.yaml_split(query_landing_page)
+              pieces[2] = pieces[2].chomp
+              metadata = pieces[1, 3].join("\n")
+              query_landing_page = pieces[4]
+            end
+            object_type['description'] = query_landing_page
+          end
+          opts = default_generator_options(type: object_type)
+          contents = @graphql_object_template.result(OpenStruct.new(opts).instance_eval { binding })
+          write_file('static', 'query', metadata + contents)
+        else
+          opts = default_generator_options(type: object_type)
+          contents = @graphql_object_template.result(OpenStruct.new(opts).instance_eval { binding })
+          write_file('object', object_type['name'], contents)
+        end
       end
     end
 
@@ -131,6 +182,7 @@ module GraphQLDocs
           path = @options[:output_dir]
         else
           path = File.join(@options[:output_dir], name)
+          FileUtils.mkdir_p(path)
         end
       else
         path = File.join(@options[:output_dir], type, name.downcase)
