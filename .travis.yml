@@ -13,6 +13,13 @@ env:
 sudo: false
 cache: bundler
 
+addons:
+  apt:
+    sources:
+      - kalakris-cmake
+    packages:
+      - cmake
+
 matrix:
   include:
     - script: bundle exec rake rubocop
