@@ -39,20 +39,8 @@ module GraphQLDocs
 
       if has_yaml?(contents)
         # Split data
-        pieces = yaml_split(contents)
-        if pieces.size < 4
-          raise RuntimeError.new(
-            "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
-          )
-        end
-        # Parse
-        begin
-          meta = YAML.load(pieces[2]) || {}
-          opts = opts.merge(meta)
-        rescue Exception => e # rubocop:disable Lint/RescueException
-          raise "Could not parse YAML for #{name}: #{e.message}"
-        end
-        contents = pieces[4]
+        meta, contents = split_into_metadata_and_contents(contents)
+        opts = opts.merge(meta)
       end
 
       contents = @pipeline.to_html(contents)
@@ -67,6 +55,23 @@ module GraphQLDocs
 
     def yaml_split(contents)
       contents.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
+    end
+
+    def split_into_metadata_and_contents(contents)
+      opts = {}
+      pieces = yaml_split(contents)
+      if pieces.size < 4
+        raise RuntimeError.new(
+          "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
+        )
+      end
+      # Parse
+      begin
+        meta = YAML.load(pieces[2]) || {}
+      rescue Exception => e # rubocop:disable Lint/RescueException
+        raise "Could not parse YAML for #{name}: #{e.message}"
+      end
+      [meta, pieces[4]]
     end
 
     private

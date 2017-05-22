@@ -11,7 +11,7 @@ class RendererTest < Minitest::Test
   def test_that_broken_yaml_is_caught
     broken_file = File.read(File.join(fixtures_dir, 'landing_pages', 'broken_yaml.md'))
 
-    assert_raises RuntimeError do
+    assert_raises TypeError do
       @renderer.render('static', 'broken_yaml', broken_file)
     end
   end
