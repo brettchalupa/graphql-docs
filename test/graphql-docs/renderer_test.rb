@@ -15,4 +15,11 @@ class RendererTest < Minitest::Test
       @renderer.render('static', 'broken_yaml', broken_file)
     end
   end
+
+  def test_that_schemas_missing_types_do_not_err
+    options = {}
+    options[:path] = File.join(fixtures_dir, 'missing-unions-schema.json')
+
+    GraphQLDocs.build(options)
+  end
 end

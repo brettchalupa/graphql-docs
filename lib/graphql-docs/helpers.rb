@@ -78,31 +78,31 @@ module GraphQLDocs
     end
 
     def graphql_mutation_types
-      @parsed_schema['mutation_types']
+      @parsed_schema['mutation_types'] || []
     end
 
     def graphql_object_types
-      @parsed_schema['object_types']
+      @parsed_schema['object_types'] || []
     end
 
     def graphql_interface_types
-      @parsed_schema['interface_types']
+      @parsed_schema['interface_types'] || []
     end
 
     def graphql_enum_types
-      @parsed_schema['enum_types']
+      @parsed_schema['enum_types'] || []
     end
 
     def graphql_union_types
-      @parsed_schema['union_types']
+      @parsed_schema['union_types'] || []
     end
 
     def graphql_input_object_types
-      @parsed_schema['input_object_types']
+      @parsed_schema['input_object_types'] || []
     end
 
     def graphql_scalar_types
-      @parsed_schema['scalar_types']
+      @parsed_schema['scalar_types'] || []
     end
 
     private
