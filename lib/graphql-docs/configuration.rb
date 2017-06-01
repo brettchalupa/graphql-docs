@@ -3,6 +3,7 @@ module GraphQLDocs
     GRAPHQLDOCS_DEFAULTS = {
       # Client
       access_token: nil,
+      headers: {},
       login: nil,
       password: nil,
       path: nil,

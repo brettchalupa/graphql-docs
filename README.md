@@ -124,7 +124,7 @@ The following options are available:
 | Option | Description | Default |
 | :----- | :---------- | :------ |
 | `access_token` | Uses this token while making requests through `GraphQLDocs::Client`. | `nil` |
-| `headers` | Uses this headers while making requests through `GraphQLDocs::Client`. | `nil` |
+| `headers` | Uses these headers while making requests through `GraphQLDocs::Client`. | `{}` |
 | `login` | Uses this login while making requests through `GraphQLDocs::Client`. | `nil` |
 | `password` | Uses this password while making requests through `GraphQLDocs::Client`. | `nil` |
 | `path` | `GraphQLDocs::Client` loads a JSON file found at this location, representing the response from an introspection query. | `nil` |
