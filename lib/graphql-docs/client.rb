@@ -20,7 +20,8 @@ module GraphQLDocs
       @access_token = options[:access_token]
 
       @url = options[:url]
-      @faraday = Faraday.new(url: @url)
+      @headers = options[:headers]
+      @faraday = Faraday.new(url: @url, headers: @headers)
 
       if @login && @password
         @faraday.basic_auth(@login, @password)

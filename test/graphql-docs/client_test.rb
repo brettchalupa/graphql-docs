@@ -52,4 +52,16 @@ class ClientTest < Minitest::Test
                                 'User-Agent'=>'Faraday v0.9.2' },
                       body: "{ \"query\": \"#{GraphQL::Introspection::INTROSPECTION_QUERY.gsub("\n", '')}\" }"
   end
+
+  def test_that_it_makes_requests_with_custom_headers
+    client = GraphQLDocs::Client.new(url: @url, headers: {'X-Api-Token' => '87614b09dd141c22800f96f11737ade5226d7ba8'})
+    client.fetch
+    assert_requested :post, @url,
+                      headers: {'Accept'=>'*/*', \
+                                'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', \
+                                'X-Api-Token'=>'87614b09dd141c22800f96f11737ade5226d7ba8',
+                                'Content-Type'=>'application/json',
+                                'User-Agent'=>'Faraday v0.9.2' },
+                      body: "{ \"query\": \"#{GraphQL::Introspection::INTROSPECTION_QUERY.gsub("\n", '')}\" }"
+  end
 end
