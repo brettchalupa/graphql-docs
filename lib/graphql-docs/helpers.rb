@@ -17,7 +17,8 @@ module GraphQLDocs
     end
 
     def markdown(string)
-      GitHub::Markdown.render(string || 'n/a')
+      return '' if string.nil?
+      CommonMarker.render_html(string, :DEFAULT)
     end
 
     # Do you think I am proud of this? I am not.

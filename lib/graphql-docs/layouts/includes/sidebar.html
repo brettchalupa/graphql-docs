@@ -28,24 +28,16 @@
       <% graphql_object_types.().each do |type| %>
         <% @name = type["name"] %>
         <!-- skip connection stuff -->
-        <% if @name.end_with?("Connection") || @name.end_with?("Edge") %>
-          <% next %>
-        <% end %>
+        <% next if @name.end_with?("Connection") || @name.end_with?("Edge") %>
 
         <!-- skip mutation stuff -->
-        <% if @name == "Mutation" || @name.end_with?("Payload") %>
-          <% next %>
-        <% end %>
+        <% next if @name == "Mutation" || @name.end_with?("Payload") %>
 
         <!-- skip metadata stuff -->
-        <% if @name.start_with?("__") %>
-          <% next %>
-        <% end %>
+        <% next if @name.start_with?("__") %>
 
         <!-- skip root query stuff -->
-        <% if @name == "Query" %>
-          <% next %>
-        <% end %>
+        <% next if @name == "Query" %>
 
       <li>
         <a href="<%= base_url %>/object/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
@@ -62,9 +54,7 @@
       <% graphql_mutation_types.().each do |type| %>
       <% @name = type["name"] %>
       <!-- skip metadata stuff -->
-      <% if @name.start_with?("__") %>
-        <% next %>
-      <% end %>
+      <% next if @name.start_with?("__") %>
       <li>
         <a href="<%= base_url %>/mutation/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
@@ -94,9 +84,7 @@
       <% graphql_enum_types.().each do |type| %>
       <% @name = type["name"] %>
       <!-- skip metadata stuff -->
-      <% if @name.start_with?("__") %>
-        <% next %>
-      <% end %>
+      <% next if @name.start_with?("__") %>
       <li>
         <a href="<%= base_url %>/enum/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
