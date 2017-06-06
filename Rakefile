@@ -13,6 +13,7 @@ end
 
 task default: :test
 
+desc 'Set up a console'
 task :console do
   require 'pry'
   require 'graphql-docs'
@@ -26,6 +27,7 @@ task :console do
   Pry.start
 end
 
+desc 'Generate the documentation'
 task :generate_sample, [:base_url] do |task, args|
   require 'graphql-docs'
 
@@ -37,6 +39,7 @@ task :generate_sample, [:base_url] do |task, args|
   GraphQLDocs.build(options)
 end
 
+desc 'Generate the documentation and run a web server'
 task sample: [:generate_sample] do
   require 'webrick'
 
