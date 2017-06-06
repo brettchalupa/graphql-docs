@@ -188,7 +188,8 @@ module GraphQLDocs
         path = File.join(@options[:output_dir], type, name.downcase)
         FileUtils.mkdir_p(path)
       end
-      contents = @renderer.render(type, name, contents)
+
+      contents = @renderer.render(type, name, contents.gsub(/^\s{4}/m, '  '))
       File.write(File.join(path, 'index.html'), contents) unless contents.nil?
     end
   end
