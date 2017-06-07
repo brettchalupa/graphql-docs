@@ -113,7 +113,10 @@ module GraphQLDocs
 
       return @templates[filename] unless @templates[filename].nil?
 
-      @templates[filename] = ERB.new(File.read(File.join(@options[:templates][:includes], filename)))
+      contents = File.read(File.join(@options[:templates][:includes], filename))
+      # normalize spacing so that CommonMarker doesn't treat it as `pre`
+      template = contents.gsub(/^\s{4}/m, '  ')
+      @templates[filename] = ERB.new(template)
       @templates[filename]
     end
 
