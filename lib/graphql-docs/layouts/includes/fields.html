@@ -17,7 +17,9 @@
       </div>
     <% end %>
 
-    <%= markdown.(field['description']) %>
+    <% if field['description'].present? %>
+      <%= markdown.(field['description'].strip) %>
+    <% end %>
 
     <% unless field['args'].blank? %>
 

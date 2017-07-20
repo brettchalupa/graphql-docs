@@ -10,7 +10,7 @@
   <span class="field-name"><%= field['name'] %> (<a href="<%= base_url %>/<%= @type_path %>/<%= @name_slug %>"><code><%= @type_name %></code></a>)</span>
 
   <div class="description-wrapper">
-    <%= field['description'] %>
+    <p><%= field['description'] %></p>
 
     <% unless field['args'].nil? %>
 

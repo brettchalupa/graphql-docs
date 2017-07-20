@@ -1,10 +1,10 @@
-# <%= type['name'] %>
+<h1><%= type['name'] %></h1>
 
 <%= type['description'] %>
 
 <% unless type['inputFields'].nil? %>
 
-## Input Fields
+<h2>Input Fields</h2>
 
 <%= include.('input_fields.html', input_fields: type['inputFields']) %>
 
