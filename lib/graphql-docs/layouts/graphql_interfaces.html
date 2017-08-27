@@ -1,10 +1,10 @@
-# <%= type['name'] %>
+<h1><%= type['name'] %></h1>
 
 <%= type['description'] %>
 
 <% unless type['fields'].empty? %>
 
-## Fields
+<h2>Fields</h2>
 
 <%= include.('fields.html', fields: type['fields']) %>
 

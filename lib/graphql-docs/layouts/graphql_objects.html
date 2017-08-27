@@ -1,10 +1,10 @@
-# <%= type['name'] %>
+<h1><%= type['name'] %></h1>
 
 <%= type['description'] %>
 
 <% unless type['interfaces'].empty? %>
 
-## Implements
+<h2>Implements</h2>
 
 <ul>
   <% type['interfaces'].each do |interface| %>
@@ -16,7 +16,7 @@
 
 <% unless type['connections'].empty? %>
 
-## Connections
+<h2>Connections</h2>
 
 <%= include.('connections.html', connections: type['connections']) %>
 
@@ -24,7 +24,7 @@
 
 <% unless type['fields'].empty? %>
 
-## Fields
+<h2>Fields</h2>
 
 <%= include.('fields.html', fields: type['fields']) %>
 

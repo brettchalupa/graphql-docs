@@ -1,11 +1,19 @@
-# <%= type['name'] %>
+<h1><%= type['name'] %></h1>
 
 <%= type['description'] %>
 
-## Input fields
+<h2>Input fields</h2>
 
-<%= include.('/fields.html', fields: input_fields['inputFields']) %>
+<% if input_fields %>
+  <%= include.('/fields.html', fields: input_fields['inputFields']) %>
+<% else %>
+  <p>None</p>
+<% end %>
 
-## Return fields
+<h2>Return fields</h2>
 
-<%= include.('/fields.html', fields: return_fields['fields']) %>
+<% if return_fields %>
+  <%= include.('/fields.html', fields: return_fields['fields']) %>
+<% else %>
+  <p>None</p>
+<% end %>

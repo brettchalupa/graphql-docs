@@ -137,6 +137,13 @@
   }
   table {
     margin-top: 10px;
+    th {
+      text-align: left;
+      padding: 0 25px 0 25px;
+    }
+    thead th:first-child {
+      padding: 0;
+    }
     td p {
       padding: 0 25px 0 25px;
     }
@@ -456,6 +463,7 @@
       padding: 12px 13px;
       border: 1px solid #eee;
       vertical-align: middle;
+      text-align: left;
     }
     td {
       border: 1px solid #eee;
@@ -492,6 +500,21 @@
         position: relative;
         top: 2px;
       }
+    }
+  }
+
+  .field-name {
+    font-weight: bold;
+  }
+
+  .field-entry {
+    margin-bottom: 4rem;
+  }
+  .description-wrapper {
+    >p {
+      color: #666666;
+      padding-left: 1rem;
+      margin-bottom: 1rem;
     }
   }
 }
