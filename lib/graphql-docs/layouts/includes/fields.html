@@ -10,22 +10,20 @@
   <span class="field-name"><%= field['name'] %> (<code><a href="<%= base_url %>/<%= @type_path %>/<%= @name_slug %>"><%= @type_name %></a></code>)</span>
 
   <div class="description-wrapper">
-    <% if field['isDeprecated'] %>
-      <div class="deprecation-notice <%= classes[:deprecation_notice] %>">
-        <span class="deprecation-title">Deprecation notice</span>
-        <%= markdown.(field['deprecationReason']) %>
-      </div>
-    <% end %>
+  <% if field['isDeprecated'] %>
+    <div class="deprecation-notice <%= classes[:deprecation_notice] %>">
+      <span class="deprecation-title">Deprecation notice</span>
+      <%= markdown.(field['deprecationReason']) %>
+    </div>
+  <% end %>
 
-    <% if field['description'].present? %>
-      <%= markdown.(field['description'].strip) %>
-    <% end %>
+  <% if field['description'].present? %>
+    <%= markdown.(field['description'].strip) %>
+  <% end %>
 
-    <% unless field['args'].blank? %>
-
-      <%= include.('arguments.html', args: field['args']) %>
-
-    <% end %>
+  <% unless field['args'].blank? %>
+    <%= include.('arguments.html', args: field['args']) %>
+  <% end %>
   </div>
 </div>
 
