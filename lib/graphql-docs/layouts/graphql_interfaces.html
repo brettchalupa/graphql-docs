@@ -2,6 +2,18 @@
 
 <%= type['description'] %>
 
+<% unless type['possibleTypes'].empty? %>
+
+<h2>Implemented by</h2>
+
+<ul>
+  <% type['possibleTypes'].each do |implementor| %>
+    <li><code><a href="<%= base_url %>/object/<%= slugify.(implementor['name']) %>"><%= implementor['name'] %></a></code></li>
+  <% end %>
+</ul>
+
+<% end %>
+
 <% unless type['fields'].empty? %>
 
 <h2>Fields</h2>
