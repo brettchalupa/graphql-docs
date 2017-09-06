@@ -8,10 +8,22 @@ RuboCop::RakeTask.new(:rubocop)
 Rake::TestTask.new(:test) do |t|
   t.libs << 'test'
   t.libs << 'lib'
+  t.warning = false
   t.test_files = FileList['test/**/*_test.rb']
 end
 
 task default: :test
+
+Rake::Task[:test].enhance { Rake::Task[:html_proofer].invoke }
+
+desc 'Invoke HTML-Proofer'
+task :html_proofer do
+  require 'html-proofer'
+  output_dir = File.join(File.dirname(__FILE__), 'test', 'graphql-docs', 'fixtures', 'output')
+
+  proofer_options = { disable_external: true, assume_extension: true }
+  HTMLProofer.check_directory(output_dir, proofer_options).run
+end
 
 desc 'Set up a console'
 task :console do
