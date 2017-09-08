@@ -13,6 +13,7 @@ module GraphQLDocs
 
       @renderer = @options[:renderer].new(@options, @parsed_schema)
 
+      @graphql_operation_template = ERB.new(File.read(@options[:templates][:operation]))
       @graphql_object_template = ERB.new(File.read(@options[:templates][:objects]))
       @graphql_mutations_template = ERB.new(File.read(@options[:templates][:mutations]))
       @graphql_interfaces_template = ERB.new(File.read(@options[:templates][:interfaces]))
@@ -25,6 +26,7 @@ module GraphQLDocs
     def generate
       FileUtils.rm_rf(@options[:output_dir]) if @options[:delete_output]
 
+      create_graphql_operation_pages
       create_graphql_object_pages
       create_graphql_mutation_pages
       create_graphql_interface_pages
@@ -42,7 +44,7 @@ module GraphQLDocs
       end
 
       unless @options[:landing_pages][:mutation].nil?
-        write_file('static', 'mutation', File.read(@options[:landing_pages][:mutation]))
+        write_file('operation', 'mutation', File.read(@options[:landing_pages][:mutation]))
       end
 
       unless @options[:landing_pages][:interface].nil?
@@ -79,14 +81,10 @@ module GraphQLDocs
       true
     end
 
-    def create_graphql_object_pages
-      graphql_object_types.each do |object_type|
-        next if object_type['name'].start_with?('__')
-        if object_type['name'] == 'Mutation'
-          next unless @options[:landing_pages][:mutation].nil?
-        end
-        if object_type['name'] == 'Query'
-          metadata = ''
+    def create_graphql_operation_pages
+      graphql_operation_types.each do |query_type|
+        metadata = ''
+        if query_type[:name] == 'Query'
           unless @options[:landing_pages][:query].nil?
             query_landing_page = @options[:landing_pages][:query]
             query_landing_page = File.read(query_landing_page)
@@ -98,75 +96,74 @@ module GraphQLDocs
               metadata = pieces[1, 3].join("\n")
               query_landing_page = pieces[4]
             end
-            object_type['description'] = query_landing_page
+            query_type[:description] = query_landing_page
           end
-          opts = default_generator_options(type: object_type)
-          contents = @graphql_object_template.result(OpenStruct.new(opts).instance_eval { binding })
-          write_file('static', 'query', metadata + contents)
-        else
-          opts = default_generator_options(type: object_type)
-          contents = @graphql_object_template.result(OpenStruct.new(opts).instance_eval { binding })
-          write_file('object', object_type['name'], contents)
+          opts = default_generator_options(type: query_type)
+          contents = @graphql_operation_template.result(OpenStruct.new(opts).instance_eval { binding })
+          write_file('operation', query_type[:name], metadata + contents)
         end
+      end
+    end
+
+    def create_graphql_object_pages
+      graphql_object_types.each do |object_type|
+        opts = default_generator_options(type: object_type)
+        contents = @graphql_object_template.result(OpenStruct.new(opts).instance_eval { binding })
+        write_file('object', object_type[:name], contents)
       end
     end
 
     def create_graphql_mutation_pages
       graphql_mutation_types.each do |mutation|
-        input_name = mutation['args'].first['type']['ofType']['name']
-        return_name = mutation['type']['name']
-        input = graphql_input_object_types.find { |t| t['name'] == input_name }
-        payload = graphql_object_types.find { |t| t['name'] == return_name }
-
-        opts = default_generator_options({ type: mutation, input_fields: input, return_fields: payload })
+        opts = default_generator_options(type: mutation)
 
         contents = @graphql_mutations_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('mutation', mutation['name'], contents)
+        write_file('mutation', mutation[:name], contents)
       end
     end
 
     def create_graphql_interface_pages
       graphql_interface_types.each do |interface_type|
-        opts = default_generator_options({ type: interface_type })
+        opts = default_generator_options(type: interface_type)
 
         contents = @graphql_interfaces_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('interface', interface_type['name'], contents)
+        write_file('interface', interface_type[:name], contents)
       end
     end
 
     def create_graphql_enum_pages
       graphql_enum_types.each do |enum_type|
-        opts = default_generator_options({ type: enum_type })
+        opts = default_generator_options(type: enum_type)
 
         contents = @graphql_enums_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('enum', enum_type['name'], contents)
+        write_file('enum', enum_type[:name], contents)
       end
     end
 
     def create_graphql_union_pages
       graphql_union_types.each do |union_type|
-        opts = default_generator_options({ type: union_type })
+        opts = default_generator_options(type: union_type)
 
         contents = @graphql_unions_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('union', union_type['name'], contents)
+        write_file('union', union_type[:name], contents)
       end
     end
 
     def create_graphql_input_object_pages
       graphql_input_object_types.each do |input_object_type|
-        opts = default_generator_options({ type: input_object_type })
+        opts = default_generator_options(type: input_object_type)
 
         contents = @graphql_input_objects_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('input_object', input_object_type['name'], contents)
+        write_file('input_object', input_object_type[:name], contents)
       end
     end
 
     def create_graphql_scalar_pages
       graphql_scalar_types.each do |scalar_type|
-        opts = default_generator_options({ type: scalar_type })
+        opts = default_generator_options(type: scalar_type)
 
         contents = @graphql_scalars_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('scalar', scalar_type['name'], contents)
+        write_file('scalar', scalar_type[:name], contents)
       end
     end
 

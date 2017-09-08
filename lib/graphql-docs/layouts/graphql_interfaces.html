@@ -1,23 +1,23 @@
-<h1><%= type['name'] %></h1>
+<h1><%= type[:name] %></h1>
 
-<%= type['description'] %>
+<%= type[:description] %>
 
-<% unless type['possibleTypes'].empty? %>
+<% unless type[:possible_types].empty? %>
 
 <h2>Implemented by</h2>
 
 <ul>
-  <% type['possibleTypes'].each do |implementor| %>
-    <li><code><a href="<%= base_url %>/object/<%= slugify.(implementor['name']) %>"><%= implementor['name'] %></a></code></li>
+  <% type[:possible_types].each do |implementor| %>
+    <li><code><a href="<%= base_url %>/object/<%= slugify.(implementor) %>"><%= implementor %></a></code></li>
   <% end %>
 </ul>
 
 <% end %>
 
-<% unless type['fields'].empty? %>
+<% unless type[:fields].empty? %>
 
 <h2>Fields</h2>
 
-<%= include.('fields.html', fields: type['fields']) %>
+<%= include.('fields.html', fields: type[:fields]) %>
 
 <% end %>

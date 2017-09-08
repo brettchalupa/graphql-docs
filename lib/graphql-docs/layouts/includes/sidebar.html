@@ -10,12 +10,12 @@
     <p>Queries</p>
     <ul class="menu-root">
       <li>
-        <a href="<%= base_url %>/query/" class="sidebar-link<% if title == "Query" %> current<% end %>">
+        <a href="<%= base_url %>/operation/query/" class="sidebar-link<% if title == "Query" %> current<% end %>">
           Query
         </a>
       </li>
       <li>
-        <a href="<%= base_url %>/mutation" class="sidebar-link<% if title == "Mutation" %> current<% end %>">
+        <a href="<%= base_url %>/operation/mutation/" class="sidebar-link<% if title == "Mutation" %> current<% end %>">
           Mutation
         </a>
       </li>
@@ -26,19 +26,7 @@
     <p><a href="<%= base_url %>/object">Objects</a></p>
     <ul class="menu-root">
       <% graphql_object_types.().each do |type| %>
-        <% @name = type["name"] %>
-        <!-- skip connection stuff -->
-        <% next if @name.end_with?("Connection") || @name.end_with?("Edge") %>
-
-        <!-- skip mutation stuff -->
-        <% next if @name == "Mutation" || @name.end_with?("Payload") %>
-
-        <!-- skip metadata stuff -->
-        <% next if @name.start_with?("__") %>
-
-        <!-- skip root query stuff -->
-        <% next if @name == "Query" %>
-
+        <% @name = type[:name] %>
       <li>
         <a href="<%= base_url %>/object/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
@@ -49,12 +37,10 @@
   </li>
 
   <li>
-    <p><a href="<%= base_url %>/mutation">Mutations</a></p>
+    <p><a href="<%= base_url %>/operation/mutation">Mutations</a></p>
     <ul class="menu-root">
       <% graphql_mutation_types.().each do |type| %>
-      <% @name = type["name"] %>
-      <!-- skip metadata stuff -->
-      <% next if @name.start_with?("__") %>
+      <% @name = type[:name] %>
       <li>
         <a href="<%= base_url %>/mutation/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
@@ -68,7 +54,7 @@
     <p><a href="<%= base_url %>/interface">Interfaces</a></p>
     <ul class="menu-root">
       <% graphql_interface_types.().each do |type| %>
-        <% @name = type["name"] %>
+        <% @name = type[:name] %>
         <li>
           <a href="<%= base_url %>/interface/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
             <%= @name %>
@@ -82,9 +68,7 @@
     <p><a href="<%= base_url %>/enum">Enums</a></p>
     <ul class="menu-root">
       <% graphql_enum_types.().each do |type| %>
-      <% @name = type["name"] %>
-      <!-- skip metadata stuff -->
-      <% next if @name.start_with?("__") %>
+      <% @name = type[:name] %>
       <li>
         <a href="<%= base_url %>/enum/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
@@ -98,7 +82,7 @@
     <p><a href="<%= base_url %>/union">Unions</a></p>
     <ul class="menu-root">
       <% graphql_union_types.().each do |type| %>
-      <% @name = type["name"] %>
+      <% @name = type[:name] %>
       <li>
         <a href="<%= base_url %>/union/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
@@ -112,7 +96,7 @@
     <p><a href="<%= base_url %>/input_object">Input Objects</a></p>
     <ul class="menu-root">
       <% graphql_input_object_types.().each do |type| %>
-      <% @name = type["name"] %>
+      <% @name = type[:name] %>
       <li>
         <a href="<%= base_url %>/input_object/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
@@ -126,7 +110,7 @@
     <p><a href="<%= base_url %>/scalar">Scalars</a></p>
     <ul class="menu-root">
       <% graphql_scalar_types.().each do |type| %>
-      <% @name = type["name"] %>
+      <% @name = type[:name] %>
       <li>
         <a href="<%= base_url %>/scalar/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>

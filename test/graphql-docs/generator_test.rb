@@ -11,8 +11,8 @@ class GeneratorTest < Minitest::Test
   end
 
   def setup
-    @json = File.read(File.join(fixtures_dir, 'gh-api.json'))
-    @parser = GraphQLDocs::Parser.new(@json, {})
+    schema = File.read(File.join(fixtures_dir, 'gh-schema.graphql'))
+    @parser = GraphQLDocs::Parser.new(schema, {})
     @results = @parser.parse
     @output_dir = File.join(fixtures_dir, 'output')
   end

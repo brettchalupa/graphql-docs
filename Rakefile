@@ -17,9 +17,9 @@ task default: :test
 Rake::Task[:test].enhance { Rake::Task[:html_proofer].invoke }
 
 desc 'Invoke HTML-Proofer'
-task :html_proofer do
+task html_proofer: [:generate_sample] do
   require 'html-proofer'
-  output_dir = File.join(File.dirname(__FILE__), 'test', 'graphql-docs', 'fixtures', 'output')
+  output_dir = File.join(File.dirname(__FILE__), 'output')
 
   proofer_options = { disable_external: true, assume_extension: true }
   HTMLProofer.check_directory(output_dir, proofer_options).run
@@ -40,13 +40,13 @@ task :console do
 end
 
 desc 'Generate the documentation'
-task :generate_sample, [:base_url] do |task, args|
+task :generate_sample do
+  require 'pry'
   require 'graphql-docs'
 
   options = {}
   options[:delete_output] = true
-  options[:base_url] = args.base_url || ''
-  options[:path] = File.join(File.dirname(__FILE__), 'test', 'graphql-docs', 'fixtures', 'gh-api.json')
+  options[:filename] = File.join(File.dirname(__FILE__), 'test', 'graphql-docs', 'fixtures', 'gh-schema.graphql')
 
   GraphQLDocs.build(options)
 end
