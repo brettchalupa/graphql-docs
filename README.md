@@ -22,34 +22,12 @@ Or install it yourself as:
 
 ## Usage
 
-Simple! Call `GraphQLDocs.generate`, taking care to pass in the GraphQL endpoint:
-
 ``` ruby
-GraphQLDocs.build(url: 'http://graphql.org/swapi-graphql/')
-```
+# pass in a file
+GraphQLDocs.build(filename: contents)
 
-If your GraphQL endpoint requires authentication, you can provide a username or password, or an access token:
-
-``` ruby
-options = {
-  url: 'http://graphql.org/swapi-graphql/'
-  login: 'gjtorikian',
-  password: 'lolnowai'
-}
-GraphQLDocs.build(options)
-
-options = {
-  url: 'http://graphql.org/swapi-graphql/'
-  access_token: 'something123'
-}
-
-GraphQLDocs.build(options)
-```
-
-If you already have the JSON locally, great! Call the same method with `path` instead:
-
-``` ruby
-GraphQLDocs.build(path: 'location/to/sw-api.json')
+# or pass in a string
+GraphQLDocs.build(schema: contents)
 ```
 
 ## Breakdown

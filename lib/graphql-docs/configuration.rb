@@ -2,12 +2,8 @@ module GraphQLDocs
   module Configuration
     GRAPHQLDOCS_DEFAULTS = {
       # Client
-      access_token: nil,
-      headers: {},
-      login: nil,
-      password: nil,
-      path: nil,
-      url: nil,
+      filename: nil,
+      schema: nil,
 
       # Generating
       delete_output: false,
