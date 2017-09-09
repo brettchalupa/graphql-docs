@@ -6,7 +6,6 @@ class ParserTest < Minitest::Test
     @swapi = File.read(File.join(fixtures_dir, 'sw-schema.graphql'))
     @parser = GraphQLDocs::Parser.new(@ghapi, {})
     @results = @parser.parse
-    @issue =  @results[:object_types].find { |t| t[:name] == 'Issue' }
   end
 
   def test_types_are_sorted
@@ -15,7 +14,13 @@ class ParserTest < Minitest::Test
   end
 
   def test_connections_are_plucked
-    assert !@issue[:connections].empty?
+    issue = @results[:object_types].find { |t| t[:name] == 'Issue' }
+    refute issue[:connections].empty?
+  end
+
+  def test_knows_implementers_for_interfaces
+    comment = @results[:interface_types].find { |t| t[:name] == 'Comment' }
+    refute comment[:implemented_by].empty?
   end
 
   def test_groups_items_by_type

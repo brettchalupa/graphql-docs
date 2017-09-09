@@ -113,10 +113,10 @@ module GraphQLDocs
       @processed_schema[:scalar_types].sort_by! { |o| o[:name] }
 
       @processed_schema[:interface_types].each do |interface|
-        interface[:possible_types] = []
+        interface[:implemented_by] = []
         @processed_schema[:object_types].each do |obj|
           if obj[:interfaces].include?(interface[:name])
-            interface[:possible_types] << obj[:name]
+            interface[:implemented_by] << obj[:name]
           end
         end
       end

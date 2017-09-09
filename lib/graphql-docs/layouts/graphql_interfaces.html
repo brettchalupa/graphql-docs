@@ -2,12 +2,12 @@
 
 <%= type[:description] %>
 
-<% unless type[:possible_types].empty? %>
+<% unless type[:implemented_by].empty? %>
 
 <h2>Implemented by</h2>
 
 <ul>
-  <% type[:possible_types].each do |implementor| %>
+  <% type[:implemented_by].each do |implementor| %>
     <li><code><a href="<%= base_url %>/object/<%= slugify.(implementor) %>"><%= implementor %></a></code></li>
   <% end %>
 </ul>
