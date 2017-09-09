@@ -8,6 +8,7 @@ require 'graphql-docs/version'
 
 begin
   require 'awesome_print'
+  require 'pry'
 rescue LoadError; end
 
 module GraphQLDocs

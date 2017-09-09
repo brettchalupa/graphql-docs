@@ -23,8 +23,8 @@ Or install it yourself as:
 ## Usage
 
 ``` ruby
-# pass in a file
-GraphQLDocs.build(filename: contents)
+# pass in a filename
+GraphQLDocs.build(filename: filename)
 
 # or pass in a string
 GraphQLDocs.build(schema: contents)
@@ -32,7 +32,7 @@ GraphQLDocs.build(schema: contents)
 
 ## Breakdown
 
-There are several phases going on in one little `GraphQLDocs.build` call:
+There are several phases going on the single `GraphQLDocs.build` call:
 
 * The GraphQL IDL file is read (if you passed `filename`) through `GraphQL::Client` (or simply read if you passed a string through `schema`).
 * `GraphQL::Parser` manipulates the IDL into a slightly saner format.

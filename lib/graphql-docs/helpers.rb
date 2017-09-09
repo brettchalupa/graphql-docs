@@ -1,3 +1,5 @@
+require 'commonmarker'
+
 module GraphQLDocs
   module Helpers
     SLUGIFY_PRETTY_REGEXP = Regexp.new("[^[:alnum:]._~!$&'()+,;=@]+").freeze
@@ -18,7 +20,7 @@ module GraphQLDocs
 
     def markdown(string)
       return '' if string.nil?
-      CommonMarker.render_html(string, :DEFAULT)
+      ::CommonMarker.render_html(string, :DEFAULT)
     end
 
     def graphql_operation_types
