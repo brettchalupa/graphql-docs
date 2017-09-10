@@ -108,7 +108,7 @@ The following options are available:
 | `url` | `GraphQLDocs::Client` makes a `POST` request to this URL, passing along the introspection query. | `nil` |
 | `output_dir` | The location of the output HTML. | `./output/` |
 | `use_default_styles` | Indicates if you want to use the default styles. | `true` |
-| `base_url` | Indicates the base URL to prepend for assets and links. | `true` |
+| `base_url` | Indicates the base URL to prepend for assets and links. | `""` |
 | `delete_output` | Deletes `output_dir` before generating content. | `false` |
 | `pipeline_config` | Defines two sub-keys, `pipeline` and `context`, which are used by `html-pipeline` when rendering your output. | `pipeline` has `ExtendedMarkdownFilter`, `EmojiFilter`, and `TableOfContentsFilter`. `context` has `gfm: false` and `asset_root` set to GitHub's CDN. |
 | `renderer` | The rendering class to use. | `GraphQLDocs::Renderer`
