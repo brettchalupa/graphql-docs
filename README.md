@@ -22,56 +22,34 @@ Or install it yourself as:
 
 ## Usage
 
-Simple! Call `GraphQLDocs.generate`, taking care to pass in the GraphQL endpoint:
-
 ``` ruby
-GraphQLDocs.build(url: 'http://graphql.org/swapi-graphql/')
-```
+# pass in a filename
+GraphQLDocs.build(filename: filename)
 
-If your GraphQL endpoint requires authentication, you can provide a username or password, or an access token:
-
-``` ruby
-options = {
-  url: 'http://graphql.org/swapi-graphql/'
-  login: 'gjtorikian',
-  password: 'lolnowai'
-}
-GraphQLDocs.build(options)
-
-options = {
-  url: 'http://graphql.org/swapi-graphql/'
-  access_token: 'something123'
-}
-
-GraphQLDocs.build(options)
-```
-
-If you already have the JSON locally, great! Call the same method with `path` instead:
-
-``` ruby
-GraphQLDocs.build(path: 'location/to/sw-api.json')
+# or pass in a string
+GraphQLDocs.build(schema: contents)
 ```
 
 ## Breakdown
 
-There are several phases going on in one little `GraphQLDocs.build` call:
+There are several phases going on the single `GraphQLDocs.build` call:
 
-* The GraphQL JSON is _fetched_ (if you passed `url`) through `GraphQL::Client` (or simply read if you passed `path`).
-* `GraphQL::Parser` manipulates that JSON into a slightly saner format.
-* `GraphQL::Generator` takes that JSON and converts it into HTML.
+* The GraphQL IDL file is read (if you passed `filename`) through `GraphQL::Client` (or simply read if you passed a string through `schema`).
+* `GraphQL::Parser` manipulates the IDL into a slightly saner format.
+* `GraphQL::Generator` takes that saner format and converts it into HTML.
 * `GraphQL::Renderer` technically runs as part of the generation phase. It passes the contents of each page through a Markdown renderer.
 
 If you wanted to, you could break these calls up individually. For example:
 
 ``` ruby
 options = {}
-options[:path] = "#{File.dirname(__FILE__)}/../data/graphql/docs.json"
+options[:filename] = "#{File.dirname(__FILE__)}/../data/graphql/schema.idl"
 my_renderer = MySuperCoolRenderer(options)
 options[:renderer] = my_renderer
 
 options = GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge(options)
 
-response = File.read(options[:path])
+response = File.read(options[:filename])
 
 parser = GraphQLDocs::Parser.new(response, options)
 parsed_schema = parser.parse
@@ -99,7 +77,7 @@ class CustomRenderer
   end
 end
 
-options[:path] = 'location/to/sw-api.json'
+options[:filename] = 'location/to/sw-api.graphql'
 options[:renderer] = CustomRenderer
 
 GraphQLDocs.build(options)
@@ -112,8 +90,7 @@ In your ERB layouts, there are several helper methods you can use. The helper me
 * `slugify(str)` - This slugifies the given string.
 * `include(filename, opts)` - This embeds a template from your `includes` folder, passing along the local options provided.
 * `markdown(string)` - This converts a string from Markdown to HTML.
-* `format_type(field)` - This formats a type into an IDL-like representation. For example: `!Blah` or `[!Foo]`.
-* `graphql_mutation_types`, `graphql_object_types`, `graphql_interface_types`, `graphql_enum_types`, `graphql_union_types`, `graphql_input_object_types`, `graphql_scalar_types` - Collections of the various GraphQL types.
+* `graphql_operation_types`, `graphql_mutation_types`, `graphql_object_types`, `graphql_interface_types`, `graphql_enum_types`, `graphql_union_types`, `graphql_input_object_types`, `graphql_scalar_types` - Collections of the various GraphQL types.
 
 To call these methods within templates, you must use the dot notation, such as `<%= slugify.(text) %>`.
 
@@ -131,11 +108,11 @@ The following options are available:
 | `url` | `GraphQLDocs::Client` makes a `POST` request to this URL, passing along the introspection query. | `nil` |
 | `output_dir` | The location of the output HTML. | `./output/` |
 | `use_default_styles` | Indicates if you want to use the default styles. | `true` |
-| `base_url` | Indicates the base URL to prepend for assets and links. | `true` |
+| `base_url` | Indicates the base URL to prepend for assets and links. | `""` |
 | `delete_output` | Deletes `output_dir` before generating content. | `false` |
 | `pipeline_config` | Defines two sub-keys, `pipeline` and `context`, which are used by `html-pipeline` when rendering your output. | `pipeline` has `ExtendedMarkdownFilter`, `EmojiFilter`, and `TableOfContentsFilter`. `context` has `gfm: false` and `asset_root` set to GitHub's CDN. |
 | `renderer` | The rendering class to use. | `GraphQLDocs::Renderer`
-| `templates` | The templates to use when generating HTML. You may override any of the following keys: `default`, `includes`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`. | The defaults are found in _lib/graphql-docs/layouts/_.
+| `templates` | The templates to use when generating HTML. You may override any of the following keys: `default`, `includes`, `operations`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`. | The defaults are found in _lib/graphql-docs/layouts/_.
 | `landing_pages` | The landing page to use when generating HTML for each type. You may override any of the following keys: `index`, `query`, `object`, `mutation`, `interface`, `enum`, `union`, `input_object`, `scalar`. | The defaults are found in _lib/graphql-docs/layouts/_.
 | `classes` | Additional class names you can provide to certain elements. | The full list is found in _lib/graphql-docs/configuration.rb/_.
 

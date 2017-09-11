@@ -3,7 +3,7 @@ require 'test_helper'
 class RendererTest < Minitest::Test
 
   def setup
-    @swapi = File.read(File.join(fixtures_dir, 'sw-api.json'))
+    @swapi = File.read(File.join(fixtures_dir, 'sw-schema.graphql'))
     @parsed_schema = GraphQLDocs::Parser.new(@swapi, {})
     @renderer = GraphQLDocs::Renderer.new(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS, @parsed_schema)
   end
@@ -14,12 +14,5 @@ class RendererTest < Minitest::Test
     assert_raises TypeError do
       @renderer.render('static', 'broken_yaml', broken_file)
     end
-  end
-
-  def test_that_schemas_missing_types_do_not_err
-    options = {}
-    options[:path] = File.join(fixtures_dir, 'missing-unions-schema.json')
-
-    GraphQLDocs.build(options)
   end
 end

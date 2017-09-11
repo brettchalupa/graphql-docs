@@ -1,3 +1,5 @@
+require 'commonmarker'
+
 module GraphQLDocs
   module Helpers
     SLUGIFY_PRETTY_REGEXP = Regexp.new("[^[:alnum:]._~!$&'()+,;=@]+").freeze
@@ -18,92 +20,39 @@ module GraphQLDocs
 
     def markdown(string)
       return '' if string.nil?
-      CommonMarker.render_html(string, :DEFAULT)
+      ::CommonMarker.render_html(string, :DEFAULT)
     end
 
-    # Do you think I am proud of this? I am not.
-    def format_type(field)
-      type_path = name_slug = nil
-      type_name = ''
-
-      if field['type']['kind'] == 'NON_NULL'
-        if !field['type']['ofType']['ofType'].nil?
-          # we're going to be a list...but what kind?!
-          type_name << '['
-          if !field['type']['ofType']['ofType']['ofType'].nil?
-            type_path = field['type']['ofType']['ofType']['ofType']['kind']
-            type_name << field['type']['ofType']['ofType']['ofType']['name']
-            name_slug = field['type']['ofType']['ofType']['ofType']['name']
-            # A required list of required items: [Blah!]!
-            if field['type']['ofType']['ofType']['kind'] == 'NON_NULL'
-              type_name << '!'
-            end
-          else
-            # A required list of non-required items: [Blah]!
-            type_path = field['type']['ofType']['ofType']['kind']
-            type_name << field['type']['ofType']['ofType']['name']
-            name_slug = field['type']['ofType']['ofType']['name']
-          end
-          type_name << ']'
-          type_name << '!'
-        else
-          type_path = field['type']['ofType']['kind']
-          type_name << field['type']['ofType']['name']
-          name_slug = field['type']['ofType']['name']
-          # Simple non-null item: Blah!
-          type_name << '!'
-        end
-      elsif field['type']['kind'] == 'LIST'
-        type_name << '['
-        if field['type']['ofType']['kind'] == 'NON_NULL'
-          type_path = field['type']['ofType']['ofType']['kind']
-          type_name << field['type']['ofType']['ofType']['name']
-          name_slug = field['type']['ofType']['ofType']['name']
-          # Nullable list of non-null items: [Blah!]
-          type_name << '!'
-        else
-          # Nullable list of nullable items: [Blah]
-          type_path = field['type']['ofType']['kind']
-          type_name << field['type']['ofType']['name']
-          name_slug = field['type']['ofType']['name']
-        end
-        type_name << ']'
-      else
-        # Simple nullable item: Blah
-        type_path = field['type']['kind']
-        type_name << field['type']['name']
-        name_slug = field['type']['name']
-      end
-
-      [type_path.downcase, type_name, name_slug.downcase]
+    def graphql_operation_types
+      @parsed_schema[:operation_types] || []
     end
 
     def graphql_mutation_types
-      @parsed_schema['mutation_types'] || []
+      @parsed_schema[:mutation_types] || []
     end
 
     def graphql_object_types
-      @parsed_schema['object_types'] || []
+      @parsed_schema[:object_types] || []
     end
 
     def graphql_interface_types
-      @parsed_schema['interface_types'] || []
+      @parsed_schema[:interface_types] || []
     end
 
     def graphql_enum_types
-      @parsed_schema['enum_types'] || []
+      @parsed_schema[:enum_types] || []
     end
 
     def graphql_union_types
-      @parsed_schema['union_types'] || []
+      @parsed_schema[:union_types] || []
     end
 
     def graphql_input_object_types
-      @parsed_schema['input_object_types'] || []
+      @parsed_schema[:input_object_types] || []
     end
 
     def graphql_scalar_types
-      @parsed_schema['scalar_types'] || []
+      @parsed_schema[:scalar_types] || []
     end
 
     private

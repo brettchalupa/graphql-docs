@@ -2,18 +2,6 @@
 
 <%= type[:description] %>
 
-<% unless type[:interfaces].empty? %>
-
-<h2>Implements</h2>
-
-<ul>
-  <% type[:interfaces].each do |interface| %>
-    <li><code><a href="<%= base_url %>/interface/<%= slugify.(interface) %>"><%= interface %></a></code></li>
-  <% end %>
-</ul>
-
-<% end %>
-
 <% unless type[:connections].empty? %>
 
 <h2>Connections</h2>

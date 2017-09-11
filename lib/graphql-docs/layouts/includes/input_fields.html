@@ -1,20 +1,16 @@
 <% input_fields.each do |field| %>
 
-<% next if field['type']['ofType'] && field['type']['ofType']['name'] && field['type']['ofType']['name'].end_with?('Connection') %>
-
 <div class="field-entry <%= classes[:field_entry] %>">
-  <% next if field['name'] == "id" || field['name'].blank? %>
+  <% next if field[:name] == "id" || field[:name].blank? %>
 
-  <% @type_path, @type_name, @name_slug = format_type.(field) %>
-
-  <span class="field-name"><%= field['name'] %> (<a href="<%= base_url %>/<%= @type_path %>/<%= @name_slug %>"><code><%= @type_name %></code></a>)</span>
+  <span class="field-name"><%= field[:name] %> (<a href="<%= base_url %>/<%= field[:type][:path] %>"><code><%= field[:type][:info] %></code></a>)</span>
 
   <div class="description-wrapper">
-    <p><%= field['description'] %></p>
+    <p><%= field[:description] %></p>
 
-    <% unless field['args'].nil? %>
+    <% unless field[:args].nil? %>
 
-      <%= include.('arguments.html', args: field['args']) %>
+      <%= include.('arguments.html', args: field[:args]) %>
 
     <% end %>
   </div>

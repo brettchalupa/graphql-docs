@@ -1,13 +1,9 @@
 module GraphQLDocs
   module Configuration
     GRAPHQLDOCS_DEFAULTS = {
-      # Client
-      access_token: nil,
-      headers: {},
-      login: nil,
-      password: nil,
-      path: nil,
-      url: nil,
+      # initialize
+      filename: nil,
+      schema: nil,
 
       # Generating
       delete_output: false,
@@ -30,6 +26,8 @@ module GraphQLDocs
         default: "#{File.dirname(__FILE__)}/layouts/default.html",
 
         includes: "#{File.dirname(__FILE__)}/layouts/includes",
+
+        operation: "#{File.dirname(__FILE__)}/layouts/graphql_operation.html",
         objects: "#{File.dirname(__FILE__)}/layouts/graphql_objects.html",
         mutations: "#{File.dirname(__FILE__)}/layouts/graphql_mutations.html",
         interfaces: "#{File.dirname(__FILE__)}/layouts/graphql_interfaces.html",

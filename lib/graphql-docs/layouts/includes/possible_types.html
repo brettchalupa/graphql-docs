@@ -3,7 +3,7 @@
 <ul>
 
 <% possible_types.each do |possible_type| %>
-  <li><a href="<%= base_url %>/object/<%= slugify.(possible_type['name']) %>"><%= possible_type['name'] %></a></li>
+  <li><a href="<%= base_url %>/object/<%= slugify.(possible_type) %>"><%= possible_type %></a></li>
 <% end %>
 
 </ul>

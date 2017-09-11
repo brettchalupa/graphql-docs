@@ -11,8 +11,8 @@ class GeneratorTest < Minitest::Test
   end
 
   def setup
-    @json = File.read(File.join(fixtures_dir, 'gh-api.json'))
-    @parser = GraphQLDocs::Parser.new(@json, {})
+    schema = File.read(File.join(fixtures_dir, 'gh-schema.graphql'))
+    @parser = GraphQLDocs::Parser.new(schema, {})
     @results = @parser.parse
     @output_dir = File.join(fixtures_dir, 'output')
   end
@@ -117,18 +117,5 @@ class GeneratorTest < Minitest::Test
     object = File.read File.join(@output_dir, 'object', 'commitcomment', 'index.html')
 
     assert_match /<div class="field-entry my-4">/, object
-  end
-
-  def test_ensure_no_broken_links
-    require 'html-proofer'
-    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
-    options[:output_dir] = @output_dir
-    options[:delete_output] = true
-
-    generator = GraphQLDocs::Generator.new(@results, options)
-    generator.generate
-
-    proofer_options = { disable_external: true, assume_extension: true }
-    HTMLProofer.check_directory(@output_dir, proofer_options).run
   end
 end

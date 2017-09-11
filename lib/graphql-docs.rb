@@ -1,5 +1,4 @@
 # rubocop:disable Style/FileName
-require 'graphql-docs/client'
 require 'graphql-docs/helpers'
 require 'graphql-docs/renderer'
 require 'graphql-docs/configuration'
@@ -9,6 +8,7 @@ require 'graphql-docs/version'
 
 begin
   require 'awesome_print'
+  require 'pry'
 rescue LoadError; end
 
 module GraphQLDocs
@@ -16,22 +16,36 @@ module GraphQLDocs
     def build(options)
       options = GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge(options)
 
-      if options[:url].nil? && options[:path].nil?
-        fail ArgumentError, 'No :url or :path provided!'
+      filename = options[:filename]
+      schema = options[:schema]
+
+      if !filename.nil? && !schema.nil?
+        raise ArgumentError, 'Pass in `filename` or `schema`, but not both!'
       end
 
-      if !options[:url].nil? && !options[:path].nil?
-        fail ArgumentError, 'You can\'t pass both :url and :path!'
+      if filename.nil? && schema.nil?
+        raise ArgumentError, 'Pass in either `filename` or `schema`'
       end
 
-      if options[:url]
-        client = GraphQLDocs::Client.new(options)
-        response = client.fetch
+      if filename
+        unless filename.is_a?(String)
+          raise TypeError, "Expected `String`, got `#{filename.class}`"
+        end
+
+        unless File.exist?(filename)
+          raise ArgumentError, "#{filename} does not exist!"
+        end
+
+        schema = File.read(filename)
       else
-        response = File.read(options[:path])
+        unless schema.is_a?(String)
+          raise TypeError, "Expected `String`, got `#{schema.class}`"
+        end
+
+        schema = schema
       end
 
-      parser = GraphQLDocs::Parser.new(response, options)
+      parser = GraphQLDocs::Parser.new(schema, options)
       parsed_schema = parser.parse
 
       generator = GraphQLDocs::Generator.new(parsed_schema, options)
