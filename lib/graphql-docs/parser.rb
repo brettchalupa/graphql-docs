@@ -185,7 +185,7 @@ module GraphQLDocs
              else
                raise TypeError, "Unknown type: `#{type.unwrap.class}`"
              end
-      name =  type.unwrap.to_s
+
       {
         name: name,
         path: path + '/' + slugify(name),

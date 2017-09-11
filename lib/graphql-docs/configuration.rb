@@ -1,7 +1,7 @@
 module GraphQLDocs
   module Configuration
     GRAPHQLDOCS_DEFAULTS = {
-      # Client
+      # initialize
       filename: nil,
       schema: nil,
 
