@@ -17,10 +17,11 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test|spec|features)/})
   end
   spec.bindir        = 'bin'
-  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  spec.executables   << 'gqldocs'
   spec.require_paths = ['lib']
 
   spec.add_dependency 'graphql', '~> 1.4'
+  spec.add_dependency 'thor', '0.19.4'
 
   # rendering
   spec.add_dependency 'html-pipeline', '~> 2.2'
