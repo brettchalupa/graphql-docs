@@ -6,6 +6,11 @@ class GeneratorTest < Minitest::Test
     end
 
     def render(type, name, contents)
+      to_html(contents)
+    end
+
+    def to_html(contents)
+      return '' if contents.nil?
       contents.sub(/Repository/i, 'Meow Woof!')
     end
   end
@@ -117,5 +122,15 @@ class GeneratorTest < Minitest::Test
     object = File.read File.join(@output_dir, 'object', 'commitcomment', 'index.html')
 
     assert_match /<div class="field-entry my-4">/, object
+  end
+
+  def test_that_broken_yaml_is_caught
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:landing_pages][:index] = File.join(fixtures_dir, 'landing_pages', 'broken_yaml.md')
+    generator = GraphQLDocs::Generator.new(@results, options)
+
+    assert_raises TypeError do
+      generator.generate
+    end
   end
 end
