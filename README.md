@@ -36,16 +36,15 @@ There are several phases going on the single `GraphQLDocs.build` call:
 
 * The GraphQL IDL file is read (if you passed `filename`) through `GraphQL::Client` (or simply read if you passed a string through `schema`).
 * `GraphQL::Parser` manipulates the IDL into a slightly saner format.
-* `GraphQL::Generator` takes that saner format and converts it into HTML.
-* `GraphQL::Renderer` technically runs as part of the generation phase. It passes the contents of each page through a Markdown renderer.
+* `GraphQL::Generator` takes that saner format and begins the process of applying items to the HTML templates.
+* `GraphQL::Renderer` technically runs as part of the generation phase. It passes the contents of each page and converts it into HTML.
 
 If you wanted to, you could break these calls up individually. For example:
 
 ``` ruby
 options = {}
 options[:filename] = "#{File.dirname(__FILE__)}/../data/graphql/schema.idl"
-my_renderer = MySuperCoolRenderer(options)
-options[:renderer] = my_renderer
+options[:renderer] = MySuperCoolRenderer
 
 options = GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge(options)
 
@@ -63,17 +62,23 @@ generator.generate
 
 By default, the HTML generation process uses ERB to layout the content. There are a bunch of default options provided for you, but feel free to override any of these. The *Configuration* section below has more information on what you can change.
 
-It also uses [html-pipeline](https://github.com/jch/html-pipeline) to perform the Markdown rendering by default. You can override this by providing a custom rendering class. `initialize` takes two arguments, the configuration options and the parsed schema. You must implement at least one method, `render`, which takes the GraphQL type, the name, and the layout contents. For example:
+It also uses [html-pipeline](https://github.com/jch/html-pipeline) to perform the rendering by default. You can override this by providing a custom rendering class.You must implement two methods:
+
+* `initialize` - Takes two arguments, the parsed `schema` and the configuration `options`.
+* `render` Takes the contents of a template page. It also takes two optional kwargs, the GraphQL `type` and its `name`. For example:
 
 ``` ruby
 class CustomRenderer
-  def initialize(options, parsed_schema)
-    @options = options
+  def initialize(schema, options)
     @parsed_schema = parsed_schema
+    @options = options
   end
 
-  def render(type, name, contents)
-    contents.sub(/Repository/i, 'Meow Woof!')
+  def render(contents, type: nil, name: nil)
+    contents.sub(/Repository/i, '<strong>Meow Woof!</strong>')
+
+    opts[:content] = contents
+    @graphql_default_layout.result(OpenStruct.new(opts).instance_eval { binding })
   end
 end
 
@@ -89,7 +94,7 @@ In your ERB layouts, there are several helper methods you can use. The helper me
 
 * `slugify(str)` - This slugifies the given string.
 * `include(filename, opts)` - This embeds a template from your `includes` folder, passing along the local options provided.
-* `markdown(string)` - This converts a string from Markdown to HTML.
+* `to_html(string)` - This converts a string into HTML using the rendering process.
 * `graphql_operation_types`, `graphql_mutation_types`, `graphql_object_types`, `graphql_interface_types`, `graphql_enum_types`, `graphql_union_types`, `graphql_input_object_types`, `graphql_scalar_types` - Collections of the various GraphQL types.
 
 To call these methods within templates, you must use the dot notation, such as `<%= slugify.(text) %>`.
