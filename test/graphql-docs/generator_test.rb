@@ -5,13 +5,13 @@ class GeneratorTest < Minitest::Test
     def initialize(_, _)
     end
 
-    def render(type, name, contents)
+    def render(contents, type: nil, name: nil)
       to_html(contents)
     end
 
     def to_html(contents)
       return '' if contents.nil?
-      contents.sub(/Repository/i, 'Meow Woof!')
+      contents.sub(/CodeOfConduct/i, 'CoC!!!!!')
     end
   end
 
@@ -19,6 +19,11 @@ class GeneratorTest < Minitest::Test
     schema = File.read(File.join(fixtures_dir, 'gh-schema.graphql'))
     @parser = GraphQLDocs::Parser.new(schema, {})
     @results = @parser.parse
+
+    tiny_schema = File.read(File.join(fixtures_dir, 'tiny-schema.graphql'))
+    @tiny_parser = GraphQLDocs::Parser.new(tiny_schema, {})
+    @tiny_results = @tiny_parser.parse
+
     @output_dir = File.join(fixtures_dir, 'output')
   end
 
@@ -74,7 +79,7 @@ class GeneratorTest < Minitest::Test
     options[:delete_output] = true
     options[:use_default_styles] = false
 
-    generator = GraphQLDocs::Generator.new(@results, options)
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
     generator.generate
 
     refute File.exist? File.join(@output_dir, 'assets', 'style.css')
@@ -86,14 +91,14 @@ class GeneratorTest < Minitest::Test
     options[:delete_output] = true
     options[:base_url] = 'wowzers'
 
-    generator = GraphQLDocs::Generator.new(@results, options)
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
     generator.generate
 
     contents = File.read File.join(@output_dir, 'index.html')
     assert_match %r{<link rel="stylesheet" href="wowzers/assets/style.css">}, contents
 
-    contents = File.read File.join(@output_dir, 'object', 'repository', 'index.html')
-    assert_match %r{href="wowzers/object/repository/"}, contents
+    contents = File.read File.join(@output_dir, 'object', 'codeofconduct', 'index.html')
+    assert_match %r{href="wowzers/object/codeofconduct/"}, contents
   end
 
   def test_that_custom_renderer_can_be_used
@@ -102,12 +107,12 @@ class GeneratorTest < Minitest::Test
 
     options[:renderer] = CustomRenderer
 
-    generator = GraphQLDocs::Generator.new(@results, options)
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
     generator.generate
 
-    contents = File.read(File.join(@output_dir, 'object', 'repository', 'index.html'))
+    contents = File.read(File.join(@output_dir, 'object', 'codeofconduct', 'index.html'))
 
-    assert_match /Meow Woof!/, contents
+    assert_match /CoC!!!!!/, contents
   end
 
   def test_that_it_sets_classes
@@ -116,10 +121,10 @@ class GeneratorTest < Minitest::Test
     options[:delete_output] = true
     options[:classes][:field_entry] = 'my-4'
 
-    generator = GraphQLDocs::Generator.new(@results, options)
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
     generator.generate
 
-    object = File.read File.join(@output_dir, 'object', 'commitcomment', 'index.html')
+    object = File.read File.join(@output_dir, 'object', 'codeofconduct', 'index.html')
 
     assert_match /<div class="field-entry my-4">/, object
   end
@@ -127,7 +132,7 @@ class GeneratorTest < Minitest::Test
   def test_that_broken_yaml_is_caught
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:landing_pages][:index] = File.join(fixtures_dir, 'landing_pages', 'broken_yaml.md')
-    generator = GraphQLDocs::Generator.new(@results, options)
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
 
     assert_raises TypeError do
       generator.generate
