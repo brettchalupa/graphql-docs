@@ -153,7 +153,7 @@ module GraphQLDocs
           end
         end
 
-        if field.type.unwrap.name.end_with?('Connection')
+        if !argument?(field) && field.connection?
           connections << hash
         else
           fields << hash
@@ -191,6 +191,10 @@ module GraphQLDocs
         path: path + '/' + slugify(name),
         info: type.to_s
       }
+    end
+
+    def argument?(field)
+      field.is_a?(::GraphQL::Argument)
     end
   end
 end
