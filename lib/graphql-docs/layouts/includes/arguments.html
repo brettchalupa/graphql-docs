@@ -14,7 +14,7 @@
       <code><a href="<%= base_url %>/<%= argument[:type][:path]%>"><%= argument[:type][:info] %></a></code>
     </td>
     <td>
-      <p><%= markdown.(argument[:description]) %></p>
+      <p><%= to_html.(argument[:description]) %></p>
     </td>
   </tr>
   <% end %>

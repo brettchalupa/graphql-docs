@@ -17,8 +17,7 @@ module GraphQLDocs
     end
 
     def to_html(string)
-      return '' if string.nil?
-      @renderer.to_html(string)
+      @renderer.render(string)
     end
 
     def graphql_operation_types
