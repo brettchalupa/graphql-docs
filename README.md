@@ -107,12 +107,8 @@ The following options are available:
 
 | Option | Description | Default |
 | :----- | :---------- | :------ |
-| `access_token` | Uses this token while making requests through `GraphQLDocs::Client`. | `nil` |
-| `headers` | Uses these headers while making requests through `GraphQLDocs::Client`. | `{}` |
-| `login` | Uses this login while making requests through `GraphQLDocs::Client`. | `nil` |
-| `password` | Uses this password while making requests through `GraphQLDocs::Client`. | `nil` |
-| `path` | `GraphQLDocs::Client` loads a JSON file found at this location, representing the response from an introspection query. | `nil` |
-| `url` | `GraphQLDocs::Client` makes a `POST` request to this URL, passing along the introspection query. | `nil` |
+| `filename` | The location of your schema's IDL file. | `nil` |
+| `schema` | A string representing a schema IDL file. | `nil` |
 | `output_dir` | The location of the output HTML. | `./output/` |
 | `use_default_styles` | Indicates if you want to use the default styles. | `true` |
 | `base_url` | Indicates the base URL to prepend for assets and links. | `""` |
@@ -121,7 +117,7 @@ The following options are available:
 | `renderer` | The rendering class to use. | `GraphQLDocs::Renderer`
 | `templates` | The templates to use when generating HTML. You may override any of the following keys: `default`, `includes`, `operations`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`. | The defaults are found in _lib/graphql-docs/layouts/_.
 | `landing_pages` | The landing page to use when generating HTML for each type. You may override any of the following keys: `index`, `query`, `object`, `mutation`, `interface`, `enum`, `union`, `input_object`, `scalar`. | The defaults are found in _lib/graphql-docs/layouts/_.
-| `classes` | Additional class names you can provide to certain elements. | The full list is found in _lib/graphql-docs/configuration.rb/_.
+| `classes` | Additional class names you can provide to certain elements. | The full list is available in _lib/graphql-docs/configuration.rb/_.
 
 ## Development
 
