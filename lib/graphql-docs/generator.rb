@@ -11,7 +11,7 @@ module GraphQLDocs
       @parsed_schema = parsed_schema
       @options = options
 
-      @renderer = @options[:renderer].new(@options, @parsed_schema)
+      @renderer = @options[:renderer].new(@parsed_schema, @options)
 
       @graphql_operation_template = ERB.new(File.read(@options[:templates][:operation]))
       @graphql_object_template = ERB.new(File.read(@options[:templates][:objects]))

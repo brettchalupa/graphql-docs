@@ -6,9 +6,9 @@ module GraphQLDocs
   class Renderer
     include Helpers
 
-    def initialize(options, parsed_schema)
-      @options = options
+    def initialize(parsed_schema, options)
       @parsed_schema = parsed_schema
+      @options = options
 
       unless @options[:templates][:default].nil?
         @graphql_default_layout = ERB.new(File.read(@options[:templates][:default]))
