@@ -153,7 +153,7 @@ module GraphQLDocs
           end
         end
 
-        if field.type.unwrap.name.end_with?('Connection')
+        if field.connection?
           connections << hash
         else
           fields << hash
