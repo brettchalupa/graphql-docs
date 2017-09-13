@@ -187,6 +187,7 @@ module GraphQLDocs
       end
 
       # normalize spacing so that CommonMarker doesn't treat it as `pre`
+      contents.gsub!(/^\s*$/, '')
       contents = @renderer.render(type, name, contents.gsub(/^\s{4}/m, '  '))
       File.write(File.join(path, 'index.html'), contents) unless contents.nil?
     end
