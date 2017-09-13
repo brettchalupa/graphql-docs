@@ -88,6 +88,8 @@ options[:renderer] = CustomRenderer
 GraphQLDocs.build(options)
 ```
 
+If your `render` method returns `nil`, the `Generator` will not attempt to write any HTML file.
+
 ### Helper methods
 
 In your ERB layouts, there are several helper methods you can use. The helper methods are:
