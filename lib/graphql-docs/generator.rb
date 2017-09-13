@@ -88,14 +88,6 @@ module GraphQLDocs
           unless @options[:landing_pages][:query].nil?
             query_landing_page = @options[:landing_pages][:query]
             query_landing_page = File.read(query_landing_page)
-            if @renderer.respond_to?(:has_yaml?) && \
-               @renderer.has_yaml?(query_landing_page) && \
-               @renderer.respond_to?(:yaml_split)
-              pieces = @renderer.yaml_split(query_landing_page)
-              pieces[2] = pieces[2].chomp
-              metadata = pieces[1, 3].join("\n")
-              query_landing_page = pieces[4]
-            end
             query_type[:description] = query_landing_page
           end
           opts = default_generator_options(type: query_type)
@@ -181,6 +173,12 @@ module GraphQLDocs
           path = File.join(@options[:output_dir], name)
           FileUtils.mkdir_p(path)
         end
+
+        if has_yaml?(contents)
+          # Split data
+          meta, contents = split_into_metadata_and_contents(contents)
+          @options = @options.merge(meta)
+        end
       else
         path = File.join(@options[:output_dir], type, name.downcase)
         FileUtils.mkdir_p(path)
@@ -188,8 +186,35 @@ module GraphQLDocs
 
       # normalize spacing so that CommonMarker doesn't treat it as `pre`
       contents.gsub!(/^\s*$/, '')
-      contents = @renderer.render(type, name, contents.gsub(/^\s{4}/m, '  '))
+      contents.gsub!(/^\s{4}/m, '  ')
+
+      contents = @renderer.render(contents, type: type, name: name)
       File.write(File.join(path, 'index.html'), contents) unless contents.nil?
+    end
+
+    def split_into_metadata_and_contents(contents)
+      opts = {}
+      pieces = yaml_split(contents)
+      if pieces.size < 4
+        raise RuntimeError.new(
+          "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
+        )
+      end
+      # Parse
+      begin
+        meta = YAML.load(pieces[2]) || {}
+      rescue Exception => e # rubocop:disable Lint/RescueException
+        raise "Could not parse YAML for #{name}: #{e.message}"
+      end
+      [meta, pieces[4]]
+    end
+
+    def has_yaml?(contents)
+      contents =~ /\A-{3,5}\s*$/
+    end
+
+    def yaml_split(contents)
+      contents.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
     end
   end
 end
