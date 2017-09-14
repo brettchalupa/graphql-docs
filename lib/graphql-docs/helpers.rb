@@ -16,8 +16,9 @@ module GraphQLDocs
       template.result(OpenStruct.new(opts.merge(helper_methods)).instance_eval { binding })
     end
 
-    def to_html(string)
-      @renderer.render(string)
+    def markdownify(string)
+      return '' if string.nil?
+      ::CommonMarker.render_html(string, :DEFAULT)
     end
 
     def graphql_operation_types

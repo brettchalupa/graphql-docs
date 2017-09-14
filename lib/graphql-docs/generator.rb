@@ -88,6 +88,12 @@ module GraphQLDocs
           unless @options[:landing_pages][:query].nil?
             query_landing_page = @options[:landing_pages][:query]
             query_landing_page = File.read(query_landing_page)
+            if has_yaml?(query_landing_page)
+              pieces = yaml_split(query_landing_page)
+              pieces[2] = pieces[2].chomp
+              metadata = pieces[1, 3].join("\n")
+              query_landing_page = pieces[4]
+            end
             query_type[:description] = query_landing_page
           end
           opts = default_generator_options(type: query_type)
@@ -100,6 +106,7 @@ module GraphQLDocs
     def create_graphql_object_pages
       graphql_object_types.each do |object_type|
         opts = default_generator_options(type: object_type)
+
         contents = @graphql_object_template.result(OpenStruct.new(opts).instance_eval { binding })
         write_file('object', object_type[:name], contents)
       end
@@ -173,15 +180,15 @@ module GraphQLDocs
           path = File.join(@options[:output_dir], name)
           FileUtils.mkdir_p(path)
         end
-
-        if has_yaml?(contents)
-          # Split data
-          meta, contents = split_into_metadata_and_contents(contents)
-          @options = @options.merge(meta)
-        end
       else
         path = File.join(@options[:output_dir], type, name.downcase)
         FileUtils.mkdir_p(path)
+      end
+
+      if has_yaml?(contents)
+        # Split data
+        meta, contents = split_into_metadata_and_contents(contents)
+        @options = @options.merge(meta)
       end
 
       # normalize spacing so that CommonMarker doesn't treat it as `pre`
