@@ -60,10 +60,8 @@ module GraphQLDocs
       return @templates[filename] unless @templates[filename].nil?
 
       contents = File.read(File.join(@options[:templates][:includes], filename))
-      # normalize spacing so that CommonMarker doesn't treat it as `pre`
-      template = contents.gsub(/^\s{4}/m, '  ')
-      @templates[filename] = ERB.new(template)
-      @templates[filename]
+
+      @templates[filename] = ERB.new(contents)
     end
 
     def helper_methods

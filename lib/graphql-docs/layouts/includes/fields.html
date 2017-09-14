@@ -1,8 +1,6 @@
 <% fields.each do |field| %>
 
 <div class="field-entry <%= classes[:field_entry] %>">
-  <% next if field[:name] == "id" || field[:name].blank? %>
-
   <span class="field-name"><%= field[:name] %> (<code><a href="<%= base_url %>/<%= field[:type][:path] %>"><%= field[:type][:info] %></a></code>)</span>
 
   <div class="description-wrapper">
