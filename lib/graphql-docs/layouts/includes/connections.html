@@ -1,7 +1,7 @@
 <% connections.each do |connection| %>
 
 <div class="field-entry <%= classes[:field_entry] %>">
-  <span class="field-name connection-name"><%= connection[:name] %> (<a href="<%= base_url %>/<%= connection[:type][:path] %>" class="js-connection-name"><code><%= connection[:type][:info] %></code></a>)</span>
+  <span class="field-name connection-name"><%= connection[:name] %> (<a href="<%= base_url %>/<%= connection[:type][:path] %>"><code><%= connection[:type][:info] %></code></a>)</span>
 
   <div class="description-wrapper">
     <p><%= connection[:description] %></p>
