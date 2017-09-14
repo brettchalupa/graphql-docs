@@ -8,7 +8,8 @@ module GraphQLDocs
 
     attr_reader :options
 
-    def initialize(options)
+    def initialize(parsed_schema, options)
+      @parsed_schema = parsed_schema
       @options = options
 
       unless @options[:templates][:default].nil?

@@ -127,7 +127,8 @@ module GraphQLDocs
     private
 
     def fetch_fields(object_fields)
-      fields = connections = []
+      fields = []
+      connections = []
 
       object_fields.values.each do |field|
         hash = {}

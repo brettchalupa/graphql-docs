@@ -11,7 +11,7 @@ module GraphQLDocs
       @parsed_schema = parsed_schema
       @options = options
 
-      @renderer = @options[:renderer].new(@options)
+      @renderer = @options[:renderer].new(@parsed_schema, @options)
 
       @graphql_operation_template = ERB.new(File.read(@options[:templates][:operations]))
       @graphql_object_template = ERB.new(File.read(@options[:templates][:objects]))
@@ -197,31 +197,6 @@ module GraphQLDocs
 
       contents = @renderer.render(contents, type: type, name: name)
       File.write(File.join(path, 'index.html'), contents) unless contents.nil?
-    end
-
-    def split_into_metadata_and_contents(contents)
-      opts = {}
-      pieces = yaml_split(contents)
-      if pieces.size < 4
-        raise RuntimeError.new(
-          "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
-        )
-      end
-      # Parse
-      begin
-        meta = YAML.load(pieces[2]) || {}
-      rescue Exception => e # rubocop:disable Lint/RescueException
-        raise "Could not parse YAML for #{name}: #{e.message}"
-      end
-      [meta, pieces[4]]
-    end
-
-    def has_yaml?(contents)
-      contents =~ /\A-{3,5}\s*$/
-    end
-
-    def yaml_split(contents)
-      contents.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
     end
   end
 end
