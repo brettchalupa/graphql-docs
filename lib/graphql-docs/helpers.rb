@@ -18,7 +18,7 @@ module GraphQLDocs
 
     def markdownify(string)
       return '' if string.nil?
-      ::CommonMarker.render_html(string, :DEFAULT)
+      ::CommonMarker.render_html(string, :DEFAULT).strip
     end
 
     def graphql_operation_types

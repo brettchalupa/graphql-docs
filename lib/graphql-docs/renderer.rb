@@ -45,7 +45,7 @@ module GraphQLDocs
 
     def to_html(string)
       return '' if string.nil?
-      CommonMarker.render_html(string, :DEFAULT)
+      CommonMarker.render_html(string, :DEFAULT).strip
     end
 
     private
