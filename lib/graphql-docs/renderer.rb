@@ -6,8 +6,9 @@ module GraphQLDocs
   class Renderer
     include Helpers
 
-    def initialize(parsed_schema, options)
-      @parsed_schema = parsed_schema
+    attr_reader :options
+
+    def initialize(options)
       @options = options
 
       unless @options[:templates][:default].nil?
