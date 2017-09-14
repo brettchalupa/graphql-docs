@@ -1,0 +1,26 @@
+# The Code of Conduct for a repository
+type CodeOfConduct {
+  # The body of the CoC
+  body: String
+
+  # The key for the CoC
+  key: String!
+
+  # The formal name of the CoC
+  name: String!
+
+  # The path to the CoC
+  url: URI
+}
+
+# An RFC 3986, RFC 3987, and RFC 6570 (level 4) compliant URI string.
+scalar URI
+
+# The query root of GitHub's GraphQL interface.
+type Query {
+  # Look up a code of conduct by its key
+  codeOfConduct(
+    # The code of conduct's key
+    key: String!
+  ): CodeOfConduct
+}

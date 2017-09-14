@@ -1,18 +1,12 @@
 <% input_fields.each do |field| %>
 
 <div class="field-entry <%= classes[:field_entry] %>">
-  <% next if field[:name] == "id" || field[:name].blank? %>
-
   <span class="field-name"><%= field[:name] %> (<a href="<%= base_url %>/<%= field[:type][:path] %>"><code><%= field[:type][:info] %></code></a>)</span>
 
   <div class="description-wrapper">
-    <p><%= field[:description] %></p>
+    <%= field[:description] %>
 
-    <% unless field[:args].nil? %>
-
-      <%= include.('arguments.html', args: field[:args]) %>
-
-    <% end %>
+    <%= include.('arguments.html', args: field[:args]) %>
   </div>
 </div>
 

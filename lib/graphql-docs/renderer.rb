@@ -6,9 +6,9 @@ module GraphQLDocs
   class Renderer
     include Helpers
 
-    def initialize(options, parsed_schema)
-      @options = options
+    def initialize(parsed_schema, options)
       @parsed_schema = parsed_schema
+      @options = options
 
       unless @options[:templates][:default].nil?
         @graphql_default_layout = ERB.new(File.read(@options[:templates][:default]))
@@ -34,44 +34,18 @@ module GraphQLDocs
       @pipeline = HTML::Pipeline.new(filters, @pipeline_config[:context])
     end
 
-    def render(type, name, contents)
+    def render(contents, type: nil, name: nil)
       opts = { base_url: @options[:base_url] }.merge({ type: type, name: name}).merge(helper_methods)
 
-      if has_yaml?(contents)
-        # Split data
-        meta, contents = split_into_metadata_and_contents(contents)
-        opts = opts.merge(meta)
-      end
-
-      contents = @pipeline.to_html(contents)
+      contents = to_html(contents)
       return contents if @graphql_default_layout.nil?
       opts[:content] = contents
       @graphql_default_layout.result(OpenStruct.new(opts).instance_eval { binding })
     end
 
-    def has_yaml?(contents)
-      contents =~ /\A-{3,5}\s*$/
-    end
-
-    def yaml_split(contents)
-      contents.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
-    end
-
-    def split_into_metadata_and_contents(contents)
-      opts = {}
-      pieces = yaml_split(contents)
-      if pieces.size < 4
-        raise RuntimeError.new(
-          "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
-        )
-      end
-      # Parse
-      begin
-        meta = YAML.load(pieces[2]) || {}
-      rescue Exception => e # rubocop:disable Lint/RescueException
-        raise "Could not parse YAML for #{name}: #{e.message}"
-      end
-      [meta, pieces[4]]
+    def to_html(string)
+      return '' if string.nil?
+      CommonMarker.render_html(string, :DEFAULT).strip
     end
 
     private

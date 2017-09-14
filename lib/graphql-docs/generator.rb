@@ -11,7 +11,7 @@ module GraphQLDocs
       @parsed_schema = parsed_schema
       @options = options
 
-      @renderer = @options[:renderer].new(@options, @parsed_schema)
+      @renderer = @options[:renderer].new(@parsed_schema, @options)
 
       @graphql_operation_template = ERB.new(File.read(@options[:templates][:operation]))
       @graphql_object_template = ERB.new(File.read(@options[:templates][:objects]))
@@ -88,10 +88,8 @@ module GraphQLDocs
           unless @options[:landing_pages][:query].nil?
             query_landing_page = @options[:landing_pages][:query]
             query_landing_page = File.read(query_landing_page)
-            if @renderer.respond_to?(:has_yaml?) && \
-               @renderer.has_yaml?(query_landing_page) && \
-               @renderer.respond_to?(:yaml_split)
-              pieces = @renderer.yaml_split(query_landing_page)
+            if has_yaml?(query_landing_page)
+              pieces = yaml_split(query_landing_page)
               pieces[2] = pieces[2].chomp
               metadata = pieces[1, 3].join("\n")
               query_landing_page = pieces[4]
@@ -108,6 +106,7 @@ module GraphQLDocs
     def create_graphql_object_pages
       graphql_object_types.each do |object_type|
         opts = default_generator_options(type: object_type)
+
         contents = @graphql_object_template.result(OpenStruct.new(opts).instance_eval { binding })
         write_file('object', object_type[:name], contents)
       end
@@ -186,10 +185,43 @@ module GraphQLDocs
         FileUtils.mkdir_p(path)
       end
 
+      if has_yaml?(contents)
+        # Split data
+        meta, contents = split_into_metadata_and_contents(contents)
+        @options = @options.merge(meta)
+      end
+
       # normalize spacing so that CommonMarker doesn't treat it as `pre`
       contents.gsub!(/^\s*$/, '')
-      contents = @renderer.render(type, name, contents.gsub(/^\s{4}/m, '  '))
+      contents.gsub!(/^\s{4}/m, '  ')
+
+      contents = @renderer.render(contents, type: type, name: name)
       File.write(File.join(path, 'index.html'), contents) unless contents.nil?
+    end
+
+    def split_into_metadata_and_contents(contents)
+      opts = {}
+      pieces = yaml_split(contents)
+      if pieces.size < 4
+        raise RuntimeError.new(
+          "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
+        )
+      end
+      # Parse
+      begin
+        meta = YAML.load(pieces[2]) || {}
+      rescue Exception => e # rubocop:disable Lint/RescueException
+        raise "Could not parse YAML for #{name}: #{e.message}"
+      end
+      [meta, pieces[4]]
+    end
+
+    def has_yaml?(contents)
+      contents =~ /\A-{3,5}\s*$/
+    end
+
+    def yaml_split(contents)
+      contents.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
     end
   end
 end

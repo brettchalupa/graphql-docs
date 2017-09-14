@@ -1,5 +1,3 @@
-require 'commonmarker'
-
 module GraphQLDocs
   module Helpers
     SLUGIFY_PRETTY_REGEXP = Regexp.new("[^[:alnum:]._~!$&'()+,;=@]+").freeze
@@ -18,9 +16,9 @@ module GraphQLDocs
       template.result(OpenStruct.new(opts.merge(helper_methods)).instance_eval { binding })
     end
 
-    def markdown(string)
+    def markdownify(string)
       return '' if string.nil?
-      ::CommonMarker.render_html(string, :DEFAULT)
+      ::CommonMarker.render_html(string, :DEFAULT).strip
     end
 
     def graphql_operation_types
@@ -63,10 +61,8 @@ module GraphQLDocs
       return @templates[filename] unless @templates[filename].nil?
 
       contents = File.read(File.join(@options[:templates][:includes], filename))
-      # normalize spacing so that CommonMarker doesn't treat it as `pre`
-      template = contents.gsub(/^\s{4}/m, '  ')
-      @templates[filename] = ERB.new(template)
-      @templates[filename]
+
+      @templates[filename] = ERB.new(contents)
     end
 
     def helper_methods

@@ -2,18 +2,19 @@
 
 <%= type[:description] %>
 
+<% if !type[:input_fields].empty? %>
+
 <h2>Input fields</h2>
 
-<% if !type[:input_fields].empty? %>
-  <%= include.('/fields.html', fields: type[:input_fields]) %>
-<% else %>
-  <p>None</p>
+<%= include.('fields.html', fields: type[:input_fields]) %>
+
 <% end %>
+
+
+<% if !type[:return_fields].empty? %>
 
 <h2>Return fields</h2>
 
-<% if !type[:return_fields].empty? %>
-  <%= include.('/fields.html', fields: type[:return_fields]) %>
-<% else %>
-  <p>None</p>
+<%= include.('fields.html', fields: type[:return_fields]) %>
+
 <% end %>

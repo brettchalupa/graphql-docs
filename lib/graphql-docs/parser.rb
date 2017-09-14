@@ -141,8 +141,8 @@ module GraphQLDocs
 
         hash[:type] = generate_type(field.type)
 
+        hash[:arguments] = []
         if field.respond_to?(:arguments)
-          hash[:arguments] = []
           field.arguments.values.each do |arg|
             h = {}
             h[:name] = arg.name

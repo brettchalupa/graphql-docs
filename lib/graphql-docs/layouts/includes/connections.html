@@ -6,11 +6,7 @@
   <div class="description-wrapper">
     <p><%= connection[:description] %></p>
 
-    <% unless connection[:arguments].empty? %>
-
-      <%= include.('arguments.html', args: connection[:arguments]) %>
-
-    <% end %>
+    <%= include.('arguments.html', args: connection[:arguments]) %>
   </div>
 </div>
 
