@@ -13,7 +13,9 @@
 
   <%= markdownify.(field[:description]) %>
 
-  <%= include.('arguments.html', args: field[:arguments]) %>
+  <% unless field[:arguments].empty? %>
+    <%= include.('arguments.html', arguments: field[:arguments]) %>
+  <% end %>
 
   </div>
 </div>

@@ -6,7 +6,9 @@
   <div class="description-wrapper">
     <%= field[:description] %>
 
-    <%= include.('arguments.html', args: field[:args]) %>
+    <% unless field[:arguments].empty? %>
+      <%= include.('arguments.html', arguments: field[:arguments]) %>
+    <% end %>
   </div>
 </div>
 
