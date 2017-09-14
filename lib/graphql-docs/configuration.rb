@@ -27,7 +27,7 @@ module GraphQLDocs
 
         includes: "#{File.dirname(__FILE__)}/layouts/includes",
 
-        operation: "#{File.dirname(__FILE__)}/layouts/graphql_operation.html",
+        operations: "#{File.dirname(__FILE__)}/layouts/graphql_operations.html",
         objects: "#{File.dirname(__FILE__)}/layouts/graphql_objects.html",
         mutations: "#{File.dirname(__FILE__)}/layouts/graphql_mutations.html",
         interfaces: "#{File.dirname(__FILE__)}/layouts/graphql_interfaces.html",

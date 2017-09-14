@@ -13,7 +13,7 @@ module GraphQLDocs
 
       @renderer = @options[:renderer].new(@parsed_schema, @options)
 
-      @graphql_operation_template = ERB.new(File.read(@options[:templates][:operation]))
+      @graphql_operation_template = ERB.new(File.read(@options[:templates][:operations]))
       @graphql_object_template = ERB.new(File.read(@options[:templates][:objects]))
       @graphql_mutations_template = ERB.new(File.read(@options[:templates][:mutations]))
       @graphql_interfaces_template = ERB.new(File.read(@options[:templates][:interfaces]))
