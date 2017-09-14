@@ -44,8 +44,7 @@ module GraphQLDocs
     end
 
     def to_html(string)
-      return '' if string.nil?
-      CommonMarker.render_html(string, :DEFAULT).strip
+      @pipeline.to_html(string)
     end
 
     private
