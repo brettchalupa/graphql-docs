@@ -2,7 +2,7 @@
 
 <% values.each do |value| %>
 
-  <h4 class="name"><%= value[:name] %></h4>
+  <h4 id="<%= slugify.(value[:name]) %>" class="name"><%= value[:name] %></h4>
 
   <div class="description-wrapper">
     <% if value[:is_deprecated] %>
