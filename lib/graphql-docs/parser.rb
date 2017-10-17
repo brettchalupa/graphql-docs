@@ -22,7 +22,7 @@ module GraphQLDocs
     end
 
     def parse
-      @schema.types.values.each do |object|
+      @schema.types.each_value do |object|
         data = {}
 
         case object
@@ -41,7 +41,7 @@ module GraphQLDocs
 
               @processed_schema[:operation_types] << data
 
-              object.fields.values.each do |mutation|
+              object.fields.each_value do |mutation|
                 h = {}
                 h[:name] = mutation.name
                 h[:description] = mutation.description
@@ -130,7 +130,7 @@ module GraphQLDocs
       fields = []
       connections = []
 
-      object_fields.values.each do |field|
+      object_fields.each_value do |field|
         hash = {}
 
         hash[:name] = field.name
@@ -144,7 +144,7 @@ module GraphQLDocs
 
         hash[:arguments] = []
         if field.respond_to?(:arguments)
-          field.arguments.values.each do |arg|
+          field.arguments.each_value do |arg|
             h = {}
             h[:name] = arg.name
             h[:description] = arg.description
