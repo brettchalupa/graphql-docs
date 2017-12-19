@@ -69,7 +69,7 @@ It also uses [html-pipeline](https://github.com/jch/html-pipeline) to perform th
 
 ``` ruby
 class CustomRenderer
-  def initialize(schema, options)
+  def initialize(parsed_schema, options)
     @parsed_schema = parsed_schema
     @options = options
   end
