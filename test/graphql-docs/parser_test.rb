@@ -39,4 +39,24 @@ class ParserTest < Minitest::Test
 
     assert_empty results[:mutation_types]
   end
+
+  def test_scalar_inputs_for_mutations_are_supported
+    schema = <<-SCHEMA
+    type Query {
+      foo : ID
+    }
+    input MessageInput {
+      content: String
+      author: String
+    }
+    type Mutation {
+      bar(id: ID!, input: MessageInput) : ID
+    }
+    SCHEMA
+
+    parser = GraphQLDocs::Parser.new(schema, {})
+    results = parser.parse
+
+    assert results[:mutation_types]
+  end
 end
