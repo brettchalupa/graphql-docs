@@ -9,7 +9,7 @@ class ParserTest < Minitest::Test
   end
 
   def test_types_are_sorted
-    names = @results[:object_types].map { |t| t[:name]}
+    names = @results[:object_types].map { |t| t[:name] }
     assert_equal names.sort, names
   end
 
