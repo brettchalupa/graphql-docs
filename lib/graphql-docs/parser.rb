@@ -36,26 +36,26 @@ module GraphQLDocs
 
             @processed_schema[:operation_types] << data
           elsif object.name == 'Mutation'
-              data[:name] = object.name
-              data[:description] = object.description
+            data[:name] = object.name
+            data[:description] = object.description
 
-              @processed_schema[:operation_types] << data
+            @processed_schema[:operation_types] << data
 
-              object.fields.each_value do |mutation|
-                h = {}
-                h[:name] = mutation.name
-                h[:description] = mutation.description
-                h[:input_fields], _ = fetch_fields(mutation.arguments)
+            object.fields.each_value do |mutation|
+              h = {}
+              h[:name] = mutation.name
+              h[:description] = mutation.description
+              h[:input_fields], _ = fetch_fields(mutation.arguments)
 
-                return_type = mutation.type
-                if return_type.unwrap.respond_to?(:fields)
-                  h[:return_fields], _ = fetch_fields(return_type.unwrap.fields)
-                else # it is a scalar return type
-                  h[:return_fields], _ = fetch_fields({ "#{return_type.name}" => mutation })
-                end
-
-                @processed_schema[:mutation_types] << h
+              return_type = mutation.type
+              if return_type.unwrap.respond_to?(:fields)
+                h[:return_fields], _ = fetch_fields(return_type.unwrap.fields)
+              else # it is a scalar return type
+                h[:return_fields], _ = fetch_fields({ "#{return_type.name}" => mutation })
               end
+
+              @processed_schema[:mutation_types] << h
+            end
           else
             data[:name] = object.name
             data[:description] = object.description
