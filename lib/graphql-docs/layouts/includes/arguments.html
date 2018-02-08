@@ -15,6 +15,9 @@
     </td>
     <td>
       <p><%= markdownify.(argument[:description]) %></p>
+      <% unless (default_value = argument[:default_value]).nil? %>
+        <p>The default value is <code><%= argument[:default_value] %></code>.</p>
+      <% end %>
     </td>
   </tr>
   <% end %>

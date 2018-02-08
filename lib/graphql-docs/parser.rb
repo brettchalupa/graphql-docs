@@ -155,7 +155,9 @@ module GraphQLDocs
             h[:name] = arg.name
             h[:description] = arg.description
             h[:type] = generate_type(arg.type)
-
+            if arg.default_value?
+              h[:default_value] = arg.default_value
+            end
             hash[:arguments] << h
           end
         end
