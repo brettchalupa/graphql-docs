@@ -11,6 +11,8 @@
     </div>
   <% end %>
 
+  <%= include.('notices.html', notices: field[:notices]) %>
+
   <%= markdownify.(field[:description]) %>
 
   <% unless field[:arguments].empty? %>

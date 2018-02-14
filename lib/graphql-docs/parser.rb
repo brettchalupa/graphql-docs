@@ -8,6 +8,9 @@ module GraphQLDocs
 
     def initialize(schema, options)
       @options = options
+
+      @options[:notices] ||= -> (schema_member_path) { [] }
+
       @schema = GraphQL::Schema.from_definition(schema)
       @processed_schema = {
         operation_types: [],
@@ -25,6 +28,8 @@ module GraphQLDocs
       @schema.types.each_value do |object|
         data = {}
 
+        data[:notices] = @options[:notices].call(object.name)
+
         case object
         when ::GraphQL::ObjectType
           if object.name == 'Query'
@@ -32,7 +37,7 @@ module GraphQLDocs
             data[:description] = object.description
 
             data[:interfaces] = object.interfaces.map(&:name).sort
-            data[:fields], data[:connections] = fetch_fields(object.fields)
+            data[:fields], data[:connections] = fetch_fields(object.fields, object.name)
 
             @processed_schema[:operation_types] << data
           elsif object.name == 'Mutation'
@@ -43,15 +48,17 @@ module GraphQLDocs
 
             object.fields.each_value do |mutation|
               h = {}
+
+              h[:notices] = @options[:notices].call([object.name, mutation.name].join('.'))
               h[:name] = mutation.name
               h[:description] = mutation.description
-              h[:input_fields], _ = fetch_fields(mutation.arguments)
+              h[:input_fields], _ = fetch_fields(mutation.arguments, [object.name, mutation.name].join('.'))
 
               return_type = mutation.type
               if return_type.unwrap.respond_to?(:fields)
-                h[:return_fields], _ = fetch_fields(return_type.unwrap.fields)
+                h[:return_fields], _ = fetch_fields(return_type.unwrap.fields, return_type.name)
               else # it is a scalar return type
-                h[:return_fields], _ = fetch_fields({ "#{return_type.name}" => mutation })
+                h[:return_fields], _ = fetch_fields({ "#{return_type.name}" => mutation }, return_type.name)
               end
 
               @processed_schema[:mutation_types] << h
@@ -61,14 +68,14 @@ module GraphQLDocs
             data[:description] = object.description
 
             data[:interfaces] = object.interfaces.map(&:name).sort
-            data[:fields], data[:connections] = fetch_fields(object.fields)
+            data[:fields], data[:connections] = fetch_fields(object.fields, object.name)
 
             @processed_schema[:object_types] << data
           end
         when ::GraphQL::InterfaceType
           data[:name] = object.name
           data[:description] = object.description
-          data[:fields], data[:connections] = fetch_fields(object.fields)
+          data[:fields], data[:connections] = fetch_fields(object.fields, object.name)
 
           @processed_schema[:interface_types] << data
         when ::GraphQL::EnumType
@@ -77,6 +84,7 @@ module GraphQLDocs
 
           data[:values] = object.values.values.map do |val|
             h = {}
+            h[:notices] = @options[:notices].call([object.name, val.name].join('.'))
             h[:name] = val.name
             h[:description] = val.description
             unless val.deprecation_reason.nil?
@@ -97,7 +105,7 @@ module GraphQLDocs
           data[:name] = object.name
           data[:description] = object.description
 
-          data[:input_fields], _ = fetch_fields(object.input_fields)
+          data[:input_fields], _ = fetch_fields(object.input_fields, object.name)
 
           @processed_schema[:input_object_types] << data
         when ::GraphQL::ScalarType
@@ -132,13 +140,14 @@ module GraphQLDocs
 
     private
 
-    def fetch_fields(object_fields)
+    def fetch_fields(object_fields, parent_path)
       fields = []
       connections = []
 
       object_fields.each_value do |field|
         hash = {}
 
+        hash[:notices] = @options[:notices].call([parent_path, field.name].join('.'))
         hash[:name] = field.name
         hash[:description] = field.description
         if field.respond_to?(:deprecation_reason) && !field.deprecation_reason.nil?
