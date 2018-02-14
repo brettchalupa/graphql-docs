@@ -1,9 +1,6 @@
 <h1><%= type[:name] %></h1>
 
+
 <%= type[:description] %>
 
-<% unless type[:values].empty? %>
-
 <%= include.('values.html', values: type[:values]) %>
-
-<% end %>
