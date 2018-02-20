@@ -1,7 +1,7 @@
 <% notices.each do |notice| %>
-  <div class="notice <%= notice[:class] %>">
+  <div class="notice <%= classes[:notice] %> <%= notice[:class] %>">
     <% if notice[:title] %>
-      <span class="notice-title <%= notice[:title_class] %>"><%= notice[:title] %></span>
+      <span class="notice-title <%= classes[:notice_title] %> <%= notice[:title_class] %>"><%= notice[:title] %></span>
     <% end %>
     <%= markdownify.(notice[:body]) %>
   </div>

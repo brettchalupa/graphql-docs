@@ -51,7 +51,9 @@ module GraphQLDocs
 
       classes: {
         field_entry: '',
-        deprecation_notice: ''
+        deprecation_notice: '',
+        notice: '',
+        notice_title: '',
       }
     }.freeze
   end
