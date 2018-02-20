@@ -118,7 +118,7 @@ The following options are available:
 | `renderer` | The rendering class to use. | `GraphQLDocs::Renderer`
 | `templates` | The templates to use when generating HTML. You may override any of the following keys: `default`, `includes`, `operations`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`. | The defaults are found in _lib/graphql-docs/layouts/_.
 | `landing_pages` | The landing page to use when generating HTML for each type. You may override any of the following keys: `index`, `query`, `object`, `mutation`, `interface`, `enum`, `union`, `input_object`, `scalar`. | The defaults are found in _lib/graphql-docs/layouts/_.
-| `classes` | Additional class names you can provide to certain elements. | The full list is available in _lib/graphql-docs/configuration.rb/_.
+| `classes` | Additional class names you can provide to certain elements. | The full list is available in _lib/graphql-docs/configuration.rb_.
 | `notices` | A proc used to add notices to schema members. See *Customizing Notices* section below. | `nil` |
 
 ### Customizing Notices
