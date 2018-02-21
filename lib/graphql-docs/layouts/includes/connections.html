@@ -4,6 +4,7 @@
   <span id="<%= slugify.(connection[:name]) %>" class="field-name connection-name"><%= connection[:name] %> (<a href="<%= base_url %>/<%= connection[:type][:path] %>"><code><%= connection[:type][:info] %></code></a>)</span>
 
   <div class="description-wrapper">
+    <%= include.('notices.html', notices: connection[:notices]) %>
     <p><%= connection[:description] %></p>
 
     <% unless connection[:arguments].empty? %>

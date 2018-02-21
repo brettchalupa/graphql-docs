@@ -102,6 +102,7 @@ In your ERB layouts, there are several helper methods you can use. The helper me
 To call these methods within templates, you must use the dot notation, such as `<%= slugify.(text) %>`.
 
 For `markdownify`, `CommonMarker` is not enabled by default (because it relies on native code). You will need to add `require 'commonmarker'` if you wish to use it.
+
 ## Configuration
 
 The following options are available:
@@ -118,7 +119,57 @@ The following options are available:
 | `renderer` | The rendering class to use. | `GraphQLDocs::Renderer`
 | `templates` | The templates to use when generating HTML. You may override any of the following keys: `default`, `includes`, `operations`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`. | The defaults are found in _lib/graphql-docs/layouts/_.
 | `landing_pages` | The landing page to use when generating HTML for each type. You may override any of the following keys: `index`, `query`, `object`, `mutation`, `interface`, `enum`, `union`, `input_object`, `scalar`. | The defaults are found in _lib/graphql-docs/layouts/_.
-| `classes` | Additional class names you can provide to certain elements. | The full list is available in _lib/graphql-docs/configuration.rb/_.
+| `classes` | Additional class names you can provide to certain elements. | The full list is available in _lib/graphql-docs/configuration.rb_.
+| `notices` | A proc used to add notices to schema members. See *Customizing Notices* section below. | `nil` |
+
+### Customizing Notices
+
+A notice is a block of CommonMark text that optionally has a title which is displayed above a schema member's description. The
+look of a notice block can be controlled by specifying a custom class for it and then styled via CSS.
+
+The `notices` option allows you to customize the notices that appear for a specific schema member using a proc.
+
+The proc will be called for each schema member and needs to return an array of notices or an empty array if there are none.
+
+A `notice` has the following options:
+
+| Option | Description |
+| :----- | :---------- |
+| `body` | CommonMark body of the notice |
+| `title` | Optional title of the notice |
+| `class` | Optional CSS class for the wrapper `<div>` of the notice |
+| `title_class` | Optional CSS class for the `<span>` of the notice's title |
+
+Example of a `notices` proc that adds a notice to the `TeamDiscussion` type:
+
+```ruby
+options[:notice] = (schema_member_path) -> {
+  notices = []
+
+  if schema_member_path == "TeamDiscussion"
+    notices << {
+      class: "preview-notice",
+      body: "Available via the [Team Discussion](/previews/team-discussion) preview.",
+    }
+  end
+
+  notices
+}
+```
+
+The format of `schema_member_path` is a dot delimited path to the schema member. For example:
+
+```ruby
+"Author", # an object
+"ExtraInfo" # an interface,
+"Author.socialSecurityNumber" # a field
+"Book.author.includeMiddleInitial" # an argument
+"Likeable" # a union,
+"Cover" # an enum
+"Cover.DIGITAL" # an enum value
+"BookOrder" # an input object
+"Mutation.addLike" # a mutation
+```
 
 ## Development
 

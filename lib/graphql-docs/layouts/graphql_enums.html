@@ -1,9 +1,7 @@
-# <%= type[:name] %>
+<h1><%= type[:name] %></h1>
+
+<%= include.('notices.html', notices: type[:notices]) %>
 
 <%= type[:description] %>
 
-<% unless type[:values].empty? %>
-
 <%= include.('values.html', values: type[:values]) %>
-
-<% end %>
