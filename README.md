@@ -102,6 +102,7 @@ In your ERB layouts, there are several helper methods you can use. The helper me
 To call these methods within templates, you must use the dot notation, such as `<%= slugify.(text) %>`.
 
 For `markdownify`, `CommonMarker` is not enabled by default (because it relies on native code). You will need to add `require 'commonmarker'` if you wish to use it.
+
 ## Configuration
 
 The following options are available:
@@ -123,7 +124,7 @@ The following options are available:
 
 ### Customizing Notices
 
-A notice is a block of markdown text that optionally has a title which is displayed above a schema member's description. The
+A notice is a block of CommonMark text that optionally has a title which is displayed above a schema member's description. The
 look of a notice block can be controlled by specifying a custom class for it and then styled via CSS.
 
 The `notices` option allows you to customize the notices that appear for a specific schema member using a proc.
@@ -134,12 +135,12 @@ A `notice` has the following options:
 
 | Option | Description |
 | :----- | :---------- |
-| `body` | Markdown body of the notice. |
+| `body` | CommonMark body of the notice |
 | `title` | Optional title of the notice |
 | `class` | Optional CSS class for the wrapper `<div>` of the notice |
 | `title_class` | Optional CSS class for the `<span>` of the notice's title |
 
-Example of a `notices` prob that adds a notice to the `TeamDiscussion` type:
+Example of a `notices` proc that adds a notice to the `TeamDiscussion` type:
 
 ```ruby
 options[:notice] = (schema_member_path) -> {
@@ -156,9 +157,7 @@ options[:notice] = (schema_member_path) -> {
 }
 ```
 
-The format of `schema_member_path` is a dot delimited path to the schema member.
-
-For example:
+The format of `schema_member_path` is a dot delimited path to the schema member. For example:
 
 ```ruby
 "Author", # an object
