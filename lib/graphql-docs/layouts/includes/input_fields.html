@@ -6,7 +6,7 @@
   <div class="description-wrapper">
     <%= include.('notices.html', notices: field[:notices]) %>
 
-    <%= field[:description] %>
+    <%= markdownify.(field[:description]) %>
 
     <% unless field[:arguments].empty? %>
       <%= include.('arguments.html', arguments: field[:arguments]) %>
