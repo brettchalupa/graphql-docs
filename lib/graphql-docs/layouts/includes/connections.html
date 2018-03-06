@@ -1,7 +1,7 @@
 <% connections.each do |connection| %>
 
 <div class="field-entry <%= classes[:field_entry] %>">
-  <span id="<%= slugify.(connection[:name]) %>" class="field-name connection-name"><%= connection[:name] %> (<code><a href="<%= base_url %>/<%= connection[:type][:path] %>"><%= connection[:type][:info] %></a></code>)</span>
+  <span id="<%= slugify.(connection[:name]) %>" class="field-name connection-name anchored"><%= connection[:name] %> (<code><a href="<%= base_url %>/<%= connection[:type][:path] %>"><%= connection[:type][:info] %></a></code>)</span>
 
   <div class="description-wrapper">
     <%= include.('notices.html', notices: connection[:notices]) %>
