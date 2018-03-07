@@ -1,7 +1,7 @@
 <% input_fields.each do |field| %>
 
 <div class="field-entry <%= classes[:field_entry] %>">
-  <span id="<%= slugify.(field[:name]) %>" class="field-name"><%= field[:name] %> (<code><a href="<%= base_url %>/<%= field[:type][:path] %>"><%= field[:type][:info] %></a></code>)</span>
+  <span id="<%= slugify.(field[:name]) %>" class="field-name anchored"><%= field[:name] %> (<code><a href="<%= base_url %>/<%= field[:type][:path] %>"><%= field[:type][:info] %></a></code>)</span>
 
   <div class="description-wrapper">
     <%= include.('notices.html', notices: field[:notices]) %>

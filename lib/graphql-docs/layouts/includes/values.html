@@ -2,7 +2,7 @@
 
 <% values.each do |value| %>
 
-  <h4 id="<%= slugify.(value[:name]) %>" class="name"><%= value[:name] %></h4>
+  <h4 id="<%= slugify.(value[:name]) %>" class="name anchored"><%= value[:name] %></h4>
 
   <div class="description-wrapper">
     <%= include.('notices.html', notices: value[:notices]) %>

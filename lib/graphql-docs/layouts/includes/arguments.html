@@ -9,7 +9,7 @@
   <tbody>
   <% arguments.each do |argument| %>
   <tr>
-    <td><code><%= argument[:name] %></code></td>
+    <td><code class="anchored"><%= argument[:name] %></code></td>
     <td>
       <code><a href="<%= base_url %>/<%= argument[:type][:path]%>"><%= argument[:type][:info] %></a></code>
     </td>
