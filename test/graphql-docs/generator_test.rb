@@ -138,4 +138,15 @@ class GeneratorTest < Minitest::Test
       generator.generate
     end
   end
+
+  def test_that_markdown_preserves_whitespace
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+    options[:templates][:objects] = File.join(fixtures_dir, 'landing_pages', 'whitespace_template.md')
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
+
+    object = File.read File.join(@output_dir, 'object', 'codeofconduct', 'index.html')
+
+    assert_match %r{    "nest2": \{}, object
+  end
 end
