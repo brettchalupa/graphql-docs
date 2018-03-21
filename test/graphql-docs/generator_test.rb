@@ -142,11 +142,25 @@ class GeneratorTest < Minitest::Test
   def test_that_markdown_preserves_whitespace
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir
-    options[:templates][:objects] = File.join(fixtures_dir, 'landing_pages', 'whitespace_template.md')
+    options[:landing_pages][:index] = File.join(fixtures_dir, 'landing_pages', 'whitespace_template.md')
+
     generator = GraphQLDocs::Generator.new(@tiny_results, options)
+    generator.generate
 
-    object = File.read File.join(@output_dir, 'object', 'codeofconduct', 'index.html')
+    contents = File.read File.join(@output_dir, 'index.html')
 
-    assert_match %r{    "nest2": \{}, object
+    assert_match %r{    "nest2": \{}, contents
+  end
+
+  def test_that_empty_lines_trimmed_from_html
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
+    generator.generate
+
+    contents = File.read File.join(@output_dir, 'operation', 'query', 'index.html')
+
+    assert_match %r{<td>\s+<p>The code of conduct's key</p>\s+</td>}, contents
   end
 end
