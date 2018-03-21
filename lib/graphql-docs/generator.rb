@@ -13,14 +13,14 @@ module GraphQLDocs
 
       @renderer = @options[:renderer].new(@parsed_schema, @options)
 
-      @graphql_operation_template = ERB.new(File.read(@options[:templates][:operations]), nil, '<>')
-      @graphql_object_template = ERB.new(File.read(@options[:templates][:objects]), nil, '<>')
-      @graphql_mutations_template = ERB.new(File.read(@options[:templates][:mutations]), nil, '<>')
-      @graphql_interfaces_template = ERB.new(File.read(@options[:templates][:interfaces]), nil, '<>')
-      @graphql_enums_template = ERB.new(File.read(@options[:templates][:enums]), nil, '<>')
-      @graphql_unions_template = ERB.new(File.read(@options[:templates][:unions]), nil, '<>')
-      @graphql_input_objects_template = ERB.new(File.read(@options[:templates][:input_objects]), nil, '<>')
-      @graphql_scalars_template = ERB.new(File.read(@options[:templates][:scalars]), nil, '<>')
+      @graphql_operation_template = ERB.new(File.read(@options[:templates][:operations]), nil, '>')
+      @graphql_object_template = ERB.new(File.read(@options[:templates][:objects]), nil, '>')
+      @graphql_mutations_template = ERB.new(File.read(@options[:templates][:mutations]), nil, '>')
+      @graphql_interfaces_template = ERB.new(File.read(@options[:templates][:interfaces]), nil, '>')
+      @graphql_enums_template = ERB.new(File.read(@options[:templates][:enums]), nil, '>')
+      @graphql_unions_template = ERB.new(File.read(@options[:templates][:unions]), nil, '>')
+      @graphql_input_objects_template = ERB.new(File.read(@options[:templates][:input_objects]), nil, '>')
+      @graphql_scalars_template = ERB.new(File.read(@options[:templates][:scalars]), nil, '>')
     end
 
     def generate

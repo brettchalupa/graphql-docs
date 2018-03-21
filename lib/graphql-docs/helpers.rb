@@ -87,7 +87,7 @@ module GraphQLDocs
 
       contents = File.read(File.join(@options[:templates][:includes], filename))
 
-      @templates[filename] = ERB.new(contents, nil, '<>')
+      @templates[filename] = ERB.new(contents, nil, '>')
     end
 
     def helper_methods
