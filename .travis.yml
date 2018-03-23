@@ -1,7 +1,8 @@
 language: ruby
 rvm:
-  - 2.3.4
-  - 2.4.0
+  - 2.3.6
+  - 2.4.3
+  - 2.5.0
 
 git:
   depth: 10
@@ -23,4 +24,4 @@ addons:
 matrix:
   include:
     - script: bundle exec rake rubocop
-      rvm: 2.4.0
+      rvm: 2.5.0
