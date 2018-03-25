@@ -193,7 +193,7 @@ module GraphQLDocs
 
       if trim
         # normalize spacing so that CommonMarker doesn't treat it as `pre`
-        contents.gsub!(/^\s*$/, '')
+        contents.gsub!(/^\s+$/, '')
         contents.gsub!(/^\s{4}/m, '  ')
       end
 
