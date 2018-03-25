@@ -13,14 +13,14 @@ module GraphQLDocs
 
       @renderer = @options[:renderer].new(@parsed_schema, @options)
 
-      @graphql_operation_template = ERB.new(File.read(@options[:templates][:operations]), nil, '>')
-      @graphql_object_template = ERB.new(File.read(@options[:templates][:objects]), nil, '>')
-      @graphql_mutations_template = ERB.new(File.read(@options[:templates][:mutations]), nil, '>')
-      @graphql_interfaces_template = ERB.new(File.read(@options[:templates][:interfaces]), nil, '>')
-      @graphql_enums_template = ERB.new(File.read(@options[:templates][:enums]), nil, '>')
-      @graphql_unions_template = ERB.new(File.read(@options[:templates][:unions]), nil, '>')
-      @graphql_input_objects_template = ERB.new(File.read(@options[:templates][:input_objects]), nil, '>')
-      @graphql_scalars_template = ERB.new(File.read(@options[:templates][:scalars]), nil, '>')
+      @graphql_operation_template = ERB.new(File.read(@options[:templates][:operations]))
+      @graphql_object_template = ERB.new(File.read(@options[:templates][:objects]))
+      @graphql_mutations_template = ERB.new(File.read(@options[:templates][:mutations]))
+      @graphql_interfaces_template = ERB.new(File.read(@options[:templates][:interfaces]))
+      @graphql_enums_template = ERB.new(File.read(@options[:templates][:enums]))
+      @graphql_unions_template = ERB.new(File.read(@options[:templates][:unions]))
+      @graphql_input_objects_template = ERB.new(File.read(@options[:templates][:input_objects]))
+      @graphql_scalars_template = ERB.new(File.read(@options[:templates][:scalars]))
     end
 
     def generate
@@ -36,35 +36,35 @@ module GraphQLDocs
       create_graphql_scalar_pages
 
       unless @options[:landing_pages][:index].nil?
-        write_file('static', 'index', File.read(@options[:landing_pages][:index]))
+        write_file('static', 'index', File.read(@options[:landing_pages][:index]), trim: false)
       end
 
       unless @options[:landing_pages][:object].nil?
-        write_file('static', 'object', File.read(@options[:landing_pages][:object]))
+        write_file('static', 'object', File.read(@options[:landing_pages][:object]), trim: false)
       end
 
       unless @options[:landing_pages][:mutation].nil?
-        write_file('operation', 'mutation', File.read(@options[:landing_pages][:mutation]))
+        write_file('operation', 'mutation', File.read(@options[:landing_pages][:mutation]), trim: false)
       end
 
       unless @options[:landing_pages][:interface].nil?
-        write_file('static', 'interface', File.read(@options[:landing_pages][:interface]))
+        write_file('static', 'interface', File.read(@options[:landing_pages][:interface]), trim: false)
       end
 
       unless @options[:landing_pages][:enum].nil?
-        write_file('static', 'enum', File.read(@options[:landing_pages][:enum]))
+        write_file('static', 'enum', File.read(@options[:landing_pages][:enum]), trim: false)
       end
 
       unless @options[:landing_pages][:union].nil?
-        write_file('static', 'union', File.read(@options[:landing_pages][:union]))
+        write_file('static', 'union', File.read(@options[:landing_pages][:union]), trim: false)
       end
 
       unless @options[:landing_pages][:input_object].nil?
-        write_file('static', 'input_object', File.read(@options[:landing_pages][:input_object]))
+        write_file('static', 'input_object', File.read(@options[:landing_pages][:input_object]), trim: false)
       end
 
       unless @options[:landing_pages][:scalar].nil?
-        write_file('static', 'scalar', File.read(@options[:landing_pages][:scalar]))
+        write_file('static', 'scalar', File.read(@options[:landing_pages][:scalar]), trim: false)
       end
 
       if @options[:use_default_styles]
@@ -172,7 +172,7 @@ module GraphQLDocs
       @options.merge(opts).merge(helper_methods)
     end
 
-    def write_file(type, name, contents)
+    def write_file(type, name, contents, trim: true)
       if type == 'static'
         if name == 'index'
           path = @options[:output_dir]
@@ -189,6 +189,12 @@ module GraphQLDocs
         # Split data
         meta, contents = split_into_metadata_and_contents(contents)
         @options = @options.merge(meta)
+      end
+
+      if trim
+        # normalize spacing so that CommonMarker doesn't treat it as `pre`
+        contents.gsub!(/^\s+$/, '')
+        contents.gsub!(/^\s{4}/m, '  ')
       end
 
       contents = @renderer.render(contents, type: type, name: name)

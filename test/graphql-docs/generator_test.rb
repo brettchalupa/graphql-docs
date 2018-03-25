@@ -152,7 +152,7 @@ class GeneratorTest < Minitest::Test
     assert_match %r{    "nest2": \{}, contents
   end
 
-  def test_that_empty_lines_trimmed_from_html
+  def test_that_empty_html_lines_not_interpreted_by_markdown
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir
 
@@ -162,5 +162,17 @@ class GeneratorTest < Minitest::Test
     contents = File.read File.join(@output_dir, 'operation', 'query', 'index.html')
 
     assert_match %r{<td>\s+<p>The code of conduct's key</p>\s+</td>}, contents
+  end
+
+  def test_that_non_empty_html_lines_not_interpreted_by_markdown
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+
+    generator = GraphQLDocs::Generator.new(@results, options)
+    generator.generate
+
+    contents = File.read File.join(@output_dir, 'input_object', 'projectorder', 'index.html')
+
+    assert_match %r{<div class="description-wrapper">\n   <p>The direction in which to order projects by the specified field.</p>\s+</div>}, contents
   end
 end
