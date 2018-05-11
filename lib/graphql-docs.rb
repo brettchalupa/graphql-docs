@@ -1,4 +1,4 @@
-# rubocop:disable Style/FileName
+# rubocop:disable Naming/FileName
 require 'graphql-docs/helpers'
 require 'graphql-docs/renderer'
 require 'graphql-docs/configuration'

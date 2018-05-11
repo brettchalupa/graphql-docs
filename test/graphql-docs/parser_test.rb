@@ -28,7 +28,7 @@ class ParserTest < Minitest::Test
     end
 
     results = GraphQLDocs::Parser.new(schema, {}).parse
-    assert_equal "test", results[:operation_types][0][:fields][0][:name]
+    assert_equal 'test', results[:operation_types][0][:fields][0][:name]
     assert_equal "Title paragraph.\n        ```\n        line1\n          line2\n        line3\n        ```", results[:operation_types][0][:fields][0][:description]
   end
 
