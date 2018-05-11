@@ -38,8 +38,8 @@ module GraphQLDocs
 
         schema = File.read(filename)
       else
-        unless schema.is_a?(String)
-          raise TypeError, "Expected `String`, got `#{schema.class}`"
+        if !schema.is_a?(String) && !schema.is_a?(GraphQL::Schema)
+          raise TypeError, "Expected `String` or `GraphQL::Schema`, got `#{schema.class}`"
         end
 
         schema = schema

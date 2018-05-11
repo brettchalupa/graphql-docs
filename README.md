@@ -28,6 +28,12 @@ GraphQLDocs.build(filename: filename)
 
 # or pass in a string
 GraphQLDocs.build(schema: contents)
+
+# or a schema class
+schema = GraphQL::Schema.define do
+  query query_type
+end
+GraphQLDocs.build(schema: schema)
 ```
 
 ## Breakdown
