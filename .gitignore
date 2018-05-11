@@ -11,3 +11,4 @@
 /test/graphql-docs/fixtures/output/
 /.sass-cache/
 /output/
+.byebug_history
