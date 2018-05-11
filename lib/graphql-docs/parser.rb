@@ -11,7 +11,12 @@ module GraphQLDocs
 
       @options[:notices] ||= -> (schema_member_path) { [] }
 
-      @schema = GraphQL::Schema.from_definition(schema)
+      if schema.is_a?(GraphQL::Schema)
+        @schema = schema
+      else
+        @schema = GraphQL::Schema.from_definition(schema)
+      end
+
       @processed_schema = {
         operation_types: [],
         mutation_types: [],

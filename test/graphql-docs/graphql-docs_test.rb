@@ -1,4 +1,4 @@
-# rubocop:disable Style/FileName
+# rubocop:disable Naming/FileName
 require 'test_helper'
 
 class GraphQLDocsTest < Minitest::Test

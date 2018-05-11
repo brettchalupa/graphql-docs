@@ -8,6 +8,30 @@ class ParserTest < Minitest::Test
     @results = @parser.parse
   end
 
+  def test_it_accepts_schema_class
+    query_type = GraphQL::ObjectType.define do
+      name 'Query'
+
+      field :test do
+        type types.Int
+        description "Title paragraph.
+        ```
+        line1
+          line2
+        line3
+        ```"
+      end
+    end
+
+    schema = GraphQL::Schema.define do
+      query query_type
+    end
+
+    results = GraphQLDocs::Parser.new(schema, {}).parse
+    assert_equal 'test', results[:operation_types][0][:fields][0][:name]
+    assert_equal "Title paragraph.\n        ```\n        line1\n          line2\n        line3\n        ```", results[:operation_types][0][:fields][0][:description]
+  end
+
   def test_types_are_sorted
     names = @results[:object_types].map { |t| t[:name] }
     assert_equal names.sort, names
