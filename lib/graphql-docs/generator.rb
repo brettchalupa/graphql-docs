@@ -42,6 +42,10 @@ module GraphQLDocs
       unless @options[:landing_pages][:object].nil?
         write_file('static', 'object', File.read(@options[:landing_pages][:object]), trim: false)
       end
+      
+      unless @options[:landing_pages][:query].nil?
+        write_file('operation', 'query', File.read(@options[:landing_pages][:query]), trim: false)
+      end
 
       unless @options[:landing_pages][:mutation].nil?
         write_file('operation', 'mutation', File.read(@options[:landing_pages][:mutation]), trim: false)
