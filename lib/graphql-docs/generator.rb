@@ -13,14 +13,21 @@ module GraphQLDocs
 
       @renderer = @options[:renderer].new(@parsed_schema, @options)
 
-      @graphql_operation_template = ERB.new(File.read(@options[:templates][:operations]))
-      @graphql_object_template = ERB.new(File.read(@options[:templates][:objects]))
-      @graphql_mutations_template = ERB.new(File.read(@options[:templates][:mutations]))
-      @graphql_interfaces_template = ERB.new(File.read(@options[:templates][:interfaces]))
-      @graphql_enums_template = ERB.new(File.read(@options[:templates][:enums]))
-      @graphql_unions_template = ERB.new(File.read(@options[:templates][:unions]))
-      @graphql_input_objects_template = ERB.new(File.read(@options[:templates][:input_objects]))
-      @graphql_scalars_template = ERB.new(File.read(@options[:templates][:scalars]))
+      %i(operations objects mutations interfaces enums unions input_objects scalars).each do |sym|
+        if !File.exist?(@options[:templates][sym])
+          raise IOError, "`#{sym}` template #{@options[:templates][sym]} was not found"
+        end
+        instance_variable_set("@graphql_#{sym}_template", ERB.new(File.read(@options[:templates][sym])))
+      end
+
+      %i(index object mutation interface enum union input_object scalar).each do |sym|
+        if @options[:templates][sym].nil?
+          instance_variable_set("@#{sym}_landing_page", nil)
+        elsif !File.exist?(@options[:templates][sym])
+          raise IOError, "`#{sym}` landing page #{@options[:landing_pages][sym]} was not found"
+        end
+        instance_variable_set("@graphql_#{sym}_landing_page", File.read(@options[:landing_pages][sym]))
+      end
     end
 
     def generate
@@ -97,7 +104,7 @@ module GraphQLDocs
             query_type[:description] = query_landing_page
           end
           opts = default_generator_options(type: query_type)
-          contents = @graphql_operation_template.result(OpenStruct.new(opts).instance_eval { binding })
+          contents = @graphql_operations_template.result(OpenStruct.new(opts).instance_eval { binding })
           write_file('operation', query_type[:name], metadata + contents)
         end
       end
@@ -107,7 +114,7 @@ module GraphQLDocs
       graphql_object_types.each do |object_type|
         opts = default_generator_options(type: object_type)
 
-        contents = @graphql_object_template.result(OpenStruct.new(opts).instance_eval { binding })
+        contents = @graphql_objects_template.result(OpenStruct.new(opts).instance_eval { binding })
         write_file('object', object_type[:name], contents)
       end
     end
