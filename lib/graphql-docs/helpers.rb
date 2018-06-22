@@ -21,6 +21,10 @@ module GraphQLDocs
       ::CommonMarker.render_html(string, :DEFAULT).strip
     end
 
+    def graphql_root_types
+      @parsed_schema[:root_types] || []
+    end
+
     def graphql_operation_types
       @parsed_schema[:operation_types] || []
     end

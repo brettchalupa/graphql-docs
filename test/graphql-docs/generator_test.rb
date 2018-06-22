@@ -136,7 +136,7 @@ class GeneratorTest < Minitest::Test
   def test_that_named_query_root_generates_fields
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir
-    
+
     generator = GraphQLDocs::Generator.new(@named_root_results, options)
     generator.generate
 
