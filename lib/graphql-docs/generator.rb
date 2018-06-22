@@ -20,7 +20,7 @@ module GraphQLDocs
         instance_variable_set("@graphql_#{sym}_template", ERB.new(File.read(@options[:templates][sym])))
       end
 
-      %i(index object mutation interface enum union input_object scalar).each do |sym|
+      %i(index object query mutation interface enum union input_object scalar).each do |sym|
         if @options[:landing_pages][sym].nil?
           instance_variable_set("@#{sym}_landing_page", nil)
         elsif !File.exist?(@options[:landing_pages][sym])
@@ -49,9 +49,9 @@ module GraphQLDocs
       unless @graphql_object_landing_page.nil?
         write_file('static', 'object', @graphql_object_landing_page, trim: false)
       end
-      
-      unless @options[:landing_pages][:query].nil?
-        write_file('operation', 'query', File.read(@options[:landing_pages][:query]), trim: false)
+
+      unless @graphql_query_landing_page.nil?
+        write_file('operation', 'query', @graphql_query_landing_page, trim: false)
       end
 
       unless @graphql_mutation_landing_page.nil?
