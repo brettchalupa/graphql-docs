@@ -49,6 +49,10 @@ module GraphQLDocs
       unless @graphql_object_landing_page.nil?
         write_file('static', 'object', @graphql_object_landing_page, trim: false)
       end
+      
+      unless @options[:landing_pages][:query].nil?
+        write_file('operation', 'query', File.read(@options[:landing_pages][:query]), trim: false)
+      end
 
       unless @graphql_mutation_landing_page.nil?
         write_file('operation', 'mutation', @graphql_mutation_landing_page, trim: false)
