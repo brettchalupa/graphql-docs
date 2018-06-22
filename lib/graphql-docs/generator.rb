@@ -21,9 +21,9 @@ module GraphQLDocs
       end
 
       %i(index object mutation interface enum union input_object scalar).each do |sym|
-        if @options[:templates][sym].nil?
+        if @options[:landing_pages][sym].nil?
           instance_variable_set("@#{sym}_landing_page", nil)
-        elsif !File.exist?(@options[:templates][sym])
+        elsif !File.exist?(@options[:landing_pages][sym])
           raise IOError, "`#{sym}` landing page #{@options[:landing_pages][sym]} was not found"
         end
         instance_variable_set("@graphql_#{sym}_landing_page", File.read(@options[:landing_pages][sym]))
@@ -42,36 +42,36 @@ module GraphQLDocs
       create_graphql_input_object_pages
       create_graphql_scalar_pages
 
-      unless @options[:landing_pages][:index].nil?
-        write_file('static', 'index', File.read(@options[:landing_pages][:index]), trim: false)
+      unless @graphql_index_landing_page.nil?
+        write_file('static', 'index', @graphql_index_landing_page, trim: false)
       end
 
-      unless @options[:landing_pages][:object].nil?
-        write_file('static', 'object', File.read(@options[:landing_pages][:object]), trim: false)
+      unless @graphql_object_landing_page.nil?
+        write_file('static', 'object', @graphql_object_landing_page, trim: false)
       end
 
-      unless @options[:landing_pages][:mutation].nil?
-        write_file('operation', 'mutation', File.read(@options[:landing_pages][:mutation]), trim: false)
+      unless @graphql_mutation_landing_page.nil?
+        write_file('operation', 'mutation', @graphql_mutation_landing_page, trim: false)
       end
 
-      unless @options[:landing_pages][:interface].nil?
-        write_file('static', 'interface', File.read(@options[:landing_pages][:interface]), trim: false)
+      unless @graphql_interface_landing_page.nil?
+        write_file('static', 'interface', @graphql_interface_landing_page, trim: false)
       end
 
-      unless @options[:landing_pages][:enum].nil?
-        write_file('static', 'enum', File.read(@options[:landing_pages][:enum]), trim: false)
+      unless @graphql_enum_landing_page.nil?
+        write_file('static', 'enum', @graphql_enum_landing_page, trim: false)
       end
 
-      unless @options[:landing_pages][:union].nil?
-        write_file('static', 'union', File.read(@options[:landing_pages][:union]), trim: false)
+      unless @graphql_union_landing_page.nil?
+        write_file('static', 'union', @graphql_union_landing_page, trim: false)
       end
 
-      unless @options[:landing_pages][:input_object].nil?
-        write_file('static', 'input_object', File.read(@options[:landing_pages][:input_object]), trim: false)
+      unless @graphql_input_object_landing_page.nil?
+        write_file('static', 'input_object', @graphql_input_object_landing_page, trim: false)
       end
 
-      unless @options[:landing_pages][:scalar].nil?
-        write_file('static', 'scalar', File.read(@options[:landing_pages][:scalar]), trim: false)
+      unless @graphql_scalar_landing_page.nil?
+        write_file('static', 'scalar', @graphql_scalar_landing_page, trim: false)
       end
 
       if @options[:use_default_styles]

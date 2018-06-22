@@ -129,6 +129,15 @@ class GeneratorTest < Minitest::Test
     assert_match /<div class="field-entry my-4">/, object
   end
 
+  def test_that_missing_landing_pages_are_reported
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:landing_pages][:index] = 'BOGUS'
+
+    assert_raises IOError do
+      GraphQLDocs::Generator.new(@tiny_results, options)
+    end
+  end
+
   def test_that_broken_yaml_is_caught
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:landing_pages][:index] = File.join(fixtures_dir, 'landing_pages', 'broken_yaml.md')
