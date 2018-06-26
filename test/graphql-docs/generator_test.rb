@@ -5,7 +5,7 @@ class GeneratorTest < Minitest::Test
     def initialize(_, _)
     end
 
-    def render(contents, type: nil, name: nil)
+    def render(contents, type: nil, name: nil, filename: nil)
       to_html(contents)
     end
 
