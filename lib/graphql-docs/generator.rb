@@ -33,7 +33,7 @@ module GraphQLDocs
     def generate
       FileUtils.rm_rf(@options[:output_dir]) if @options[:delete_output]
 
-      create_graphql_operation_pages
+      has_query = create_graphql_query_pages
       create_graphql_object_pages
       create_graphql_mutation_pages
       create_graphql_interface_pages
@@ -50,7 +50,7 @@ module GraphQLDocs
         write_file('static', 'object', @graphql_object_landing_page, trim: false)
       end
 
-      unless @graphql_query_landing_page.nil?
+      if !@graphql_query_landing_page.nil? && !has_query
         write_file('operation', 'query', @graphql_query_landing_page, trim: false)
       end
 
@@ -92,7 +92,7 @@ module GraphQLDocs
       true
     end
 
-    def create_graphql_operation_pages
+    def create_graphql_query_pages
       graphql_operation_types.each do |query_type|
         metadata = ''
         if query_type[:name] == graphql_root_types['query']
@@ -110,8 +110,10 @@ module GraphQLDocs
           opts = default_generator_options(type: query_type)
           contents = @graphql_operations_template.result(OpenStruct.new(opts).instance_eval { binding })
           write_file('operation', 'query', metadata + contents)
+          return true
         end
       end
+      false
     end
 
     def create_graphql_object_pages
