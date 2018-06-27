@@ -36,19 +36,19 @@ class GeneratorTest < Minitest::Test
   end
 
   def test_that_it_requires_templates
-    config = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
-    config[:templates][:objects] = 'BOGUS'
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:templates][:objects] = 'BOGUS'
 
-    assert_raises Errno::ENOENT do
-      GraphQLDocs::Generator.new(@results, config)
+    assert_raises IOError do
+      GraphQLDocs::Generator.new(@results, options)
     end
   end
 
   def test_that_it_does_not_require_default
-    config = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
-    config[:templates][:default] = nil
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:templates][:default] = nil
 
-    GraphQLDocs::Generator.new(@results, config)
+    GraphQLDocs::Generator.new(@results, options)
   end
 
   def test_that_it_works
@@ -143,6 +143,15 @@ class GeneratorTest < Minitest::Test
     object = File.read File.join(@output_dir, 'operation', 'query', 'index.html')
 
     assert_match /Do a thing/, object
+  end
+
+  def test_that_missing_landing_pages_are_reported
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:landing_pages][:index] = 'BOGUS'
+
+    assert_raises IOError do
+      GraphQLDocs::Generator.new(@tiny_results, options)
+    end
   end
 
   def test_that_broken_yaml_is_caught

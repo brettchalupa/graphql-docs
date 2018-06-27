@@ -14,18 +14,14 @@ end
 
 task default: :test
 
-Rake::Task[:test].enhance { Rake::Task[:html_proofer].invoke }
-
 desc 'Invoke HTML-Proofer'
 task :html_proofer do
-  if ENV['CI']
-    Rake::Task[:generate_sample].invoke('https://www.gjtorikian.com/graphql-docs')
-    require 'html-proofer'
-    output_dir = File.join(File.dirname(__FILE__), 'output')
+  Rake::Task[:generate_sample].invoke('https://www.gjtorikian.com/graphql-docs')
+  require 'html-proofer'
+  output_dir = File.join(File.dirname(__FILE__), 'output')
 
-    proofer_options = { disable_external: true, assume_extension: true }
-    HTMLProofer.check_directory(output_dir, proofer_options).run
-  end
+  proofer_options = { disable_external: true, assume_extension: true }
+  HTMLProofer.check_directory(output_dir, proofer_options).run
 end
 
 desc 'Set up a console'

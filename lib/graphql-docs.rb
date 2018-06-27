@@ -13,6 +13,17 @@ rescue LoadError; end
 module GraphQLDocs
   class << self
     def build(options)
+      # do not let user provided values overwrite every single value
+      %i(templates landing_pages).each do |opt|
+        if options.key?(opt)
+          GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS[opt].each_pair do |key, value|
+            unless options[opt].key?(key)
+              options[opt][key] = value
+            end
+          end
+        end
+      end
+
       options = GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge(options)
 
       filename = options[:filename]

@@ -25,3 +25,5 @@ matrix:
   include:
     - script: bundle exec rake rubocop
       rvm: 2.5.0
+    - script: bundle exec rake html_proofer
+      rvm: 2.5.0
