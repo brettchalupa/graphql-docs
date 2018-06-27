@@ -23,7 +23,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'graphql', '~> 1.6'
 
   # rendering
-  spec.add_dependency 'html-pipeline', '~> 2.2'
+  spec.add_dependency 'html-pipeline', '~> 2.8'
+  spec.add_dependency 'escape_utils',  '~> 1.2'
   spec.add_dependency 'extended-markdown-filter', '~> 0.4'
   spec.add_dependency 'gemoji', '~> 3.0'
   spec.add_dependency 'sass', '~> 3.4'
