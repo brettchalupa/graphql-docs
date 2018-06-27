@@ -19,4 +19,35 @@ class RendererTest < Minitest::Test
 
     assert_equal '<p><strong>R2D2</strong></p>', contents
   end
+
+  def test_that_filename_accessible_to_filters
+    @renderer = GraphQLDocs::Renderer.new(@parsed_schema, GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge({
+      pipeline_config: {
+        pipeline:
+          %i(ExtendedMarkdownFilter
+             EmojiFilter
+             TableOfContentsFilter
+             AddFilenameFilter),
+        context: {
+          gfm: false,
+          asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'
+        }
+      }
+    }))
+    contents = @renderer.render('<span id="fill-me"></span>', type: 'Droid', name: 'R2D2', filename: '/this/is/the/filename')
+    assert_match %r{<span id="fill-me">/this/is/the/filename</span>}, contents
+  end
+end
+
+class AddFilenameFilter < HTML::Pipeline::Filter
+  def call
+    doc.search('span[@id="fill-me"]').each do |span|
+      span.inner_html=(context[:filename])
+    end
+    doc
+  end
+
+  def validate
+    needs :filename
+  end
 end
