@@ -24,6 +24,10 @@ class GeneratorTest < Minitest::Test
     @tiny_parser = GraphQLDocs::Parser.new(tiny_schema, {})
     @tiny_results = @tiny_parser.parse
 
+    named_root_schema = File.read(File.join(fixtures_dir, 'named-root-schema.graphql'))
+    @named_root_parser = GraphQLDocs::Parser.new(named_root_schema, {})
+    @named_root_results = @named_root_parser.parse
+
     @output_dir = File.join(fixtures_dir, 'output')
   end
 
@@ -127,6 +131,18 @@ class GeneratorTest < Minitest::Test
     object = File.read File.join(@output_dir, 'object', 'codeofconduct', 'index.html')
 
     assert_match /<div class="field-entry my-4">/, object
+  end
+
+  def test_that_named_query_root_generates_fields
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+
+    generator = GraphQLDocs::Generator.new(@named_root_results, options)
+    generator.generate
+
+    object = File.read File.join(@output_dir, 'operation', 'query', 'index.html')
+
+    assert_match /Do a thing/, object
   end
 
   def test_that_broken_yaml_is_caught

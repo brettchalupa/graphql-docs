@@ -1,4 +1,3 @@
-# rubocop:disable Naming/FileName
 require 'test_helper'
 
 class GraphQLDocsTest < Minitest::Test
