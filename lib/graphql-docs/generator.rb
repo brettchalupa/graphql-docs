@@ -95,7 +95,7 @@ module GraphQLDocs
     def create_graphql_operation_pages
       graphql_operation_types.each do |query_type|
         metadata = ''
-        if query_type[:name] == 'Query'
+        if query_type[:name] == graphql_root_types['query']
           unless @options[:landing_pages][:query].nil?
             query_landing_page = @options[:landing_pages][:query]
             query_landing_page = File.read(query_landing_page)
@@ -109,7 +109,7 @@ module GraphQLDocs
           end
           opts = default_generator_options(type: query_type)
           contents = @graphql_operations_template.result(OpenStruct.new(opts).instance_eval { binding })
-          write_file('operation', query_type[:name], metadata + contents)
+          write_file('operation', 'query', metadata + contents)
         end
       end
     end

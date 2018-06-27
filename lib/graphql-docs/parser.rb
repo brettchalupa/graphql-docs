@@ -30,6 +30,15 @@ module GraphQLDocs
     end
 
     def parse
+
+      root_types = {}
+      ['query', 'mutation'].each do |operation|
+        unless @schema.root_type_for_operation(operation).nil?
+          root_types[operation] = @schema.root_type_for_operation(operation).name
+        end
+      end
+      @processed_schema[:root_types] = root_types
+
       @schema.types.each_value do |object|
         data = {}
 
@@ -37,7 +46,7 @@ module GraphQLDocs
 
         case object
         when ::GraphQL::ObjectType
-          if object.name == 'Query'
+          if object.name == root_types['query']
             data[:name] = object.name
             data[:description] = object.description
 
@@ -45,7 +54,7 @@ module GraphQLDocs
             data[:fields], data[:connections] = fetch_fields(object.fields, object.name)
 
             @processed_schema[:operation_types] << data
-          elsif object.name == 'Mutation'
+          elsif object.name == root_types['mutation']
             data[:name] = object.name
             data[:description] = object.description
 
