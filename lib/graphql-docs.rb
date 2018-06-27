@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'graphql-docs/helpers'
 require 'graphql-docs/renderer'
 require 'graphql-docs/configuration'

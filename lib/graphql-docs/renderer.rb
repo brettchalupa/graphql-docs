@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'html/pipeline'
 require 'yaml'
 require 'extended-markdown-filter'
