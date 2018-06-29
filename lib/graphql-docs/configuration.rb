@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module GraphQLDocs
   module Configuration
     GRAPHQLDOCS_DEFAULTS = {

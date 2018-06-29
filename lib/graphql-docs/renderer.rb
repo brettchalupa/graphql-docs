@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'html/pipeline'
 require 'yaml'
 require 'extended-markdown-filter'
@@ -36,17 +37,17 @@ module GraphQLDocs
       @pipeline = HTML::Pipeline.new(filters, @pipeline_config[:context])
     end
 
-    def render(contents, type: nil, name: nil)
-      opts = { base_url: @options[:base_url] }.merge({ type: type, name: name}).merge(helper_methods)
+    def render(contents, type: nil, name: nil, filename: nil)
+      opts = { base_url: @options[:base_url], output_dir: @options[:output_dir] }.merge({ type: type, name: name, filename: filename}).merge(helper_methods)
 
-      contents = to_html(contents)
+      contents = to_html(contents, context: { filename: filename })
       return contents if @graphql_default_layout.nil?
       opts[:content] = contents
       @graphql_default_layout.result(OpenStruct.new(opts).instance_eval { binding })
     end
 
-    def to_html(string)
-      @pipeline.to_html(string)
+    def to_html(string, context: {})
+      @pipeline.to_html(string, context)
     end
 
     private

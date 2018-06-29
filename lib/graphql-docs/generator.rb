@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'erb'
 require 'sass'
 
@@ -210,8 +211,9 @@ module GraphQLDocs
         contents.gsub!(/^\s{4}/m, '  ')
       end
 
-      contents = @renderer.render(contents, type: type, name: name)
-      File.write(File.join(path, 'index.html'), contents) unless contents.nil?
+      filename = File.join(path, 'index.html')
+      contents = @renderer.render(contents, type: type, name: name, filename: filename)
+      File.write(filename, contents) unless contents.nil?
     end
   end
 end

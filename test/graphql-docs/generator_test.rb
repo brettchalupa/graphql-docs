@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 
 class GeneratorTest < Minitest::Test
@@ -5,7 +6,7 @@ class GeneratorTest < Minitest::Test
     def initialize(_, _)
     end
 
-    def render(contents, type: nil, name: nil)
+    def render(contents, type: nil, name: nil, filename: nil)
       to_html(contents)
     end
 
