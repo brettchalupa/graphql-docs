@@ -107,8 +107,6 @@ In your ERB layouts, there are several helper methods you can use. The helper me
 
 To call these methods within templates, you must use the dot notation, such as `<%= slugify.(text) %>`.
 
-For `markdownify`, `CommonMarker` is not enabled by default (because it relies on native code). You will need to add `require 'commonmarker'` if you wish to use it.
-
 ## Configuration
 
 The following options are available:
