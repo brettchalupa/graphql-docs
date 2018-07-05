@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+
+require 'commonmarker'
+
 module GraphQLDocs
   module Helpers
     SLUGIFY_PRETTY_REGEXP = Regexp.new("[^[:alnum:]._~!$&'()+,;=@]+").freeze
@@ -19,7 +22,6 @@ module GraphQLDocs
 
     def markdownify(string)
       return '' if string.nil?
-      return string unless defined?(CommonMarker)
       ::CommonMarker.render_html(string, :DEFAULT).strip
     end
 
