@@ -19,6 +19,7 @@ module GraphQLDocs
 
     def markdownify(string)
       return '' if string.nil?
+      return string unless defined?(CommonMarker)
       ::CommonMarker.render_html(string, :DEFAULT).strip
     end
 
