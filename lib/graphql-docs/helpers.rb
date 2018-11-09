@@ -22,7 +22,8 @@ module GraphQLDocs
 
     def markdownify(string)
       return '' if string.nil?
-      ::CommonMarker.render_html(string, :DEFAULT).strip
+      type = @options[:pipeline_config][:context][:unsafe] ? :UNSAFE : :DEFAULT
+      ::CommonMarker.render_html(string, type).strip
     end
 
     def graphql_root_types

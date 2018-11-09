@@ -21,8 +21,33 @@ class RendererTest < Minitest::Test
     assert_equal '<p><strong>R2D2</strong></p>', contents
   end
 
+  def test_that_unsafe_html_is_not_blocked_by_default
+    contents = @renderer.to_html('<strong>Oh hello</strong>')
+
+    assert_equal '<p><strong>Oh hello</strong></p>', contents
+  end
+
+  def test_that_unsafe_html_is_blocked_when_asked
+    renderer = GraphQLDocs::Renderer.new(@parsed_schema, GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge({
+      pipeline_config: {
+        pipeline:
+          %i(ExtendedMarkdownFilter
+             EmojiFilter
+             TableOfContentsFilter),
+        context: {
+          gfm: false,
+          unsafe: false,
+          asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'
+        }
+      }
+    }))
+    contents = renderer.to_html('<strong>Oh</strong> **hello**')
+
+    assert_equal '<p><!-- raw HTML omitted -->Oh<!-- raw HTML omitted --> <strong>hello</strong></p>', contents
+  end
+
   def test_that_filename_accessible_to_filters
-    @renderer = GraphQLDocs::Renderer.new(@parsed_schema, GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge({
+    renderer = GraphQLDocs::Renderer.new(@parsed_schema, GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge({
       pipeline_config: {
         pipeline:
           %i(ExtendedMarkdownFilter
@@ -31,11 +56,12 @@ class RendererTest < Minitest::Test
              AddFilenameFilter),
         context: {
           gfm: false,
+          unsafe: true,
           asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'
         }
       }
     }))
-    contents = @renderer.render('<span id="fill-me"></span>', type: 'Droid', name: 'R2D2', filename: '/this/is/the/filename')
+    contents = renderer.render('<span id="fill-me"></span>', type: 'Droid', name: 'R2D2', filename: '/this/is/the/filename')
     assert_match %r{<span id="fill-me">/this/is/the/filename</span>}, contents
   end
 end

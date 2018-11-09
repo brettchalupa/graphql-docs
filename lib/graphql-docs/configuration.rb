@@ -16,6 +16,7 @@ module GraphQLDocs
            TableOfContentsFilter),
         context: {
           gfm: false,
+          unsafe: true, # necessary for layout needs, given that it's all HTML templates
           asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'
         }
       },

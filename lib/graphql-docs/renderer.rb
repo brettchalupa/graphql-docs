@@ -17,9 +17,11 @@ module GraphQLDocs
         @graphql_default_layout = ERB.new(File.read(@options[:templates][:default]))
       end
 
-      @pipeline_config = @options[:pipeline_config]
+      @pipeline_config = @options[:pipeline_config] || {}
+      pipeline = @pipeline_config[:pipeline] || {}
+      context = @pipeline_config[:context] || {}
 
-      filters = @pipeline_config[:pipeline].map do |f|
+      filters = pipeline.map do |f|
         if filter?(f)
           f
         else
@@ -34,7 +36,7 @@ module GraphQLDocs
         end
       end
 
-      @pipeline = HTML::Pipeline.new(filters, @pipeline_config[:context])
+      @pipeline = HTML::Pipeline.new(filters, context)
     end
 
     def render(contents, type: nil, name: nil, filename: nil)
