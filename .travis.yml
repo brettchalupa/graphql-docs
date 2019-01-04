@@ -3,6 +3,7 @@ rvm:
   - 2.3.6
   - 2.4.3
   - 2.5.0
+  - 2.6.0
 
 git:
   depth: 10
@@ -24,6 +25,6 @@ addons:
 matrix:
   include:
     - script: bundle exec rake rubocop
-      rvm: 2.5.0
+      rvm: 2.6.0
     - script: bundle exec rake html_proofer
-      rvm: 2.5.0
+      rvm: 2.6.0
