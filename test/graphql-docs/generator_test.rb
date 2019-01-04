@@ -155,6 +155,21 @@ class GeneratorTest < Minitest::Test
     end
   end
 
+  def test_that_erb_landing_pages_work
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+    options[:landing_pages][:object] = File.join(fixtures_dir, 'landing_pages', 'object.erb')
+    options[:landing_pages][:variables] = { some_var: 'wowie!!' }
+
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
+    generator.generate
+
+    object = File.read File.join(@output_dir, 'object', 'index.html')
+
+    assert_match /Variable Objects/, object
+    assert_match /wowie!!/, object
+  end
+
   def test_that_broken_yaml_is_caught
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:landing_pages][:index] = File.join(fixtures_dir, 'landing_pages', 'broken_yaml.md')

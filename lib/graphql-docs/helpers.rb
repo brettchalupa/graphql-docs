@@ -62,7 +62,7 @@ module GraphQLDocs
       @parsed_schema[:scalar_types] || []
     end
 
-    def split_into_metadata_and_contents(contents)
+    def split_into_metadata_and_contents(contents, parse: true)
       opts = {}
       pieces = yaml_split(contents)
       if pieces.size < 4
@@ -72,7 +72,11 @@ module GraphQLDocs
       end
       # Parse
       begin
-        meta = YAML.load(pieces[2]) || {}
+        if parse
+          meta = YAML.load(pieces[2]) || {}
+        else
+          meta = pieces[2]
+        end
       rescue Exception => e # rubocop:disable Lint/RescueException
         raise "Could not parse YAML for #{name}: #{e.message}"
       end

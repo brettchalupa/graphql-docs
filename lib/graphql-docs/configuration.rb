@@ -48,7 +48,9 @@ module GraphQLDocs
         enum: "#{File.dirname(__FILE__)}/landing_pages/enum.md",
         union: "#{File.dirname(__FILE__)}/landing_pages/union.md",
         input_object: "#{File.dirname(__FILE__)}/landing_pages/input_object.md",
-        scalar: "#{File.dirname(__FILE__)}/landing_pages/scalar.md"
+        scalar: "#{File.dirname(__FILE__)}/landing_pages/scalar.md",
+
+        variables: {} # only used for ERB landing pages
       },
 
       classes: {

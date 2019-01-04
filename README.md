@@ -96,6 +96,12 @@ GraphQLDocs.build(options)
 
 If your `render` method returns `nil`, the `Generator` will not attempt to write any HTML file.
 
+### Templates
+
+The layouts for the individual GraphQL pages are ERB templates, but you can also use ERB templates for your static landing pages.
+
+If you want to add additional variables for your landing pages, you can add define a `variables` hash within the `landing_pages` option.
+
 ### Helper methods
 
 In your ERB layouts, there are several helper methods you can use. The helper methods are:

@@ -27,7 +27,23 @@ module GraphQLDocs
         elsif !File.exist?(@options[:landing_pages][sym])
           raise IOError, "`#{sym}` landing page #{@options[:landing_pages][sym]} was not found"
         end
-        instance_variable_set("@graphql_#{sym}_landing_page", File.read(@options[:landing_pages][sym]))
+
+        landing_page_contents = File.read(@options[:landing_pages][sym])
+        metadata = ''
+
+        if File.extname((@options[:landing_pages][sym])) == '.erb'
+          opts = @options.merge(@options[:landing_pages][:variables]).merge(helper_methods)
+          if has_yaml?(landing_page_contents)
+            metadata, landing_page = split_into_metadata_and_contents(landing_page_contents, parse: false)
+            erb_template = ERB.new(landing_page)
+          else
+            erb_template = ERB.new(landing_page_contents)
+          end
+
+          landing_page_contents = erb_template.result(OpenStruct.new(opts).instance_eval { binding })
+        end
+
+        instance_variable_set("@graphql_#{sym}_landing_page", metadata + landing_page_contents)
       end
     end
 
