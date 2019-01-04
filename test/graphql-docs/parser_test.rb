@@ -5,8 +5,8 @@ class ParserTest < Minitest::Test
   def setup
     @ghapi = File.read(File.join(fixtures_dir, 'gh-schema.graphql'))
     @swapi = File.read(File.join(fixtures_dir, 'sw-schema.graphql'))
-    @parser = GraphQLDocs::Parser.new(@ghapi, {})
-    @results = @parser.parse
+    @gh_parser = GraphQLDocs::Parser.new(@ghapi, {})
+    @gh_results = @gh_parser.parse
   end
 
   def test_it_accepts_schema_class
@@ -34,28 +34,28 @@ class ParserTest < Minitest::Test
   end
 
   def test_types_are_sorted
-    names = @results[:object_types].map { |t| t[:name] }
+    names = @gh_results[:object_types].map { |t| t[:name] }
     assert_equal names.sort, names
   end
 
   def test_connections_are_plucked
-    issue = @results[:object_types].find { |t| t[:name] == 'Issue' }
+    issue = @gh_results[:object_types].find { |t| t[:name] == 'Issue' }
     refute issue[:connections].empty?
   end
 
   def test_knows_implementers_for_interfaces
-    comment = @results[:interface_types].find { |t| t[:name] == 'Comment' }
+    comment = @gh_results[:interface_types].find { |t| t[:name] == 'Comment' }
     refute comment[:implemented_by].empty?
   end
 
   def test_groups_items_by_type
-    assert @results[:input_object_types]
-    assert @results[:object_types]
-    assert @results[:scalar_types]
-    assert @results[:interface_types]
-    assert @results[:enum_types]
-    assert @results[:union_types]
-    assert @results[:mutation_types]
+    assert @gh_results[:input_object_types]
+    assert @gh_results[:object_types]
+    assert @gh_results[:scalar_types]
+    assert @gh_results[:interface_types]
+    assert @gh_results[:enum_types]
+    assert @gh_results[:union_types]
+    assert @gh_results[:mutation_types]
   end
 
   def test_mutationless_schemas_do_not_explode
@@ -83,5 +83,35 @@ class ParserTest < Minitest::Test
     results = parser.parse
 
     assert results[:mutation_types]
+  end
+
+  def test_schemas_with_quote_style_comments_works
+    schema = <<-SCHEMA
+    type Query {
+      profile: User
+    }
+
+    """
+    A user
+    """
+    type User {
+      """
+      The id of the user
+      """
+      id: String!
+
+      """
+      The email of user
+      """
+      email: String
+    }
+    SCHEMA
+
+    parser = GraphQLDocs::Parser.new(schema, {})
+
+    results = parser.parse
+    assert results[:object_types]
+    user = results[:object_types].first
+    assert_equal 'The id of the user', user[:fields].first[:description]
   end
 end
