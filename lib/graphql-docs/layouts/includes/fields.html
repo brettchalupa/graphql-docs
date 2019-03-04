@@ -4,21 +4,15 @@
   <span id="<%= slugify.(field[:name]) %>" class="field-name anchored"><%= field[:name] %> (<code><a href="<%= base_url %>/<%= field[:type][:path] %>"><%= field[:type][:info] %></a></code>)</span>
 
   <div class="description-wrapper">
-  <% if field[:is_deprecated] %>
-    <div class="deprecation-notice <%= classes[:deprecation_notice] %>">
-      <span class="deprecation-title">Deprecation notice</span>
-      <%= markdownify.(field[:deprecation_reason]) %>
-    </div>
-  <% end %>
+    <%= include.('deprecations.html', item: field) %>
 
-  <%= include.('notices.html', notices: field[:notices]) %>
+    <%= include.('notices.html', notices: field[:notices]) %>
 
-  <%= markdownify.(field[:description]) %>
+    <%= markdownify.(field[:description]) %>
 
-  <% unless field[:arguments].empty? %>
-    <%= include.('arguments.html', arguments: field[:arguments]) %>
-  <% end %>
-
+    <% unless field[:arguments].empty? %>
+      <%= include.('arguments.html', arguments: field[:arguments]) %>
+    <% end %>
   </div>
 </div>
 
