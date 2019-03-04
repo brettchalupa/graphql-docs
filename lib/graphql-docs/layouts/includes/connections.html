@@ -13,7 +13,7 @@
 
     <%= include.('notices.html', notices: connection[:notices]) %>
 
-    <p><%= connection[:description] %></p>
+    <p><%= markdownify.(connection[:description]) %></p>
 
     <% unless connection[:arguments].empty? %>
       <%= include.('arguments.html', arguments: connection[:arguments]) %>
