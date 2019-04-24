@@ -153,7 +153,7 @@ A `notice` has the following options:
 Example of a `notices` proc that adds a notice to the `TeamDiscussion` type:
 
 ```ruby
-options[:notice] = (schema_member_path) -> {
+options[:notices] = ->(schema_member_path) {
   notices = []
 
   if schema_member_path == "TeamDiscussion"
