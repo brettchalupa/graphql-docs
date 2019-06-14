@@ -14,14 +14,14 @@ module GraphQLDocs
 
       @renderer = @options[:renderer].new(@parsed_schema, @options)
 
-      %i(operations objects mutations interfaces enums unions input_objects scalars).each do |sym|
+      %i(operations objects mutations interfaces enums unions input_objects scalars directives).each do |sym|
         if !File.exist?(@options[:templates][sym])
           raise IOError, "`#{sym}` template #{@options[:templates][sym]} was not found"
         end
         instance_variable_set("@graphql_#{sym}_template", ERB.new(File.read(@options[:templates][sym])))
       end
 
-      %i(index object query mutation interface enum union input_object scalar).each do |sym|
+      %i(index object query mutation interface enum union input_object scalar directive).each do |sym|
         if @options[:landing_pages][sym].nil?
           instance_variable_set("@#{sym}_landing_page", nil)
         elsif !File.exist?(@options[:landing_pages][sym])
@@ -58,6 +58,7 @@ module GraphQLDocs
       create_graphql_union_pages
       create_graphql_input_object_pages
       create_graphql_scalar_pages
+      create_graphql_directive_pages
 
       unless @graphql_index_landing_page.nil?
         write_file('static', 'index', @graphql_index_landing_page, trim: false)
@@ -93,6 +94,10 @@ module GraphQLDocs
 
       unless @graphql_scalar_landing_page.nil?
         write_file('static', 'scalar', @graphql_scalar_landing_page, trim: false)
+      end
+
+      unless @graphql_directive_landing_page.nil?
+        write_file('static', 'directive', @graphql_directive_landing_page, trim: false)
       end
 
       if @options[:use_default_styles]
@@ -193,6 +198,15 @@ module GraphQLDocs
 
         contents = @graphql_scalars_template.result(OpenStruct.new(opts).instance_eval { binding })
         write_file('scalar', scalar_type[:name], contents)
+      end
+    end
+
+    def create_graphql_directive_pages
+      graphql_directive_types.each do |directive_type|
+        opts = default_generator_options(type: directive_type)
+
+        contents = @graphql_directives_template.result(OpenStruct.new(opts).instance_eval { binding })
+        write_file('directive', directive_type[:name], contents)
       end
     end
 

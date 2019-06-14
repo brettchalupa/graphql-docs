@@ -37,6 +37,7 @@ module GraphQLDocs
         unions: "#{File.dirname(__FILE__)}/layouts/graphql_unions.html",
         input_objects: "#{File.dirname(__FILE__)}/layouts/graphql_input_objects.html",
         scalars: "#{File.dirname(__FILE__)}/layouts/graphql_scalars.html",
+        directives: "#{File.dirname(__FILE__)}/layouts/graphql_directives.html",
       },
 
       landing_pages: {
@@ -49,6 +50,7 @@ module GraphQLDocs
         union: "#{File.dirname(__FILE__)}/landing_pages/union.md",
         input_object: "#{File.dirname(__FILE__)}/landing_pages/input_object.md",
         scalar: "#{File.dirname(__FILE__)}/landing_pages/scalar.md",
+        directive: "#{File.dirname(__FILE__)}/landing_pages/directive.md",
 
         variables: {} # only used for ERB landing pages
       },

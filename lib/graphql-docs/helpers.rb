@@ -62,6 +62,10 @@ module GraphQLDocs
       @parsed_schema[:scalar_types] || []
     end
 
+    def graphql_directive_types
+      @parsed_schema[:directive_types] || []
+    end
+
     def split_into_metadata_and_contents(contents, parse: true)
       opts = {}
       pieces = yaml_split(contents)
