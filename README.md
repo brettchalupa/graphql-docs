@@ -128,7 +128,7 @@ The following options are available:
 | `pipeline_config` | Defines two sub-keys, `pipeline` and `context`, which are used by `html-pipeline` when rendering your output. | `pipeline` has `ExtendedMarkdownFilter`, `EmojiFilter`, and `TableOfContentsFilter`. `context` has `gfm: false` and `asset_root` set to GitHub's CDN. |
 | `renderer` | The rendering class to use. | `GraphQLDocs::Renderer`
 | `templates` | The templates to use when generating HTML. You may override any of the following keys: `default`, `includes`, `operations`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`, `directives`. | The defaults are found in _lib/graphql-docs/layouts/_.
-| `landing_pages` | The landing page to use when generating HTML for each type. You may override any of the following keys: `index`, `query`, `object`, `mutation`, `interface`, `enum`, `union`, `input_object`, `scalar`, `directive`. | The defaults are found in _lib/graphql-docs/layouts/_.
+| `landing_pages` | The landing page to use when generating HTML for each type. You may override any of the following keys: `index`, `query`, `object`, `mutation`, `interface`, `enum`, `union`, `input_object`, `scalar`, `directive`. | The defaults are found in _lib/graphql-docs/landing\_pages/_.
 | `classes` | Additional class names you can provide to certain elements. | The full list is available in _lib/graphql-docs/configuration.rb_.
 | `notices` | A proc used to add notices to schema members. See *Customizing Notices* section below. | `nil` |
 
