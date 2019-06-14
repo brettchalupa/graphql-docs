@@ -119,4 +119,18 @@
       <% end %>
     </ul>
   </li>
+
+  <li>
+    <p><a href="<%= base_url %>/directive">Directives</a></p>
+    <ul class="menu-root">
+      <% graphql_directive_types.().each do |type| %>
+      <% @name = type[:name] %>
+      <li>
+        <a href="<%= base_url %>/directive/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
+          <%= @name %>
+        </a>
+      </li>
+      <% end %>
+    </ul>
+  </li>
 </ul>

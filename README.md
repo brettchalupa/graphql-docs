@@ -109,7 +109,7 @@ In your ERB layouts, there are several helper methods you can use. The helper me
 * `slugify(str)` - This slugifies the given string.
 * `include(filename, opts)` - This embeds a template from your `includes` folder, passing along the local options provided.
 * `markdownify(string)` - This converts a string into HTML via CommonMarker.
-* `graphql_operation_types`, `graphql_mutation_types`, `graphql_object_types`, `graphql_interface_types`, `graphql_enum_types`, `graphql_union_types`, `graphql_input_object_types`, `graphql_scalar_types` - Collections of the various GraphQL types.
+* `graphql_operation_types`, `graphql_mutation_types`, `graphql_object_types`, `graphql_interface_types`, `graphql_enum_types`, `graphql_union_types`, `graphql_input_object_types`, `graphql_scalar_types`, `graphql_directive_types` - Collections of the various GraphQL types.
 
 To call these methods within templates, you must use the dot notation, such as `<%= slugify.(text) %>`.
 
@@ -127,8 +127,8 @@ The following options are available:
 | `delete_output` | Deletes `output_dir` before generating content. | `false` |
 | `pipeline_config` | Defines two sub-keys, `pipeline` and `context`, which are used by `html-pipeline` when rendering your output. | `pipeline` has `ExtendedMarkdownFilter`, `EmojiFilter`, and `TableOfContentsFilter`. `context` has `gfm: false` and `asset_root` set to GitHub's CDN. |
 | `renderer` | The rendering class to use. | `GraphQLDocs::Renderer`
-| `templates` | The templates to use when generating HTML. You may override any of the following keys: `default`, `includes`, `operations`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`. | The defaults are found in _lib/graphql-docs/layouts/_.
-| `landing_pages` | The landing page to use when generating HTML for each type. You may override any of the following keys: `index`, `query`, `object`, `mutation`, `interface`, `enum`, `union`, `input_object`, `scalar`. | The defaults are found in _lib/graphql-docs/layouts/_.
+| `templates` | The templates to use when generating HTML. You may override any of the following keys: `default`, `includes`, `operations`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`, `directives`. | The defaults are found in _lib/graphql-docs/layouts/_.
+| `landing_pages` | The landing page to use when generating HTML for each type. You may override any of the following keys: `index`, `query`, `object`, `mutation`, `interface`, `enum`, `union`, `input_object`, `scalar`, `directive`. | The defaults are found in _lib/graphql-docs/layouts/_.
 | `classes` | Additional class names you can provide to certain elements. | The full list is available in _lib/graphql-docs/configuration.rb_.
 | `notices` | A proc used to add notices to schema members. See *Customizing Notices* section below. | `nil` |
 

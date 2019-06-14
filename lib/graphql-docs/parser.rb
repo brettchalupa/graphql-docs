@@ -27,6 +27,7 @@ module GraphQLDocs
         union_types: [],
         input_object_types: [],
         scalar_types: [],
+        directive_types: [],
       }
     end
 
@@ -133,13 +134,20 @@ module GraphQLDocs
         end
       end
 
-      @processed_schema[:mutation_types].sort_by! { |o| o[:name] }
-      @processed_schema[:object_types].sort_by! { |o| o[:name] }
-      @processed_schema[:interface_types].sort_by! { |o| o[:name] }
-      @processed_schema[:enum_types].sort_by! { |o| o[:name] }
-      @processed_schema[:union_types].sort_by! { |o| o[:name] }
-      @processed_schema[:input_object_types].sort_by! { |o| o[:name] }
-      @processed_schema[:scalar_types].sort_by! { |o| o[:name] }
+      @schema.directives.each_value do |directive|
+        data = {}
+        data[:notices] = @options[:notices].call(directive.name)
+
+        data[:name] = directive.name
+        data[:description] = directive.description
+        data[:locations] = directive.locations
+
+        data[:arguments], _ = fetch_fields(directive.arguments, directive.name)
+
+        @processed_schema[:directive_types] << data
+      end
+
+      sort_by_name!
 
       @processed_schema[:interface_types].each do |interface|
         interface[:implemented_by] = []
@@ -228,6 +236,13 @@ module GraphQLDocs
 
     def argument?(field)
       field.is_a?(::GraphQL::Argument)
+    end
+
+    def sort_by_name!
+      @processed_schema.each_pair do |key, value|
+        next if key == :operation_types || key == :root_types
+        value.sort_by! { |o| o[:name] }
+      end
     end
   end
 end

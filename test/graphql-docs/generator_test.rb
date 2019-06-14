@@ -51,7 +51,7 @@ class GeneratorTest < Minitest::Test
 
     GraphQLDocs::Generator.new(@results, options)
   end
-
+  focus
   def test_that_it_works
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir
@@ -69,6 +69,7 @@ class GeneratorTest < Minitest::Test
     assert File.exist? File.join(@output_dir, 'object', 'repository', 'index.html')
     assert File.exist? File.join(@output_dir, 'scalar', 'boolean', 'index.html')
     assert File.exist? File.join(@output_dir, 'union', 'issuetimelineitem', 'index.html')
+    assert File.exist? File.join(@output_dir, 'directive', 'deprecated', 'index.html')
 
     # content sanity checks
     Dir.glob("#{@output_dir}/**/*.html") do |file|
