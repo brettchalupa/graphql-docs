@@ -29,6 +29,10 @@ class GeneratorTest < Minitest::Test
     @named_root_parser = GraphQLDocs::Parser.new(named_root_schema, {})
     @named_root_results = @named_root_parser.parse
 
+    wonky_mutation_schema = File.read(File.join(fixtures_dir, 'wonky-mutation.graphql'))
+    @wonky_mutation_parser = GraphQLDocs::Parser.new(wonky_mutation_schema, {})
+    @wonky_mutation_results = @wonky_mutation_parser.parse
+
     @output_dir = File.join(fixtures_dir, 'output')
   end
 
@@ -51,7 +55,7 @@ class GeneratorTest < Minitest::Test
 
     GraphQLDocs::Generator.new(@results, options)
   end
-  focus
+
   def test_that_it_works
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir
@@ -216,5 +220,17 @@ class GeneratorTest < Minitest::Test
     contents = File.read File.join(@output_dir, 'input_object', 'projectorder', 'index.html')
 
     assert_match %r{<div class="description-wrapper">\n   <p>The direction in which to order projects by the specified field.</p>\s+</div>}, contents
+  end
+
+  def test_mutations_generate
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+
+    generator = GraphQLDocs::Generator.new(@wonky_mutation_results, options)
+    generator.generate
+
+    mutation = File.read File.join(@output_dir, 'mutation', 'testmutation', 'index.html')
+
+    assert_match /anything/, mutation
   end
 end
