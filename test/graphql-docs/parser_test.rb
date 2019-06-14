@@ -56,6 +56,21 @@ class ParserTest < Minitest::Test
     assert @gh_results[:enum_types]
     assert @gh_results[:union_types]
     assert @gh_results[:mutation_types]
+    assert @gh_results[:directive_types]
+  end
+
+  def test_directives
+    names = @gh_results[:directive_types].map { |t| t[:name] }
+    assert_equal %w(deprecated include preview skip), names
+
+    preview_directive = @gh_results[:directive_types].find { |t| t[:name]  == 'deprecated' }
+    ap preview_directive
+    assert_equal %i(FIELD_DEFINITION ENUM_VALUE), preview_directive[:locations]
+
+    assert_equal 'Marks an element of a GraphQL schema as no longer supported.', preview_directive[:description]
+    reason_arg = preview_directive[:arguments].first
+    assert_equal 'reason', reason_arg[:name]
+    assert_equal 'Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted in [Markdown](https://daringfireball.net/projects/markdown/).', reason_arg[:description]
   end
 
   def test_mutationless_schemas_do_not_explode

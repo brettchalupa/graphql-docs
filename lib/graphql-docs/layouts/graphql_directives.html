@@ -1,0 +1,15 @@
+<h1><%= type[:name] %></h1>
+
+<%= include.('notices.html', notices: type[:notices]) %>
+
+<%= type[:description] %>
+
+<%= include.('locations.html', locations: type[:locations]) %>
+
+<% unless type[:arguments].empty? %>
+
+<h2>Arguments</h2>
+
+<%= include.('arguments.html', arguments: type[:arguments]) %>
+
+<% end %>
