@@ -51,7 +51,7 @@ class GeneratorTest < Minitest::Test
 
     GraphQLDocs::Generator.new(@results, options)
   end
-  focus
+
   def test_that_it_works
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir

@@ -64,7 +64,6 @@ class ParserTest < Minitest::Test
     assert_equal %w(deprecated include preview skip), names
 
     preview_directive = @gh_results[:directive_types].find { |t| t[:name]  == 'deprecated' }
-    ap preview_directive
     assert_equal %i(FIELD_DEFINITION ENUM_VALUE), preview_directive[:locations]
 
     assert_equal 'Marks an element of a GraphQL schema as no longer supported.', preview_directive[:description]

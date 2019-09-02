@@ -32,7 +32,6 @@ module GraphQLDocs
     end
 
     def parse
-
       root_types = {}
       ['query', 'mutation'].each do |operation|
         unless @schema.root_type_for_operation(operation).nil?
