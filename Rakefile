@@ -46,6 +46,7 @@ task :generate_sample do
 
   options = {}
   options[:delete_output] = true
+  options[:base_url] = '/graphql-docs'
   options[:filename] = File.join(File.dirname(__FILE__), 'test', 'graphql-docs', 'fixtures', 'gh-schema.graphql')
 
   GraphQLDocs.build(options)
