@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 require 'erb'
-require 'sass'
+require 'sassc'
 
 module GraphQLDocs
   class Generator
@@ -105,7 +105,7 @@ module GraphQLDocs
         FileUtils.mkdir_p(File.join(@options[:output_dir], 'assets'))
 
         sass = File.join(assets_dir, 'css', 'screen.scss')
-        system `sass --sourcemap=none #{sass}:#{@options[:output_dir]}/assets/style.css`
+        system `sassc --sourcemap=inline #{sass} #{@options[:output_dir]}/assets/style.css`
 
         FileUtils.cp_r(File.join(assets_dir, 'images'), File.join(@options[:output_dir], 'assets'))
         FileUtils.cp_r(File.join(assets_dir, 'webfonts'), File.join(@options[:output_dir], 'assets'))
