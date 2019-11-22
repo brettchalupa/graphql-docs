@@ -11,9 +11,17 @@ rvm:
 git:
   depth: 10
 
+env:
+  global:
+    - SASS_LIBSASS_PATH=$TRAVIS_BUILD_DIR/libsass
+
 before_install:
+  - git clone https://github.com/sass/libsass.git
   - gem update --system
   - gem install bundler
+
+script:
+  - ./script/ci-build-libsass
 
 matrix:
   include:
