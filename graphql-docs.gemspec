@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'graphql', '~> 1.8'
+  spec.add_dependency 'graphql', '< 1.10'
 
   # rendering
   spec.add_dependency 'commonmarker', '~> 0.16'
