@@ -6,7 +6,7 @@ class GeneratorTest < Minitest::Test
   class CustomRenderer
     def initialize(_, _); end
 
-    def render(contents)
+    def render(contents, type: nil, name: nil, filename: nil) # rubocop:disable Lint/UnusedMethodArgument
       to_html(contents)
     end
 
