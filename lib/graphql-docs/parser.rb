@@ -216,8 +216,8 @@ module GraphQLDocs
 
       {
         name: name,
-        path: path + '/' + slugify(name),
-        info: type.to_s
+        path: "#{path}/#{slugify(name)}",
+        info: type.graphql_definition
       }
     end
 

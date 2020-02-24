@@ -47,7 +47,7 @@ task :generate_sample do
 
   options = {}
   options[:delete_output] = true
-  options[:base_url] = '/graphql-docs'
+  options[:base_url] = ENV.fetch('GQL_DOCS_BASE_URL', '')
   options[:filename] = File.join(File.dirname(__FILE__), 'test', 'graphql-docs', 'fixtures', 'gh-schema.graphql')
 
   GraphQLDocs.build(options)
@@ -67,6 +67,7 @@ end
 
 desc 'Generate and publish docs to gh-pages'
 task :publish do
+  ENV['GQL_DOCS_BASE_URL'] = '/graphql-docs'
   Rake::Task[:generate_sample].invoke('https://www.gjtorikian.com/graphql-docs')
   Dir.mktmpdir do |tmp|
     system "mv output/* #{tmp}"
