@@ -1,6 +1,6 @@
-# coding: utf-8
 # frozen_string_literal: true
-lib = File.expand_path('../lib', __FILE__)
+
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'graphql-docs/version'
 
@@ -21,14 +21,14 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'graphql', '~> 1.8'
+  spec.add_dependency 'graphql', '~> 1.10'
 
   # rendering
   spec.add_dependency 'commonmarker', '~> 0.16'
-  spec.add_dependency 'html-pipeline', '~> 2.9'
-  spec.add_dependency 'escape_utils',  '~> 1.2'
+  spec.add_dependency 'escape_utils', '~> 1.2'
   spec.add_dependency 'extended-markdown-filter', '~> 0.4'
   spec.add_dependency 'gemoji', '~> 3.0'
+  spec.add_dependency 'html-pipeline', '~> 2.9'
   spec.add_dependency 'sass', '~> 3.4'
 
   spec.add_development_dependency 'awesome_print'
