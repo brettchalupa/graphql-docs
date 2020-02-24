@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 
@@ -31,7 +32,7 @@ task :console do
   require 'graphql-docs'
 
   def reload!
-    files = $LOADED_FEATURES.select { |feat| feat =~ /\/graphql-docs\// }
+    files = $LOADED_FEATURES.select { |feat| feat =~ %r{/graphql-docs/} }
     files.each { |file| load file }
   end
 
@@ -46,7 +47,7 @@ task :generate_sample do
 
   options = {}
   options[:delete_output] = true
-  options[:base_url] = '/graphql-docs'
+  options[:base_url] = ENV.fetch('GQL_DOCS_BASE_URL', '')
   options[:filename] = File.join(File.dirname(__FILE__), 'test', 'graphql-docs', 'fixtures', 'gh-schema.graphql')
 
   GraphQLDocs.build(options)
@@ -66,6 +67,7 @@ end
 
 desc 'Generate and publish docs to gh-pages'
 task :publish do
+  ENV['GQL_DOCS_BASE_URL'] = '/graphql-docs'
   Rake::Task[:generate_sample].invoke('https://www.gjtorikian.com/graphql-docs')
   Dir.mktmpdir do |tmp|
     system "mv output/* #{tmp}"

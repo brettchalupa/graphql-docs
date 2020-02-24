@@ -1,17 +1,18 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 class GeneratorTest < Minitest::Test
   class CustomRenderer
-    def initialize(_, _)
-    end
+    def initialize(_, _); end
 
-    def render(contents, type: nil, name: nil, filename: nil)
+    def render(contents, type: nil, name: nil, filename: nil) # rubocop:disable Lint/UnusedMethodArgument
       to_html(contents)
     end
 
     def to_html(contents)
       return '' if contents.nil?
+
       contents.sub(/CodeOfConduct/i, 'CoC!!!!!')
     end
   end
@@ -118,7 +119,7 @@ class GeneratorTest < Minitest::Test
 
     contents = File.read(File.join(@output_dir, 'object', 'codeofconduct', 'index.html'))
 
-    assert_match /CoC!!!!!/, contents
+    assert_match(/CoC!!!!!/, contents)
   end
 
   def test_that_it_sets_classes
@@ -132,7 +133,7 @@ class GeneratorTest < Minitest::Test
 
     object = File.read File.join(@output_dir, 'object', 'codeofconduct', 'index.html')
 
-    assert_match /<div class="field-entry my-4">/, object
+    assert_match(/<div class="field-entry my-4">/, object)
   end
 
   def test_that_named_query_root_generates_fields
@@ -144,7 +145,7 @@ class GeneratorTest < Minitest::Test
 
     object = File.read File.join(@output_dir, 'operation', 'query', 'index.html')
 
-    assert_match /Do a thing/, object
+    assert_match(/Do a thing/, object)
   end
 
   def test_that_missing_landing_pages_are_reported
@@ -167,8 +168,8 @@ class GeneratorTest < Minitest::Test
 
     object = File.read File.join(@output_dir, 'object', 'index.html')
 
-    assert_match /Variable Objects/, object
-    assert_match /wowie!!/, object
+    assert_match(/Variable Objects/, object)
+    assert_match(/wowie!!/, object)
   end
 
   def test_that_broken_yaml_is_caught
@@ -191,7 +192,7 @@ class GeneratorTest < Minitest::Test
 
     contents = File.read File.join(@output_dir, 'index.html')
 
-    assert_match %r{    "nest2": \{}, contents
+    assert_match(/    "nest2": \{/, contents)
   end
 
   def test_that_empty_html_lines_not_interpreted_by_markdown
@@ -203,7 +204,7 @@ class GeneratorTest < Minitest::Test
 
     contents = File.read File.join(@output_dir, 'operation', 'query', 'index.html')
 
-    assert_match %r{<td>\s+<p>The code of conduct's key</p>\s+</td>}, contents
+    assert_match(%r{<td>\s+<p>The code of conduct's key</p>\s+</td>}, contents)
   end
 
   def test_that_non_empty_html_lines_not_interpreted_by_markdown

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 class GraphQLDocsTest < Minitest::Test
@@ -32,5 +33,9 @@ class GraphQLDocsTest < Minitest::Test
     assert_raises ArgumentError do
       GraphQLDocs.build
     end
+  end
+
+  def test_it_accepts_class_schema
+    GraphQLDocs.build(schema: MySchema)
   end
 end

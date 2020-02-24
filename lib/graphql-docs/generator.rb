@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'erb'
 require 'sass'
 
@@ -14,14 +15,13 @@ module GraphQLDocs
 
       @renderer = @options[:renderer].new(@parsed_schema, @options)
 
-      %i(operations objects mutations interfaces enums unions input_objects scalars directives).each do |sym|
-        if !File.exist?(@options[:templates][sym])
-          raise IOError, "`#{sym}` template #{@options[:templates][sym]} was not found"
-        end
+      %i[operations objects mutations interfaces enums unions input_objects scalars directives].each do |sym|
+        raise IOError, "`#{sym}` template #{@options[:templates][sym]} was not found" unless File.exist?(@options[:templates][sym])
+
         instance_variable_set("@graphql_#{sym}_template", ERB.new(File.read(@options[:templates][sym])))
       end
 
-      %i(index object query mutation interface enum union input_object scalar directive).each do |sym|
+      %i[index object query mutation interface enum union input_object scalar directive].each do |sym|
         if @options[:landing_pages][sym].nil?
           instance_variable_set("@#{sym}_landing_page", nil)
         elsif !File.exist?(@options[:landing_pages][sym])
@@ -33,7 +33,7 @@ module GraphQLDocs
 
         if File.extname((@options[:landing_pages][sym])) == '.erb'
           opts = @options.merge(@options[:landing_pages][:variables]).merge(helper_methods)
-          if has_yaml?(landing_page_contents)
+          if yaml?(landing_page_contents)
             metadata, landing_page = split_into_metadata_and_contents(landing_page_contents, parse: false)
             erb_template = ERB.new(landing_page)
           else
@@ -60,45 +60,25 @@ module GraphQLDocs
       create_graphql_scalar_pages
       create_graphql_directive_pages
 
-      unless @graphql_index_landing_page.nil?
-        write_file('static', 'index', @graphql_index_landing_page, trim: false)
-      end
+      write_file('static', 'index', @graphql_index_landing_page, trim: false) unless @graphql_index_landing_page.nil?
 
-      unless @graphql_object_landing_page.nil?
-        write_file('static', 'object', @graphql_object_landing_page, trim: false)
-      end
+      write_file('static', 'object', @graphql_object_landing_page, trim: false) unless @graphql_object_landing_page.nil?
 
-      if !@graphql_query_landing_page.nil? && !has_query
-        write_file('operation', 'query', @graphql_query_landing_page, trim: false)
-      end
+      write_file('operation', 'query', @graphql_query_landing_page, trim: false) if !@graphql_query_landing_page.nil? && !has_query
 
-      unless @graphql_mutation_landing_page.nil?
-        write_file('operation', 'mutation', @graphql_mutation_landing_page, trim: false)
-      end
+      write_file('operation', 'mutation', @graphql_mutation_landing_page, trim: false) unless @graphql_mutation_landing_page.nil?
 
-      unless @graphql_interface_landing_page.nil?
-        write_file('static', 'interface', @graphql_interface_landing_page, trim: false)
-      end
+      write_file('static', 'interface', @graphql_interface_landing_page, trim: false) unless @graphql_interface_landing_page.nil?
 
-      unless @graphql_enum_landing_page.nil?
-        write_file('static', 'enum', @graphql_enum_landing_page, trim: false)
-      end
+      write_file('static', 'enum', @graphql_enum_landing_page, trim: false) unless @graphql_enum_landing_page.nil?
 
-      unless @graphql_union_landing_page.nil?
-        write_file('static', 'union', @graphql_union_landing_page, trim: false)
-      end
+      write_file('static', 'union', @graphql_union_landing_page, trim: false) unless @graphql_union_landing_page.nil?
 
-      unless @graphql_input_object_landing_page.nil?
-        write_file('static', 'input_object', @graphql_input_object_landing_page, trim: false)
-      end
+      write_file('static', 'input_object', @graphql_input_object_landing_page, trim: false) unless @graphql_input_object_landing_page.nil?
 
-      unless @graphql_scalar_landing_page.nil?
-        write_file('static', 'scalar', @graphql_scalar_landing_page, trim: false)
-      end
+      write_file('static', 'scalar', @graphql_scalar_landing_page, trim: false) unless @graphql_scalar_landing_page.nil?
 
-      unless @graphql_directive_landing_page.nil?
-        write_file('static', 'directive', @graphql_directive_landing_page, trim: false)
-      end
+      write_file('static', 'directive', @graphql_directive_landing_page, trim: false) unless @graphql_directive_landing_page.nil?
 
       if @options[:use_default_styles]
         assets_dir = File.join(File.dirname(__FILE__), 'layouts', 'assets')
@@ -117,23 +97,23 @@ module GraphQLDocs
     def create_graphql_query_pages
       graphql_operation_types.each do |query_type|
         metadata = ''
-        if query_type[:name] == graphql_root_types['query']
-          unless @options[:landing_pages][:query].nil?
-            query_landing_page = @options[:landing_pages][:query]
-            query_landing_page = File.read(query_landing_page)
-            if has_yaml?(query_landing_page)
-              pieces = yaml_split(query_landing_page)
-              pieces[2] = pieces[2].chomp
-              metadata = pieces[1, 3].join("\n")
-              query_landing_page = pieces[4]
-            end
-            query_type[:description] = query_landing_page
+        next unless query_type[:name] == graphql_root_types['query']
+
+        unless @options[:landing_pages][:query].nil?
+          query_landing_page = @options[:landing_pages][:query]
+          query_landing_page = File.read(query_landing_page)
+          if yaml?(query_landing_page)
+            pieces = yaml_split(query_landing_page)
+            pieces[2] = pieces[2].chomp
+            metadata = pieces[1, 3].join("\n")
+            query_landing_page = pieces[4]
           end
-          opts = default_generator_options(type: query_type)
-          contents = @graphql_operations_template.result(OpenStruct.new(opts).instance_eval { binding })
-          write_file('operation', 'query', metadata + contents)
-          return true
+          query_type[:description] = query_landing_page
         end
+        opts = default_generator_options(type: query_type)
+        contents = @graphql_operations_template.result(OpenStruct.new(opts).instance_eval { binding })
+        write_file('operation', 'query', metadata + contents)
+        return true
       end
       false
     end
@@ -229,7 +209,7 @@ module GraphQLDocs
         FileUtils.mkdir_p(path)
       end
 
-      if has_yaml?(contents)
+      if yaml?(contents)
         # Split data
         meta, contents = split_into_metadata_and_contents(contents)
         @options = @options.merge(meta)
