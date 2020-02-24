@@ -1,8 +1,8 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 class RendererTest < Minitest::Test
-
   def setup
     @swapi = File.read(File.join(fixtures_dir, 'sw-schema.graphql'))
     @parsed_schema = GraphQLDocs::Parser.new(@swapi, {}).parse
@@ -29,18 +29,18 @@ class RendererTest < Minitest::Test
 
   def test_that_unsafe_html_is_blocked_when_asked
     renderer = GraphQLDocs::Renderer.new(@parsed_schema, GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge({
-      pipeline_config: {
-        pipeline:
-          %i(ExtendedMarkdownFilter
-             EmojiFilter
-             TableOfContentsFilter),
-        context: {
-          gfm: false,
-          unsafe: false,
-          asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'
-        }
-      }
-    }))
+                                                                                                                  pipeline_config: {
+                                                                                                                    pipeline:
+                                                                                                                      %i[ExtendedMarkdownFilter
+                                                                                                                         EmojiFilter
+                                                                                                                         TableOfContentsFilter],
+                                                                                                                    context: {
+                                                                                                                      gfm: false,
+                                                                                                                      unsafe: false,
+                                                                                                                      asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'
+                                                                                                                    }
+                                                                                                                  }
+                                                                                                                }))
     contents = renderer.to_html('<strong>Oh</strong> **hello**')
 
     assert_equal '<p><!-- raw HTML omitted -->Oh<!-- raw HTML omitted --> <strong>hello</strong></p>', contents
@@ -48,19 +48,19 @@ class RendererTest < Minitest::Test
 
   def test_that_filename_accessible_to_filters
     renderer = GraphQLDocs::Renderer.new(@parsed_schema, GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge({
-      pipeline_config: {
-        pipeline:
-          %i(ExtendedMarkdownFilter
-             EmojiFilter
-             TableOfContentsFilter
-             AddFilenameFilter),
-        context: {
-          gfm: false,
-          unsafe: true,
-          asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'
-        }
-      }
-    }))
+                                                                                                                  pipeline_config: {
+                                                                                                                    pipeline:
+                                                                                                                      %i[ExtendedMarkdownFilter
+                                                                                                                         EmojiFilter
+                                                                                                                         TableOfContentsFilter
+                                                                                                                         AddFilenameFilter],
+                                                                                                                    context: {
+                                                                                                                      gfm: false,
+                                                                                                                      unsafe: true,
+                                                                                                                      asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'
+                                                                                                                    }
+                                                                                                                  }
+                                                                                                                }))
     contents = renderer.render('<span id="fill-me"></span>', type: 'Droid', name: 'R2D2', filename: '/this/is/the/filename')
     assert_match %r{<span id="fill-me">/this/is/the/filename</span>}, contents
   end
@@ -69,7 +69,7 @@ end
 class AddFilenameFilter < HTML::Pipeline::Filter
   def call
     doc.search('span[@id="fill-me"]').each do |span|
-      span.inner_html=(context[:filename])
+      span.inner_html = context[:filename]
     end
     doc
   end

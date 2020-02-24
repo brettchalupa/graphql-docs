@@ -232,7 +232,7 @@ module GraphQLDocs
     def sort_by_name!
       @processed_schema.each_pair do |key, value|
         next if value.empty?
-        next if key == :operation_types || key == :root_types
+        next if %i[operation_types root_types].include?(key)
 
         value.sort_by! { |o| o[:name] }
       end

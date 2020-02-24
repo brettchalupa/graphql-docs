@@ -10,7 +10,7 @@ require 'graphql-docs/version'
 begin
   require 'awesome_print'
   require 'pry'
-rescue LoadError; end
+rescue LoadError; end # rubocop:disable Lint/SuppressedException
 module GraphQLDocs
   class << self
     def build(options)

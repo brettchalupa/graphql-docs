@@ -6,7 +6,7 @@ class GeneratorTest < Minitest::Test
   class CustomRenderer
     def initialize(_, _); end
 
-    def render(contents, type: nil, name: nil, filename: nil)
+    def render(contents)
       to_html(contents)
     end
 
@@ -119,7 +119,7 @@ class GeneratorTest < Minitest::Test
 
     contents = File.read(File.join(@output_dir, 'object', 'codeofconduct', 'index.html'))
 
-    assert_match /CoC!!!!!/, contents
+    assert_match(/CoC!!!!!/, contents)
   end
 
   def test_that_it_sets_classes
@@ -133,7 +133,7 @@ class GeneratorTest < Minitest::Test
 
     object = File.read File.join(@output_dir, 'object', 'codeofconduct', 'index.html')
 
-    assert_match /<div class="field-entry my-4">/, object
+    assert_match(/<div class="field-entry my-4">/, object)
   end
 
   def test_that_named_query_root_generates_fields
@@ -145,7 +145,7 @@ class GeneratorTest < Minitest::Test
 
     object = File.read File.join(@output_dir, 'operation', 'query', 'index.html')
 
-    assert_match /Do a thing/, object
+    assert_match(/Do a thing/, object)
   end
 
   def test_that_missing_landing_pages_are_reported
@@ -168,8 +168,8 @@ class GeneratorTest < Minitest::Test
 
     object = File.read File.join(@output_dir, 'object', 'index.html')
 
-    assert_match /Variable Objects/, object
-    assert_match /wowie!!/, object
+    assert_match(/Variable Objects/, object)
+    assert_match(/wowie!!/, object)
   end
 
   def test_that_broken_yaml_is_caught

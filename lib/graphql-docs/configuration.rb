@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GraphQLDocs
   module Configuration
     GRAPHQLDOCS_DEFAULTS = {
@@ -11,9 +12,9 @@ module GraphQLDocs
       output_dir: './output/',
       pipeline_config: {
         pipeline:
-          %i(ExtendedMarkdownFilter
-           EmojiFilter
-           TableOfContentsFilter),
+          %i[ExtendedMarkdownFilter
+             EmojiFilter
+             TableOfContentsFilter],
         context: {
           gfm: false,
           unsafe: true, # necessary for layout needs, given that it's all HTML templates
@@ -37,7 +38,7 @@ module GraphQLDocs
         unions: "#{File.dirname(__FILE__)}/layouts/graphql_unions.html",
         input_objects: "#{File.dirname(__FILE__)}/layouts/graphql_input_objects.html",
         scalars: "#{File.dirname(__FILE__)}/layouts/graphql_scalars.html",
-        directives: "#{File.dirname(__FILE__)}/layouts/graphql_directives.html",
+        directives: "#{File.dirname(__FILE__)}/layouts/graphql_directives.html"
       },
 
       landing_pages: {
@@ -59,7 +60,7 @@ module GraphQLDocs
         field_entry: '',
         deprecation_notice: '',
         notice: '',
-        notice_title: '',
+        notice_title: ''
       }
     }.freeze
   end

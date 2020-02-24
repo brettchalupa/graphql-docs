@@ -10,7 +10,7 @@ module GraphQLDocs
 
     def slugify(str)
       slug = str.gsub(SLUGIFY_PRETTY_REGEXP, '-')
-      slug.gsub!(%r!^\-|\-$!i, '')
+      slug.gsub!(/^\-|\-$/i, '')
       slug.downcase
     end
 
@@ -22,6 +22,7 @@ module GraphQLDocs
 
     def markdownify(string)
       return '' if string.nil?
+
       type = @options[:pipeline_config][:context][:unsafe] ? :UNSAFE : :DEFAULT
       ::CommonMarker.render_html(string, type).strip
     end
@@ -67,27 +68,23 @@ module GraphQLDocs
     end
 
     def split_into_metadata_and_contents(contents, parse: true)
-      opts = {}
       pieces = yaml_split(contents)
-      if pieces.size < 4
-        raise RuntimeError.new(
-          "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
-        )
-      end
+      raise "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format." if pieces.size < 4
+
       # Parse
       begin
-        if parse
-          meta = YAML.load(pieces[2]) || {}
-        else
-          meta = pieces[2]
-        end
+        meta = if parse
+                 YAML.safe_load(pieces[2]) || {}
+               else
+                 pieces[2]
+               end
       rescue Exception => e # rubocop:disable Lint/RescueException
         raise "Could not parse YAML for #{name}: #{e.message}"
       end
       [meta, pieces[4]]
     end
 
-    def has_yaml?(contents)
+    def yaml?(contents)
       contents =~ /\A-{3,5}\s*$/
     end
 
@@ -114,6 +111,7 @@ module GraphQLDocs
 
       Helpers.instance_methods.each do |name|
         next if name == :helper_methods
+
         @helper_methods[name] = method(name)
       end
 

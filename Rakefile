@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 
@@ -31,7 +32,7 @@ task :console do
   require 'graphql-docs'
 
   def reload!
-    files = $LOADED_FEATURES.select { |feat| feat =~ /\/graphql-docs\// }
+    files = $LOADED_FEATURES.select { |feat| feat =~ %r{/graphql-docs/} }
     files.each { |file| load file }
   end
 
