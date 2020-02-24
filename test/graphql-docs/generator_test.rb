@@ -1,10 +1,10 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 class GeneratorTest < Minitest::Test
   class CustomRenderer
-    def initialize(_, _)
-    end
+    def initialize(_, _); end
 
     def render(contents, type: nil, name: nil, filename: nil)
       to_html(contents)
@@ -12,6 +12,7 @@ class GeneratorTest < Minitest::Test
 
     def to_html(contents)
       return '' if contents.nil?
+
       contents.sub(/CodeOfConduct/i, 'CoC!!!!!')
     end
   end
@@ -191,7 +192,7 @@ class GeneratorTest < Minitest::Test
 
     contents = File.read File.join(@output_dir, 'index.html')
 
-    assert_match %r{    "nest2": \{}, contents
+    assert_match(/    "nest2": \{/, contents)
   end
 
   def test_that_empty_html_lines_not_interpreted_by_markdown
@@ -203,7 +204,7 @@ class GeneratorTest < Minitest::Test
 
     contents = File.read File.join(@output_dir, 'operation', 'query', 'index.html')
 
-    assert_match %r{<td>\s+<p>The code of conduct's key</p>\s+</td>}, contents
+    assert_match(%r{<td>\s+<p>The code of conduct's key</p>\s+</td>}, contents)
   end
 
   def test_that_non_empty_html_lines_not_interpreted_by_markdown

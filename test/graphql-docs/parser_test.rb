@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 class ParserTest < Minitest::Test
@@ -10,27 +11,11 @@ class ParserTest < Minitest::Test
   end
 
   def test_it_accepts_schema_class
-    query_type = GraphQL::ObjectType.define do
-      name 'Query'
-
-      field :test do
-        type types.Int
-        description "Title paragraph.
-        ```
-        line1
-          line2
-        line3
-        ```"
-      end
-    end
-
-    schema = GraphQL::Schema.define do
-      query query_type
-    end
+    schema = MySchema
 
     results = GraphQLDocs::Parser.new(schema, {}).parse
     assert_equal 'test', results[:operation_types][0][:fields][0][:name]
-    assert_equal "Title paragraph.\n        ```\n        line1\n          line2\n        line3\n        ```", results[:operation_types][0][:fields][0][:description]
+    assert_equal "Title paragraph.\n  ```\n    line1\n    line2\n        line3\n  ```", results[:operation_types][0][:fields][0][:description]
   end
 
   def test_types_are_sorted
@@ -61,10 +46,10 @@ class ParserTest < Minitest::Test
 
   def test_directives
     names = @gh_results[:directive_types].map { |t| t[:name] }
-    assert_equal %w(deprecated include preview skip), names
+    assert_equal %w[deprecated include preview skip], names
 
-    preview_directive = @gh_results[:directive_types].find { |t| t[:name]  == 'deprecated' }
-    assert_equal %i(FIELD_DEFINITION ENUM_VALUE), preview_directive[:locations]
+    preview_directive = @gh_results[:directive_types].find { |t| t[:name] == 'deprecated' }
+    assert_equal %i[FIELD_DEFINITION ENUM_VALUE], preview_directive[:locations]
 
     assert_equal 'Marks an element of a GraphQL schema as no longer supported.', preview_directive[:description]
     reason_arg = preview_directive[:arguments].first

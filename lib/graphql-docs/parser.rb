@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'graphql'
 
 module GraphQLDocs
@@ -10,13 +11,13 @@ module GraphQLDocs
     def initialize(schema, options)
       @options = options
 
-      @options[:notices] ||= -> (schema_member_path) { [] }
+      @options[:notices] ||= ->(_schema_member_path) { [] }
 
-      if schema.is_a?(GraphQL::Schema)
-        @schema = schema
-      else
-        @schema = GraphQL::Schema.from_definition(schema)
-      end
+      @schema = if schema.is_a?(String)
+                  GraphQL::Schema.from_definition(schema)
+                elsif schema < GraphQL::Schema
+                  schema
+                end
 
       @processed_schema = {
         operation_types: [],
@@ -27,80 +28,71 @@ module GraphQLDocs
         union_types: [],
         input_object_types: [],
         scalar_types: [],
-        directive_types: [],
+        directive_types: []
       }
     end
 
     def parse
       root_types = {}
-      ['query', 'mutation'].each do |operation|
-        unless @schema.root_type_for_operation(operation).nil?
-          root_types[operation] = @schema.root_type_for_operation(operation).name
-        end
+      %w[query mutation].each do |operation|
+        root_types[operation] = @schema.root_type_for_operation(operation).graphql_name unless @schema.root_type_for_operation(operation).nil?
       end
       @processed_schema[:root_types] = root_types
 
       @schema.types.each_value do |object|
         data = {}
 
-        data[:notices] = @options[:notices].call(object.name)
+        data[:notices] = @options[:notices].call(object.graphql_name)
 
-        case object
-        when ::GraphQL::ObjectType
-          if object.name == root_types['query']
-            data[:name] = object.name
-            data[:description] = object.description
+        if object < ::GraphQL::Schema::Object
+          data[:name] = object.graphql_name
+          data[:description] = object.description
 
-            data[:interfaces] = object.interfaces.map(&:name).sort
-            data[:fields], data[:connections] = fetch_fields(object.fields, object.name)
+          if data[:name] == root_types['query']
+            data[:interfaces] = object.interfaces.map(&:graphql_name).sort
+            data[:fields], data[:connections] = fetch_fields(object.fields, object.graphql_name)
 
             @processed_schema[:operation_types] << data
-          elsif object.name == root_types['mutation']
-            data[:name] = object.name
-            data[:description] = object.description
-
+          elsif data[:name] == root_types['mutation']
             @processed_schema[:operation_types] << data
 
             object.fields.each_value do |mutation|
               h = {}
 
-              h[:notices] = @options[:notices].call([object.name, mutation.name].join('.'))
-              h[:name] = mutation.name
+              h[:notices] = @options[:notices].call([object.graphql_name, mutation.graphql_name].join('.'))
+              h[:name] = mutation.graphql_name
               h[:description] = mutation.description
-              h[:input_fields], _ = fetch_fields(mutation.arguments, [object.name, mutation.name].join('.'))
+              h[:input_fields], = fetch_fields(mutation.arguments, [object.graphql_name, mutation.graphql_name].join('.'))
 
               return_type = mutation.type
               if return_type.unwrap.respond_to?(:fields)
-                h[:return_fields], _ = fetch_fields(return_type.unwrap.fields, return_type.name)
+                h[:return_fields], = fetch_fields(return_type.unwrap.fields, return_type.graphql_name)
               else # it is a scalar return type
-                h[:return_fields], _ = fetch_fields({ "#{return_type.name}" => mutation }, return_type.name)
+                h[:return_fields], = fetch_fields({ return_type.graphql_name => mutation }, return_type.graphql_name)
               end
 
               @processed_schema[:mutation_types] << h
             end
           else
-            data[:name] = object.name
-            data[:description] = object.description
-
-            data[:interfaces] = object.interfaces.map(&:name).sort
-            data[:fields], data[:connections] = fetch_fields(object.fields, object.name)
+            data[:interfaces] = object.interfaces.map(&:graphql_name).sort
+            data[:fields], data[:connections] = fetch_fields(object.fields, object.graphql_name)
 
             @processed_schema[:object_types] << data
           end
-        when ::GraphQL::InterfaceType
-          data[:name] = object.name
+        elsif object < ::GraphQL::Schema::Interface
+          data[:name] = object.graphql_name
           data[:description] = object.description
-          data[:fields], data[:connections] = fetch_fields(object.fields, object.name)
+          data[:fields], data[:connections] = fetch_fields(object.fields, object.graphql_name)
 
           @processed_schema[:interface_types] << data
-        when ::GraphQL::EnumType
-          data[:name] = object.name
+        elsif object < ::GraphQL::Schema::Enum
+          data[:name] = object.graphql_name
           data[:description] = object.description
 
           data[:values] = object.values.values.map do |val|
             h = {}
-            h[:notices] = @options[:notices].call([object.name, val.name].join('.'))
-            h[:name] = val.name
+            h[:notices] = @options[:notices].call([object.graphql_name, val.graphql_name].join('.'))
+            h[:name] = val.graphql_name
             h[:description] = val.description
             unless val.deprecation_reason.nil?
               h[:is_deprecated] = true
@@ -110,38 +102,38 @@ module GraphQLDocs
           end
 
           @processed_schema[:enum_types] << data
-        when ::GraphQL::UnionType
-          data[:name] = object.name
+        elsif object < ::GraphQL::Schema::Union
+          data[:name] = object.graphql_name
           data[:description] = object.description
-          data[:possible_types] = object.possible_types.map(&:name).sort
+          data[:possible_types] = object.possible_types.map(&:graphql_name).sort
 
           @processed_schema[:union_types] << data
-        when ::GraphQL::InputObjectType
-          data[:name] = object.name
+        elsif object < GraphQL::Schema::InputObject
+          data[:name] = object.graphql_name
           data[:description] = object.description
 
-          data[:input_fields], _ = fetch_fields(object.input_fields, object.name)
+          data[:input_fields], = fetch_fields(object.arguments, object.graphql_name)
 
           @processed_schema[:input_object_types] << data
-        when ::GraphQL::ScalarType
-          data[:name] = object.name
+        elsif object < GraphQL::Schema::Scalar
+          data[:name] = object.graphql_name
           data[:description] = object.description
 
           @processed_schema[:scalar_types] << data
         else
-          raise TypeError, "I'm not sure what #{object.class} is!"
+          raise TypeError, "I'm not sure what #{object.class} < #{object.superclass.name} is!"
         end
       end
 
       @schema.directives.each_value do |directive|
         data = {}
-        data[:notices] = @options[:notices].call(directive.name)
+        data[:notices] = @options[:notices].call(directive.graphql_name)
 
-        data[:name] = directive.name
+        data[:name] = directive.graphql_name
         data[:description] = directive.description
         data[:locations] = directive.locations
 
-        data[:arguments], _ = fetch_fields(directive.arguments, directive.name)
+        data[:arguments], = fetch_fields(directive.arguments, directive.graphql_name)
 
         @processed_schema[:directive_types] << data
       end
@@ -151,9 +143,7 @@ module GraphQLDocs
       @processed_schema[:interface_types].each do |interface|
         interface[:implemented_by] = []
         @processed_schema[:object_types].each do |obj|
-          if obj[:interfaces].include?(interface[:name])
-            interface[:implemented_by] << obj[:name]
-          end
+          interface[:implemented_by] << obj[:name] if obj[:interfaces].include?(interface[:name])
         end
       end
 
@@ -169,8 +159,8 @@ module GraphQLDocs
       object_fields.each_value do |field|
         hash = {}
 
-        hash[:notices] = @options[:notices].call([parent_path, field.name].join('.'))
-        hash[:name] = field.name
+        hash[:notices] = @options[:notices].call([parent_path, field.graphql_name].join('.'))
+        hash[:name] = field.graphql_name
         hash[:description] = field.description
         if field.respond_to?(:deprecation_reason) && !field.deprecation_reason.nil?
           hash[:is_deprecated] = true
@@ -183,17 +173,15 @@ module GraphQLDocs
         if field.respond_to?(:arguments)
           field.arguments.each_value do |arg|
             h = {}
-            h[:name] = arg.name
+            h[:name] = arg.graphql_name
             h[:description] = arg.description
             h[:type] = generate_type(arg.type)
-            if arg.default_value?
-              h[:default_value] = arg.default_value
-            end
+            h[:default_value] = arg.default_value if arg.default_value?
             hash[:arguments] << h
           end
         end
 
-        if !argument?(field) && field.connection?
+        if !argument?(field) && connection?(field)
           connections << hash
         else
           fields << hash
@@ -204,26 +192,26 @@ module GraphQLDocs
     end
 
     def generate_type(type)
-      name = type.unwrap.to_s
-      path = case type.unwrap
-             when ::GraphQL::ObjectType
+      name = type.unwrap.graphql_name
+
+      path = if type.unwrap < GraphQL::Schema::Object
                if name == 'Query'
                  'operation'
                else
                  'object'
                end
-             when ::GraphQL::ScalarType
+             elsif type.unwrap < GraphQL::Schema::Scalar
                'scalar'
-             when ::GraphQL::InterfaceType
+             elsif type.unwrap < GraphQL::Schema::Interface
                'interface'
-             when ::GraphQL::EnumType
+             elsif type.unwrap < GraphQL::Schema::Enum
                'enum'
-             when ::GraphQL::InputObjectType
+             elsif type.unwrap < GraphQL::Schema::InputObject
                'input_object'
-             when ::GraphQL::UnionType
+             elsif type.unwrap < GraphQL::Schema::Union
                'union'
              else
-               raise TypeError, "Unknown type: `#{type.unwrap.class}`"
+               raise TypeError, "Unknown type for `#{name}`: `#{type.unwrap.class}`"
              end
 
       {
@@ -234,12 +222,18 @@ module GraphQLDocs
     end
 
     def argument?(field)
-      field.is_a?(::GraphQL::Argument)
+      field.is_a?(::GraphQL::Schema::Argument)
+    end
+
+    def connection?(field)
+      field.respond_to?(:connection?) && field.connection?
     end
 
     def sort_by_name!
       @processed_schema.each_pair do |key, value|
+        next if value.empty?
         next if key == :operation_types || key == :root_types
+
         value.sort_by! { |o| o[:name] }
       end
     end
