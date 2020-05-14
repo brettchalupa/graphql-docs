@@ -27,6 +27,16 @@ class RendererTest < Minitest::Test
     assert_equal '<p><strong>Oh hello</strong></p>', contents
   end
 
+  def test_that_it_works_with_unicode
+    prev = ENV['LANG']
+    ENV['LANG'] = nil
+    contents = @renderer.render('“Words words”', type: 'Poem', name: 'He works his work&mdash;I mine')
+
+    assert_match %r{<title>He works his work&mdash;I mine</title>}, contents
+
+    ENV['LANG'] = prev
+  end
+
   def test_that_unsafe_html_is_blocked_when_asked
     renderer = GraphQLDocs::Renderer.new(@parsed_schema, GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge({
                                                                                                                   pipeline_config: {
