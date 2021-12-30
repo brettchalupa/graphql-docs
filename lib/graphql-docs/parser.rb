@@ -217,7 +217,7 @@ module GraphQLDocs
       {
         name: name,
         path: "#{path}/#{slugify(name)}",
-        info: type.graphql_definition
+        info: type.to_type_signature
       }
     end
 
