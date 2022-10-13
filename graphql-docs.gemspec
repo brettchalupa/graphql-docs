@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
 
   # rendering
   spec.add_dependency 'commonmarker', '~> 0.16'
-  spec.add_dependency 'escape_utils', '~> 1.2'
+  spec.add_dependency 'escape_utils', '~> 1.2.2'
   spec.add_dependency 'extended-markdown-filter', '~> 0.4'
   spec.add_dependency 'gemoji', '~> 3.0'
   spec.add_dependency 'html-pipeline', '~> 2.9'
