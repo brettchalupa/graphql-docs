@@ -46,7 +46,7 @@ class ParserTest < Minitest::Test
 
   def test_directives
     names = @gh_results[:directive_types].map { |t| t[:name] }
-    assert_equal %w[deprecated include preview skip], names
+    assert_equal %w[deprecated include oneOf preview skip], names
 
     preview_directive = @gh_results[:directive_types].find { |t| t[:name] == 'deprecated' }
     assert_equal %i[FIELD_DEFINITION ENUM_VALUE ARGUMENT_DEFINITION INPUT_FIELD_DEFINITION], preview_directive[:locations]

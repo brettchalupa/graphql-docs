@@ -7,8 +7,8 @@ require 'graphql-docs/version'
 Gem::Specification.new do |spec|
   spec.name          = 'graphql-docs'
   spec.version       = GraphQLDocs::VERSION
-  spec.authors       = ['Garen Torikian']
-  spec.email         = ['gjtorikian@gmail.com']
+  spec.authors       = ['Brett Chalupa', 'Garen Torikian']
+  spec.email         = ['brettchalupa@gmail.com']
 
   spec.summary       = 'Easily generate beautiful documentation from your GraphQL schema.'
   spec.homepage      = 'https://github.com/gjtorikian/graphql-docs'
@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
 
   # rendering
   spec.add_dependency 'commonmarker', '~> 0.16'
-  spec.add_dependency 'escape_utils', '~> 1.2'
+  spec.add_dependency 'escape_utils', '~> 1.2.2'
   spec.add_dependency 'extended-markdown-filter', '~> 0.4'
   spec.add_dependency 'gemoji', '~> 3.0'
   spec.add_dependency 'html-pipeline', '~> 2.9'
@@ -41,4 +41,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop-performance'
   spec.add_development_dependency 'rubocop-standard'
   spec.add_development_dependency 'webmock', '~> 2.3'
+  spec.add_development_dependency 'webrick', '~> 1.7'
 end
