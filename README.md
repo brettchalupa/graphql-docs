@@ -181,6 +181,21 @@ The format of `schema_member_path` is a dot delimited path to the schema member.
 "Mutation.addLike" # a mutation
 ```
 
+## Supported Ruby Versions
+
+The gem currently supports **Ruby 2.6 and newer**. Any dropping of Ruby version
+support is considered a breaking change and means a major release for the gem.
+
+## Upgrading
+
+This project aims to strictly follow [Semantic Versioning](https://semver.org/).
+Minor and patch level updates can be done with pretty high confidence that your usage won't break.
+
+Review the
+[Changelog](https://github.com/brettchalupa/graphql-docs/blob/main/CHANGELOG.md)
+for detailed changes for each release. The intent is to make upgrading as
+painless as possible.
+
 ## Development
 
 After checking out the repo, run `script/bootstrap` to install dependencies. Then, run `rake test` to run the tests. You can also run `bundle exec rake console` for an interactive prompt that will allow you to experiment.
