@@ -194,3 +194,7 @@ bundle exec rake sample
 ```
 
 to see some sample output.
+
+## Credits
+
+Originally built by [gjtorikian](https://github.com/gjtorikian). Actively maintained by [brettchalupa](https://github.com/brettchalupa).
