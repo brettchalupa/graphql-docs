@@ -7,8 +7,8 @@ require 'graphql-docs/version'
 Gem::Specification.new do |spec|
   spec.name          = 'graphql-docs'
   spec.version       = GraphQLDocs::VERSION
-  spec.authors       = ['Garen Torikian']
-  spec.email         = ['gjtorikian@gmail.com']
+  spec.authors       = ['Brett Chalupa', 'Garen Torikian']
+  spec.email         = ['brettchalupa@gmail.com']
 
   spec.summary       = 'Easily generate beautiful documentation from your GraphQL schema.'
   spec.homepage      = 'https://github.com/gjtorikian/graphql-docs'
