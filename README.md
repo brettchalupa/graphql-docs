@@ -6,19 +6,17 @@ Easily generate beautiful documentation from your GraphQL schema.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add the gem to your project with this command:
 
-```ruby
-gem 'graphql-docs'
+``` console
+bundle add graphql-docs
 ```
-
-And then execute:
-
-    $ bundle
 
 Or install it yourself as:
 
-    $ gem install graphql-docs
+``` console
+gem install graphql-docs
+```
 
 ## Usage
 
