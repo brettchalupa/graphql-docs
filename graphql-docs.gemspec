@@ -11,8 +11,20 @@ Gem::Specification.new do |spec|
   spec.email         = ['brettchalupa@gmail.com']
 
   spec.summary       = 'Easily generate beautiful documentation from your GraphQL schema.'
-  spec.homepage      = 'https://github.com/gjtorikian/graphql-docs'
+  spec.description   = <<-EOF
+    GraphQLDocs is a library for generating HTML from a GraphQL API's schema
+    definition. With ERB templating support and a plethora of configuration
+    options, you can customize the output to your needs. The library easily
+    integrates with your Ruby deployment toolchain to ensure the docs for your
+    API are up to date.
+  EOF
+  spec.homepage      = 'https://github.com/brettchalupa/graphql-docs'
   spec.license       = 'MIT'
+  spec.metadata      = {
+    "bug_tracker_uri"   => "https://github.com/brettchalupa/graphql-docs/issues",
+    "changelog_uri"     => "https://github.com/brettchalupa/graphql-docs/blob/main/CHANGELOG.md",
+    "wiki_uri"          => "https://github.com/brettchalupa/graphql-docs/wiki",
+  }
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
