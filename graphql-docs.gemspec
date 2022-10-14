@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'graphql', '~> 2.0'
 
   # rendering
-  spec.add_dependency 'commonmarker', '~> 0.16'
+  spec.add_dependency 'commonmarker', '~> 0.23'
   spec.add_dependency 'escape_utils', '~> 1.2.2'
   spec.add_dependency 'extended-markdown-filter', '~> 0.4'
   spec.add_dependency 'gemoji', '~> 3.0'
