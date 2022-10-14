@@ -12,3 +12,4 @@
 /.sass-cache/
 /output/
 .byebug_history
+*.gem
