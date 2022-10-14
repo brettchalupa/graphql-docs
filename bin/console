@@ -2,10 +2,8 @@
 
 set -e
 
-dir=`pwd`
-
 echo "===> Bundling..."
-script/bootstrap --quiet
+bin/setup --quiet
 
 echo "===> Launching..."
-bundle exec rake console
+bin/rake console
