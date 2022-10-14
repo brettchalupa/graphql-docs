@@ -196,7 +196,9 @@ painless as possible.
 
 ## Development
 
-After checking out the repo, run `script/bootstrap` to install dependencies. Then, run `rake test` to run the tests. You can also run `bundle exec rake console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. Then, run
+`bin/rake test` to run the tests. You can also run `bin/console` for
+an interactive prompt that will allow you to experiment.
 
 ## Sample site
 
