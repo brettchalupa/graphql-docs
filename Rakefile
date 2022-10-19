@@ -40,29 +40,31 @@ task :console do
   Pry.start
 end
 
-desc 'Generate the documentation'
-task :generate_sample do
-  require 'pry'
-  require 'graphql-docs'
+namespace :sample do
+  desc 'Generate the sample documentation'
+  task :generate do
+    require 'graphql-docs'
 
-  options = {}
-  options[:delete_output] = true
-  options[:base_url] = ENV.fetch('GQL_DOCS_BASE_URL', '')
-  options[:filename] = File.join(File.dirname(__FILE__), 'test', 'graphql-docs', 'fixtures', 'gh-schema.graphql')
+    options = {}
+    options[:delete_output] = true
+    options[:base_url] = ENV.fetch('GQL_DOCS_BASE_URL', '')
+    options[:filename] = File.join(File.dirname(__FILE__), 'test', 'graphql-docs', 'fixtures', 'gh-schema.graphql')
 
-  GraphQLDocs.build(options)
-end
+    puts "Generating sample docs"
+    GraphQLDocs.build(options)
+  end
 
-desc 'Generate the documentation and run a web server'
-task sample: [:generate_sample] do
-  require 'webrick'
-
-  puts 'Navigate to http://localhost:3000 to see the sample docs'
-
-  server = WEBrick::HTTPServer.new Port: 3000
-  server.mount '/', WEBrick::HTTPServlet::FileHandler, 'output'
-  trap('INT') { server.stop }
-  server.start
+  desc 'Generate the documentation and run a web server'
+  task serve: [:generate] do
+    require 'webrick'
+    PORT = "5050"
+    puts "Navigate to http://localhost:#{PORT} to view the sample docs"
+    server = WEBrick::HTTPServer.new Port: PORT
+    server.mount '/', WEBrick::HTTPServlet::FileHandler, 'output'
+    trap('INT') { server.stop }
+    server.start
+  end
+  task server: :serve
 end
 
 desc 'Generate and publish docs to gh-pages'

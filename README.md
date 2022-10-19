@@ -205,15 +205,21 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run
 `bin/rake test` to run the tests. You can also run `bin/console` for
 an interactive prompt that will allow you to experiment.
 
-## Sample site
+## Sample Site
 
 Clone this repository and run:
 
 ```
-bundle exec rake sample
+bundle exec rake sample:generate
 ```
 
-to see some sample output.
+to see some sample output in the `output` dir.
+
+Boot up a server to view it:
+
+```
+bundle exec rake sample:serve
+```
 
 ## Credits
 
