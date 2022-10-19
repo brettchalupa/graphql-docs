@@ -210,7 +210,7 @@ an interactive prompt that will allow you to experiment.
 Clone this repository and run:
 
 ```
-bundle exec rake sample:generate
+bin/rake sample:generate
 ```
 
 to see some sample output in the `output` dir.
@@ -218,7 +218,7 @@ to see some sample output in the `output` dir.
 Boot up a server to view it:
 
 ```
-bundle exec rake sample:serve
+bin/rake sample:serve
 ```
 
 ## Credits
