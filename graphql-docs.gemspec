@@ -43,7 +43,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'extended-markdown-filter', '~> 0.4'
   spec.add_dependency 'gemoji', '~> 3.0'
   spec.add_dependency 'html-pipeline', '>= 2.14.3', '~> 2.14'
-  spec.add_dependency 'sass', '~> 3.4'
+  spec.add_dependency 'dartsass', '~> 1.49'
 
   spec.add_development_dependency 'awesome_print'
   spec.add_development_dependency 'html-proofer', '~> 3.4'
