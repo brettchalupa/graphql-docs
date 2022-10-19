@@ -11,3 +11,8 @@ For fixes and small additions, follow the steps below to get developing and cont
 5. Ensure tests pass by running `bin/rake`
 6. Commit your changes, this project follows [the Conventional Commits spec](https://www.conventionalcommits.org/en/v1.0.0/)
 7. Open up a pull request
+
+## Finding Issues
+
+- Good First Issue — If you're new to the project or Ruby, check out the ["good first issue" tag](https://github.com/brettchalupa/graphql-docs/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22). They're smaller, approachable issues if you're just getting started.
+- Web — tasks that don't require much Ruby knowledge but require HTML and CSS have the ["web" tag](https://github.com/brettchalupa/graphql-docs/issues?q=is%3Aopen+is%3Aissue+label%3A%22web%22+)
