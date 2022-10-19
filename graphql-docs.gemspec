@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Easily generate beautiful documentation from your GraphQL schema.'
   spec.description   = <<-EOF
-    GraphQLDocs is a library for generating HTML from a GraphQL API's schema
+    Library and CLI for generating a website from a GraphQL API's schema
     definition. With ERB templating support and a plethora of configuration
     options, you can customize the output to your needs. The library easily
     integrates with your Ruby deployment toolchain to ensure the docs for your
