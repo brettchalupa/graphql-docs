@@ -194,6 +194,11 @@ Review the
 for detailed changes for each release. The intent is to make upgrading as
 painless as possible.
 
+## Roadmap
+
+Upcoming work for the project is organized publicly via [GitHub
+Projects](https://github.com/users/brettchalupa/projects/7/views/1).
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
