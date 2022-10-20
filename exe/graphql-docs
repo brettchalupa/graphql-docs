@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+
+require "graphql-docs"
+require "optparse"
+
+NAME = "graphql-docs".freeze
+
+opts = {}
+OptionParser.new do |parser|
+  parser.program_name = NAME
+  parser.banner = <<~EOS
+
+  Generate GraphQL docs from the passed in schema file.
+
+  Usage: graphql-docs SCHEMA
+
+  The only required argument is the path to the schema file to generate the site from.
+
+  Examples:
+    $ graphql-docs schema.graphql
+    $ graphql-docs schema.graphql -o _docs
+
+  Options:
+  EOS
+
+  parser.version = GraphQLDocs::VERSION
+
+  parser.on("-o", "--output-dir DIR", "Where the site is generated to, defaults to ./output")
+  parser.on("-d", "--delete-output", "Delete the output-dir before generating, defaults to false")
+  parser.on("-b", "--base-url URL", "URL to preprend for assets and links, defaults to \"\"")
+  parser.on("--verbose", "Run in verbose mode")
+end.parse!(into: opts)
+
+def err(msg)
+  abort("#{NAME}: Error: #{msg}")
+end
+
+schema = ARGV[0]
+if schema.nil?
+  err("schema must be specified")
+end
+opts[:filename] = schema
+
+verbose = opts.delete(:verbose)
+
+puts("Generating site with the following options: #{opts}") if verbose
+
+opts.transform_keys! { |k| k.to_s.gsub("-", "_").to_sym }
+GraphQLDocs.build(opts)
+
+puts("Site successfully generated in: #{opts[:output_dir] || 'output' }") if verbose

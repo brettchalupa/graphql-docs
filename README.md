@@ -1,6 +1,6 @@
 # GraphQLDocs
 
-Easily generate beautiful documentation from your GraphQL schema.
+Ruby library and CLI for easily generating beautiful documentation from your GraphQL schema.
 
 ![sample](https://cloud.githubusercontent.com/assets/64050/23438604/6a23add0-fdc7-11e6-8852-ef41e8451033.png)
 
@@ -20,6 +20,8 @@ gem install graphql-docs
 
 ## Usage
 
+GraphQLDocs can be used as a Ruby library to build the documentation website. Using it as a Ruby library allows for more control and using every supported option. Here's an example:
+
 ``` ruby
 # pass in a filename
 GraphQLDocs.build(filename: filename)
@@ -32,6 +34,20 @@ schema = GraphQL::Schema.define do
   query query_type
 end
 GraphQLDocs.build(schema: schema)
+```
+
+GrophQLDocs also has a simplified CLI (`graphql-docs`) that gets installed with the gem:
+
+``` console
+graphql-docs schema.graphql
+```
+
+That will generate the output in the `output` dir.
+
+See all of the supported CLI options with:
+
+``` console
+graphql-docs -h
 ```
 
 ## Breakdown
