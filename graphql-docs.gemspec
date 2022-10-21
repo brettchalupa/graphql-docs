@@ -48,7 +48,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'html-proofer', '~> 3.4'
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'minitest-focus', '~> 1.1'
-  spec.add_development_dependency 'pry-byebug', '~> 3.6'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'rubocop-performance'

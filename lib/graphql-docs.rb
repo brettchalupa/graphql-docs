@@ -7,9 +7,6 @@ require 'graphql-docs/generator'
 require 'graphql-docs/parser'
 require 'graphql-docs/version'
 
-begin
-  require 'pry'
-rescue LoadError; end # rubocop:disable Lint/SuppressedException
 module GraphQLDocs
   class << self
     def build(options)

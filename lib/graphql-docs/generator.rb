@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'erb'
+require 'fileutils'
 
 module GraphQLDocs
   class Generator

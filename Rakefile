@@ -28,7 +28,6 @@ end
 
 desc 'Set up a console'
 task :console do
-  require 'pry'
   require 'graphql-docs'
 
   def reload!
@@ -36,8 +35,9 @@ task :console do
     files.each { |file| load file }
   end
 
+  require 'irb'
   ARGV.clear
-  Pry.start
+  IRB.start
 end
 
 namespace :sample do
