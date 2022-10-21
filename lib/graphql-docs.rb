@@ -8,7 +8,6 @@ require 'graphql-docs/parser'
 require 'graphql-docs/version'
 
 begin
-  require 'awesome_print'
   require 'pry'
 rescue LoadError; end # rubocop:disable Lint/SuppressedException
 module GraphQLDocs
