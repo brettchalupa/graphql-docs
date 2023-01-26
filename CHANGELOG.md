@@ -4,11 +4,16 @@ A concise overview of the public-facing changes to the gem from version to versi
 
 ## Unreleased
 
-The follow changes will be coming in the upcoming v4.0.0 release.
+## v4.0.0 - 2023-01-26
 
 - **Breaking change**: drop support for Ruby 2.5 and earlier
-- Fixes
+- CLI with limited options, e.g. `graphql-docs schema.graphql`
+- Dart Sass replaces Ruby Sass because Ruby Sass is deprecated
+- Fixes:
   - Upgrade commonmarker to latest ver to address security vulnerabilities
+  - commonmarker pinned to version without security vulnerability
+- Chores
+  - Dev env refresh
 
 ## v3.0.1 - 2022-10-14
 
