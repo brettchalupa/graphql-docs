@@ -14,7 +14,7 @@ class ParserTest < Minitest::Test
     schema = MySchema
 
     results = GraphQLDocs::Parser.new(schema, {}).parse
-    assert_equal 'test', results[:operation_types][0][:fields][0][:name]
+    assert_equal 'myField', results[:operation_types][0][:fields][0][:name]
     assert_equal "Title paragraph.\n  ```\n    line1\n    line2\n        line3\n  ```", results[:operation_types][0][:fields][0][:description]
   end
 
@@ -112,5 +112,15 @@ class ParserTest < Minitest::Test
     assert results[:object_types]
     user = results[:object_types].first
     assert_equal 'The id of the user', user[:fields].first[:description]
+  end
+
+  def test_deprecations
+    schema = MySchema
+
+    fields = GraphQLDocs::Parser.new(schema, {}).parse[:operation_types][0][:fields]
+
+    refute fields[0][:is_deprecated]
+    assert fields[1][:is_deprecated]
+    assert fields[2][:arguments][0][:is_deprecated]
   end
 end

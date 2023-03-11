@@ -177,6 +177,10 @@ module GraphQLDocs
             h[:description] = arg.description
             h[:type] = generate_type(arg.type)
             h[:default_value] = arg.default_value if arg.default_value?
+            if arg.respond_to?(:deprecation_reason) && arg.deprecation_reason
+              h[:is_deprecated] = true
+              h[:deprecation_reason] = arg.deprecation_reason
+            end
             hash[:arguments] << h
           end
         end

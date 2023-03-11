@@ -20,12 +20,18 @@ end
 clean_up_output
 
 class QueryType < GraphQL::Schema::Object
-  field :test, Int, "Title paragraph.
+  field :my_field, Int, "Title paragraph.
   ```
     line1
     line2
         line3
   ```", null: false
+
+  field :deprecated_field, Int, deprecation_reason: "Not useful any more"
+
+  field :field_with_deprecated_arg, Int do
+    argument :my_arg, Int, required: false, deprecation_reason: "Not useful any more"
+  end
 end
 
 class MySchema < GraphQL::Schema
