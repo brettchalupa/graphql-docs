@@ -197,8 +197,11 @@ The format of `schema_member_path` is a dot delimited path to the schema member.
 
 ## Supported Ruby Versions
 
-The gem currently supports **Ruby 2.6 and newer**. Any dropping of Ruby version
-support is considered a breaking change and means a major release for the gem.
+The gem officially supports **Ruby 2.7 and newer**.
+
+A note about Ruby 2.6: It works, but it requires activesupport to be set to a version less than 7 due to it dropping Ruby 2.6 support. Ruby 2.6 is no longer tested on CI.
+
+Any dropping of Ruby version support is considered a breaking change and means a major release for the gem.
 
 ## Upgrading
 
