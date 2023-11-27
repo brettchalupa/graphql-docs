@@ -36,7 +36,7 @@ end
 GraphQLDocs.build(schema: schema)
 ```
 
-GrophQLDocs also has a simplified CLI (`graphql-docs`) that gets installed with the gem:
+GraphQLDocs also has a simplified CLI (`graphql-docs`) that gets installed with the gem:
 
 ``` console
 graphql-docs schema.graphql
