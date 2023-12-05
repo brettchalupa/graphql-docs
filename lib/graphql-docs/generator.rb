@@ -85,7 +85,7 @@ module GraphQLDocs
         FileUtils.mkdir_p(File.join(@options[:output_dir], 'assets'))
 
         sass = File.join(assets_dir, 'css', 'screen.scss')
-        system `bundle exec dartsass --no-source-map=none #{sass} #{@options[:output_dir]}/assets/style.css`
+        system `dartsass --no-source-map=none #{sass} #{@options[:output_dir]}/assets/style.css`
 
         FileUtils.cp_r(File.join(assets_dir, 'images'), File.join(@options[:output_dir], 'assets'))
         FileUtils.cp_r(File.join(assets_dir, 'webfonts'), File.join(@options[:output_dir], 'assets'))

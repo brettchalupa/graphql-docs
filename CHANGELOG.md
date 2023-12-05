@@ -4,6 +4,10 @@ A concise overview of the public-facing changes to the gem from version to versi
 
 ## Unreleased
 
+- feat: CLI version flag: `graphql-docs --version` / `graphql-docs -v`
+- fix: CLI now works outside of a Bundler project
+- fix: test suite
+
 ## v4.0.0 - 2023-01-26
 
 - **Breaking change**: drop support for Ruby 2.5 and earlier
@@ -12,7 +16,7 @@ A concise overview of the public-facing changes to the gem from version to versi
 - Fixes:
   - Upgrade commonmarker to latest ver to address security vulnerabilities
   - commonmarker pinned to version without security vulnerability
-- Chores
+- Chores:
   - Dev env refresh
 
 ## v3.0.1 - 2022-10-14
