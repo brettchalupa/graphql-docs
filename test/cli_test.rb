@@ -52,6 +52,14 @@ class CliTest < Minitest::Test
     assert File.read(File.join("output", 'index.html')).include?("<link rel=\"stylesheet\" href=\"https://example.com/assets/style.css\">")
   end
 
+  def test_cli_version
+    out, err = capture_subprocess_io do
+      assert cmd("--version")
+    end
+    assert_match /#{GraphQLDocs::VERSION}/, out
+    assert err.empty?
+  end
+
   private
 
   def cmd(args, exception: true)

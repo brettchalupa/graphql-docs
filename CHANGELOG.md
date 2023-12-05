@@ -4,6 +4,8 @@ A concise overview of the public-facing changes to the gem from version to versi
 
 ## Unreleased
 
+- CLI version flag: `graphql-docs --version` / `graphql-docs -v`
+
 ## v4.0.0 - 2023-01-26
 
 - **Breaking change**: drop support for Ruby 2.5 and earlier
