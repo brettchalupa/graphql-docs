@@ -7,6 +7,11 @@
     <title><%= title || name %></title>
     <link rel="stylesheet" href="<%= base_url %>/assets/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.2.2/anchor.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- jQuery UI -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <script>
 
     // Add anchors on DOMContentLoaded
@@ -17,6 +22,22 @@
         icon: '¶'
       };
       anchors.add('h2, h3, h4, h5, h6, .anchored');
+    });
+    // resize sidebar
+    $(function(){
+      $("#sidebar").css({"width":sessionStorage.getItem("width")});
+    });
+    $(function() {
+      $("#sidebar").resizable({
+        maxWidth:350,
+        minWidth:200,
+        handles:"e",
+      });
+    });
+    $(function(){
+      $("#sidebar").resize(function () { 
+        sessionStorage.setItem("width",$("#sidebar").css("width"))
+      });
     });
 
     </script>
