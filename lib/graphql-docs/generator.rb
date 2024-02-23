@@ -2,6 +2,7 @@
 
 require 'erb'
 require 'fileutils'
+require 'sass-embedded'
 
 module GraphQLDocs
   class Generator
@@ -84,8 +85,8 @@ module GraphQLDocs
         assets_dir = File.join(File.dirname(__FILE__), 'layouts', 'assets')
         FileUtils.mkdir_p(File.join(@options[:output_dir], 'assets'))
 
-        sass = File.join(assets_dir, 'css', 'screen.scss')
-        system `dartsass --no-source-map=none #{sass} #{@options[:output_dir]}/assets/style.css`
+        css = Sass.compile(File.join(assets_dir, 'css', 'screen.scss')).css
+        File.write(File.join(@options[:output_dir], 'assets', 'style.css'), css)
 
         FileUtils.cp_r(File.join(assets_dir, 'images'), File.join(@options[:output_dir], 'assets'))
         FileUtils.cp_r(File.join(assets_dir, 'webfonts'), File.join(@options[:output_dir], 'assets'))
