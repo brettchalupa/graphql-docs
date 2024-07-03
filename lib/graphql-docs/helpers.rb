@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'commonmarker'
+require 'ostruct'
 
 module GraphQLDocs
   module Helpers

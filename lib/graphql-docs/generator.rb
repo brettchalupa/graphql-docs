@@ -2,6 +2,7 @@
 
 require 'erb'
 require 'fileutils'
+require 'ostruct'
 
 module GraphQLDocs
   class Generator
