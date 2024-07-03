@@ -3,6 +3,7 @@
 require 'erb'
 require 'fileutils'
 require 'sass-embedded'
+require 'ostruct'
 
 module GraphQLDocs
   class Generator

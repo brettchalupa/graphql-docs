@@ -3,6 +3,7 @@
 require 'html/pipeline'
 require 'yaml'
 require 'extended-markdown-filter'
+require 'ostruct'
 
 module GraphQLDocs
   class Renderer
