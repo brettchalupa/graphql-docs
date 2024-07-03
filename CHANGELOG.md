@@ -4,9 +4,14 @@ A concise overview of the public-facing changes to the gem from version to versi
 
 ## Unreleased
 
+## v5.0.0 - 2024-07-03
+
+- **breaking**: The graphql gem 2.2.0+ breaks some of the parsing and displaying of comments from a GraphQL schema file
+- **breaking**: Ruby 2.6, 2.7, 3.0 are no longer supported as they are End of Life (EOL)
 - feat: CLI version flag: `graphql-docs --version` / `graphql-docs -v`
 - fix: CLI now works outside of a Bundler project
 - fix: test suite
+- chore: switch to sess-embedded gem for more maintained dependency
 
 ## v4.0.0 - 2023-01-26
 
