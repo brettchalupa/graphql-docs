@@ -2,6 +2,6 @@ schema {
   query: RootQuery
 }
 type RootQuery {
-  #Do a thing
+  "Do a thing"
   thing: [String!]!
 }

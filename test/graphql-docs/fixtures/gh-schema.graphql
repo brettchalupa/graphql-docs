@@ -3759,7 +3759,7 @@ type ProjectEdge {
 
 # Ways in which lists of projects can be ordered upon return.
 input ProjectOrder {
-  # The direction in which to order projects by the specified field.
+  "The direction in which to order projects by the specified field."
   direction: OrderDirection!
 
   # The field in which to order projects by.

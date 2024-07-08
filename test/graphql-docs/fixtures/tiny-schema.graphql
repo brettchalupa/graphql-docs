@@ -20,7 +20,7 @@ scalar URI
 type Query {
   # Look up a code of conduct by its key
   codeOfConduct(
-    # The code of conduct's key
+    "The code of conduct's key"
     key: String!
   ): CodeOfConduct
 }
