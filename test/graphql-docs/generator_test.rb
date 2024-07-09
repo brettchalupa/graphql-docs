@@ -137,7 +137,6 @@ class GeneratorTest < Minitest::Test
   end
 
   def test_that_named_query_root_generates_fields
-    skip("graphql 2.2.0+ causes this to fail")
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir
 
@@ -197,7 +196,6 @@ class GeneratorTest < Minitest::Test
   end
 
   def test_that_empty_html_lines_not_interpreted_by_markdown
-    skip("graphql 2.2.0+ causes this to fail")
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir
 
@@ -210,7 +208,6 @@ class GeneratorTest < Minitest::Test
   end
 
   def test_that_non_empty_html_lines_not_interpreted_by_markdown
-    skip("graphql 2.2.0+ causes this to fail")
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir
 
