@@ -6,3 +6,6 @@ Style/StringLiterals:
 
 Naming/FileName:
   Enabled: false
+
+Layout/IndentationWidth:
+  Width: 2
