@@ -44,6 +44,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'gemoji', '~> 3.0'
   spec.add_dependency 'html-pipeline', '>= 2.14.3', '~> 2.14'
   spec.add_dependency 'sass-embedded', '~> 1.58'
+  spec.add_dependency 'ostruct', '~> 0.6'
+  spec.add_dependency 'logger', '~> 1.6'
 
   spec.add_development_dependency 'html-proofer', '~> 3.4'
   spec.add_development_dependency 'minitest', '~> 5.0'
