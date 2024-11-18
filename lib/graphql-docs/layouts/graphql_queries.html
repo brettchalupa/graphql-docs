@@ -1,0 +1,22 @@
+<h1><%= type[:name] %></h1>
+
+<%= include.('notices.html', notices: type[:notices]) %>
+
+<%= type[:description] %>
+
+<% if !type[:arguments].empty? %>
+
+<h2>Arguments</h2>
+
+<%= include.('fields.html', fields: type[:arguments]) %>
+
+<% end %>
+
+
+<% if !type[:return_fields].empty? %>
+
+<h2>Return fields</h2>
+
+<%= include.('fields.html', fields: type[:return_fields]) %>
+
+<% end %>

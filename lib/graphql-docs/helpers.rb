@@ -36,6 +36,10 @@ module GraphQLDocs
       @parsed_schema[:operation_types] || []
     end
 
+    def graphql_query_types
+      @parsed_schema[:query_types] || []
+    end
+
     def graphql_mutation_types
       @parsed_schema[:mutation_types] || []
     end
