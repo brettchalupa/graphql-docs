@@ -32,7 +32,7 @@ class CliTest < Minitest::Test
       assert cmd("--help")
     end
     assert_match /Usage/, out
-    assert err.empty?, "errors not empty"
+    assert err.empty?, "errors not empty: #{err}"
   end
 
   def test_cli_verbose
@@ -41,14 +41,14 @@ class CliTest < Minitest::Test
     end
     assert_match /Generating site/, out
     assert_match /Site successfully generated/, out
-    assert err.empty?, "errors not empty"
+    assert err.empty?, "errors not empty: #{err}"
   end
 
   def test_cli_base_url
     out, err = capture_subprocess_io do
       assert cmd("#{@schema} -b https://example.com")
     end
-    assert err.empty?, "errors not empty"
+    assert err.empty?, "errors not empty: #{err}"
     assert File.read(File.join("output", 'index.html')).include?("<link rel=\"stylesheet\" href=\"https://example.com/assets/style.css\">")
   end
 
@@ -57,7 +57,7 @@ class CliTest < Minitest::Test
       assert cmd("--version")
     end
     assert_match /#{GraphQLDocs::VERSION}/, out
-    assert err.empty?, "errors not empty"
+    assert err.empty?, "errors not empty: #{err}"
   end
 
   private
