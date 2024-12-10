@@ -222,6 +222,15 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run
 `bin/rake test` to run the tests. You can also run `bin/console` for
 an interactive prompt that will allow you to experiment.
 
+### Releasing a new version of the gem
+
+1. Update CHANGELOG.md
+2. Bump the version in `lib/graphql-docs/version.rb`
+3. Make a commit and tag it with `git commit -a vX.X.X`
+4. Push the commit and tags to GitHub: `git push origin main && git push --tags`
+5. Build the gem: `gem build`
+6. Push the gem to RubyGems.org: `gem push graphql-docs-X.X.X.gem`
+
 ## Sample Site
 
 Clone this repository and run:
