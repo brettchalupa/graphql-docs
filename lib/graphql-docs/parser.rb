@@ -21,6 +21,7 @@ module GraphQLDocs
 
       @processed_schema = {
         operation_types: [],
+        query_types: [],
         mutation_types: [],
         object_types: [],
         interface_types: [],
@@ -51,8 +52,25 @@ module GraphQLDocs
           if data[:name] == root_types['query']
             data[:interfaces] = object.interfaces.map(&:graphql_name).sort
             data[:fields], data[:connections] = fetch_fields(object.fields, object.graphql_name)
-
             @processed_schema[:operation_types] << data
+
+            object.fields.each_value do |query|
+              h = {}
+
+              h[:notices] = @options[:notices].call([object.graphql_name, query.graphql_name].join('.'))
+              h[:name] = query.graphql_name
+              h[:description] = query.description
+              h[:arguments], = fetch_fields(query.arguments, [object.graphql_name, query.graphql_name].join('.'))
+
+              return_type = query.type
+              if return_type.unwrap.respond_to?(:fields)
+                h[:return_fields], = fetch_fields(return_type.unwrap.fields, return_type.graphql_name)
+              else # it is a scalar return type
+                h[:return_fields], = fetch_fields({ return_type.graphql_name => query }, return_type.graphql_name)
+              end
+
+              @processed_schema[:query_types] << h
+            end
           elsif data[:name] == root_types['mutation']
             @processed_schema[:operation_types] << data
 
