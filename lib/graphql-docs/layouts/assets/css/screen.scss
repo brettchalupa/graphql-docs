@@ -1,7 +1,8 @@
 @charset "utf-8";
 
-@import "../_sass/_normalize.scss";
-@import "../_sass/_fonts";
+@use "sass:meta";
+@use "../_sass/_normalize.scss";
+@use "../_sass/_fonts";
 
 body {
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -39,11 +40,11 @@ em {
   font-family: 'ProximaNova-Semibold';
 }
 
-@import '../_sass/_header';
-@import '../_sass/_sidebar';
-@import '../_sass/_content';
-@import '../_sass/_types';
-@import '../_sass/_mobile';
-@import '../_sass/_api-box';
-@import '../_sass/_syntax';
-@import '../_sass/_deprecations';
+@include meta.load-css('../_sass/_header');
+@include meta.load-css('../_sass/_sidebar');
+@include meta.load-css('../_sass/_content');
+@include meta.load-css('../_sass/_types');
+@include meta.load-css('../_sass/_mobile');
+@include meta.load-css('../_sass/_api-box');
+@include meta.load-css('../_sass/_syntax');
+@include meta.load-css('../_sass/_deprecations');
