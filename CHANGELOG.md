@@ -4,6 +4,13 @@ A concise overview of the public-facing changes to the gem from version to versi
 
 ## Unreleased
 
+## v5.1.0 - 2024-12-09
+
+- List queries in the sidebar, similar to mutations. See https://github.com/brettchalupa/graphql-docs/pull/156. Thanks @denisahearn!
+- Fix Sass `@import` deprecation
+- Add ostruct and logger gems to dependencies since they're being removed from the Ruby standard library in a future release
+- Test and fixture improvements
+
 ## v5.0.0 - 2024-07-03
 
 - **breaking**: The graphql gem 2.2.0+ breaks some of the parsing and displaying of comments from a GraphQL schema file
