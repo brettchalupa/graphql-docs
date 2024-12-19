@@ -1,4 +1,4 @@
-# Contribuing Guide
+# Contributing Guide
 
 Contributions to this project are welcome. If you have an idea for a bigger change, [open an issue first](https://github.com/brettchalupa/graphql-docs/issues/new/choose) and we can discuss it.
 
