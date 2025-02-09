@@ -9,16 +9,71 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.2.2/anchor.min.js"></script>
     <script>
 
-    // Add anchors on DOMContentLoaded
     document.addEventListener("DOMContentLoaded", function(event) {
+      // Add anchors
       anchors.options = {
         placement: 'left',
         visible: 'hover',
         icon: '¶'
       };
       anchors.add('h2, h3, h4, h5, h6, .anchored');
+
+      // Add listener for search filter input
+      const sidebarDiv = document.getElementById('sidebar');
+      const searchDiv = sidebarDiv.querySelector('#search')
+
+      if (searchDiv) {
+        const searchInput = searchDiv.querySelector('input');
+        const menuElements = sidebarDiv.querySelectorAll('ul.menu-root');
+
+        const listener = debounce((event) => {
+          const searchValue = event.target.value;
+          applySearchFilter(searchValue, menuElements)
+        }, 500);
+
+        searchInput.addEventListener('input', listener);
+      }
     });
 
+    function debounce(func, wait) {
+      let timeout;
+
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    function applySearchFilter(searchValue, menuElements) {
+      menuElements.forEach(menuElement => {
+        const listElements = menuElement.getElementsByTagName('li');
+        let hasVisibleElements = false;
+        Array.from(listElements).forEach(listElement => {
+          let contains = true
+          if (searchValue.length > 0) {
+            const anchorElement = listElement.querySelector('a');
+            const textContent = anchorElement.innerText;
+            contains = textContent.toLowerCase().includes(searchValue.toLowerCase());
+          }
+
+          // Hide the list element if its text does not contain the search value
+          listElement.style.display = contains ? '' : 'none';
+
+          if (contains) {
+            hasVisibleElements = true;
+          }
+        });
+
+        // Hide the entire menu if none of the list items are visible
+        const menuParentElement = menuElement.closest('li')
+        menuParentElement.style.display = hasVisibleElements ? '' : 'none';
+      });
+    }
     </script>
   </head>
   <body>
