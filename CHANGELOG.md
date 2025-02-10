@@ -4,6 +4,10 @@ A concise overview of the public-facing changes to the gem from version to versi
 
 ## Unreleased
 
+## v5.2.0 - 2025-02-09
+
+- Add search filter to sidebar. Thanks @denisahearn!
+
 ## v5.1.0 - 2024-12-09
 
 - List queries in the sidebar, similar to mutations. See https://github.com/brettchalupa/graphql-docs/pull/156. Thanks @denisahearn!
