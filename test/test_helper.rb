@@ -34,6 +34,13 @@ class QueryType < GraphQL::Schema::Object
   end
 end
 
+class MutationType < GraphQL::Schema::Object
+  field :create_user, Int, null: false
+
+  field :deprecated_mutation, Int, null: false, deprecation_reason: "Use createUser instead"
+end
+
 class MySchema < GraphQL::Schema
   query QueryType
+  mutation MutationType
 end

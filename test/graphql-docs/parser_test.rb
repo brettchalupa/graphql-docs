@@ -123,4 +123,44 @@ class ParserTest < Minitest::Test
     assert fields[1][:is_deprecated]
     assert fields[2][:arguments][0][:is_deprecated]
   end
+
+  def test_query_field_deprecation
+    schema = MySchema
+    results = GraphQLDocs::Parser.new(schema, {}).parse
+
+    query_types = results[:query_types]
+
+    # Find the myField query
+    my_field = query_types.find { |q| q[:name] == 'myField' }
+    refute my_field[:is_deprecated], "myField should not be deprecated"
+    assert_nil my_field[:deprecation_reason], "myField should not have a deprecation reason"
+
+    # Find the deprecatedField query
+    deprecated_field = query_types.find { |q| q[:name] == 'deprecatedField' }
+    assert deprecated_field[:is_deprecated], "deprecatedField should be marked as deprecated"
+    assert_equal "Not useful any more", deprecated_field[:deprecation_reason], "deprecatedField should have correct deprecation reason"
+
+    # Find the fieldWithDeprecatedArg query
+    field_with_deprecated_arg = query_types.find { |q| q[:name] == 'fieldWithDeprecatedArg' }
+    refute field_with_deprecated_arg[:is_deprecated], "fieldWithDeprecatedArg itself should not be deprecated"
+    assert field_with_deprecated_arg[:arguments][0][:is_deprecated], "myArg should be marked as deprecated"
+    assert_equal "Not useful any more", field_with_deprecated_arg[:arguments][0][:deprecation_reason], "myArg should have correct deprecation reason"
+  end
+
+  def test_mutation_field_deprecation
+    schema = MySchema
+    results = GraphQLDocs::Parser.new(schema, {}).parse
+
+    mutation_types = results[:mutation_types]
+
+    # Find the createUser mutation
+    create_user = mutation_types.find { |m| m[:name] == 'createUser' }
+    refute create_user[:is_deprecated], "createUser should not be deprecated"
+    assert_nil create_user[:deprecation_reason], "createUser should not have a deprecation reason"
+
+    # Find the deprecatedMutation
+    deprecated_mutation = mutation_types.find { |m| m[:name] == 'deprecatedMutation' }
+    assert deprecated_mutation[:is_deprecated], "deprecatedMutation should be marked as deprecated"
+    assert_equal "Use createUser instead", deprecated_mutation[:deprecation_reason], "deprecatedMutation should have correct deprecation reason"
+  end
 end
