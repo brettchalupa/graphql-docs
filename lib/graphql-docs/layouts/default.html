@@ -7,11 +7,6 @@
     <title><%= title || name %></title>
     <link rel="stylesheet" href="<%= base_url %>/assets/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.2.2/anchor.min.js"></script>
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!-- jQuery UI -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <script>
 
     document.addEventListener("DOMContentLoaded", function(event) {
@@ -38,23 +33,81 @@
 
         searchInput.addEventListener('input', listener);
       }
+
+      // Resize sidebar functionality
+      initializeSidebarResize();
     });
-    // resize sidebar
-    $(function(){
-      $("#sidebar").css({"width":sessionStorage.getItem("width")});
-    });
-    $(function() {
-      $("#sidebar").resizable({
-        maxWidth:350,
-        minWidth:200,
-        handles:"e",
+
+    function initializeSidebarResize() {
+      const sidebar = document.getElementById('sidebar');
+      if (!sidebar) {
+        return;
+      }
+
+      const minWidth = 200;
+      const maxWidth = 350;
+
+      // Restore saved width from sessionStorage
+      const savedWidth = sessionStorage.getItem('sidebarWidth');
+      if (savedWidth) {
+        sidebar.style.width = savedWidth;
+      }
+
+      // Create resize handle as a sibling to sidebar (not inside it)
+      const resizeHandle = document.createElement('div');
+      resizeHandle.className = 'resize-handle';
+
+      // Position handle at current sidebar width
+      if (savedWidth) {
+        resizeHandle.style.left = savedWidth;
+      }
+
+      // Insert after sidebar
+      sidebar.parentNode.insertBefore(resizeHandle, sidebar.nextSibling);
+
+      // Track resize state
+      let isResizing = false;
+      let startX = 0;
+      let startWidth = 0;
+
+      // Mouse down on handle
+      resizeHandle.addEventListener('mousedown', function(e) {
+        isResizing = true;
+        startX = e.clientX;
+        startWidth = sidebar.offsetWidth;
+
+        // Prevent text selection while dragging
+        e.preventDefault();
+        document.body.style.userSelect = 'none';
+        document.body.style.cursor = 'ew-resize';
       });
-    });
-    $(function(){
-      $("#sidebar").resize(function () { 
-        sessionStorage.setItem("width",$("#sidebar").css("width"))
+
+      // Mouse move
+      document.addEventListener('mousemove', function(e) {
+        if (!isResizing) return;
+
+        const dx = e.clientX - startX;
+        const newWidth = startWidth + dx;
+
+        // Apply constraints
+        if (newWidth >= minWidth && newWidth <= maxWidth) {
+          sidebar.style.width = newWidth + 'px';
+          resizeHandle.style.left = newWidth + 'px';
+        }
       });
-    });
+
+      // Mouse up
+      document.addEventListener('mouseup', function() {
+        if (isResizing) {
+          isResizing = false;
+          document.body.style.userSelect = '';
+          document.body.style.cursor = '';
+
+          // Save the new width to sessionStorage
+          sessionStorage.setItem('sidebarWidth', sidebar.style.width);
+        }
+      });
+    }
 
     function debounce(func, wait) {
       let timeout;

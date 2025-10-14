@@ -48,3 +48,18 @@ em {
 @include meta.load-css('../_sass/_api-box');
 @include meta.load-css('../_sass/_syntax');
 @include meta.load-css('../_sass/_deprecations');
+
+// Sidebar resize handle
+.resize-handle {
+  position: fixed;
+  left: 300px; // Default sidebar width
+  top: 30px;
+  bottom: 0;
+  width: 10px;
+  cursor: ew-resize;
+  z-index: 3;
+  background-color: transparent;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
