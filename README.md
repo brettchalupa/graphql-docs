@@ -127,6 +127,81 @@ In your ERB layouts, there are several helper methods you can use. The helper me
 
 To call these methods within templates, you must use the dot notation, such as `<%= slugify.(text) %>`.
 
+## Dark Mode Support
+
+GraphQLDocs includes built-in dark mode support that automatically adapts to the user's system preferences using the `prefers-color-scheme` media query. When a user has dark mode enabled on their operating system, the documentation will automatically display with a dark theme.
+
+### Customizing Colors
+
+The default styles use CSS custom properties (variables) for all colors, making it easy to customize the color scheme to match your brand. You can override these variables by providing a custom stylesheet.
+
+The available CSS variables are:
+
+**Light Mode (default):**
+```css
+:root {
+  --bg-primary: #fff;           /* Main background color */
+  --bg-secondary: #f8f8f8;      /* Secondary background (tables, etc.) */
+  --bg-tertiary: #fafafa;       /* Tertiary background (API boxes) */
+  --bg-code: #eee;              /* Inline code background */
+  --bg-code-block: #272822;     /* Code block background */
+  --text-primary: #444;         /* Primary text color */
+  --text-secondary: #999;       /* Secondary text (categories, etc.) */
+  --text-link: #de4f4f;         /* Link color */
+  --text-code: #525252;         /* Inline code text color */
+  --border-color: #eee;         /* Primary border color */
+  --border-color-secondary: #ddd; /* Secondary border color */
+  --shadow-color: rgba(0, 0, 0, 0.1); /* Shadow/hover effects */
+}
+```
+
+**Dark Mode:**
+```css
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #252525;
+    --bg-tertiary: #2a2a2a;
+    --bg-code: #333;
+    --bg-code-block: #1e1e1e;
+    --text-primary: #e0e0e0;
+    --text-secondary: #888;
+    --text-link: #ff6b6b;
+    --text-code: #d4d4d4;
+    --border-color: #333;
+    --border-color-secondary: #444;
+    --shadow-color: rgba(255, 255, 255, 0.1);
+  }
+}
+```
+
+### Example: Custom Color Scheme
+
+To customize the colors, create a custom CSS file and load it after the default styles. You can override specific variables while keeping the rest of the defaults:
+
+```css
+/* custom-theme.css */
+:root {
+  --text-link: #0066cc;         /* Change link color to blue */
+  --bg-tertiary: #f0f0f0;       /* Lighter API boxes */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-link: #66b3ff;       /* Lighter blue for dark mode */
+    --bg-primary: #0d1117;      /* GitHub-like dark background */
+    --bg-secondary: #161b22;
+  }
+}
+```
+
+Then reference it in your custom template by overriding the `default` template and adding a link to your stylesheet:
+
+```html
+<link rel="stylesheet" href="<%= base_url %>/assets/style.css">
+<link rel="stylesheet" href="<%= base_url %>/assets/custom-theme.css">
+```
+
 ## Configuration
 
 The following options are available:
