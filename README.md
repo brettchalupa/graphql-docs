@@ -8,13 +8,13 @@ Ruby library and CLI for easily generating beautiful documentation from your Gra
 
 Add the gem to your project with this command:
 
-``` console
+```console
 bundle add graphql-docs
 ```
 
 Or install it yourself as:
 
-``` console
+```console
 gem install graphql-docs
 ```
 
@@ -22,7 +22,7 @@ gem install graphql-docs
 
 GraphQLDocs can be used as a Ruby library to build the documentation website. Using it as a Ruby library allows for more control and using every supported option. Here's an example:
 
-``` ruby
+```ruby
 # pass in a filename
 GraphQLDocs.build(filename: filename)
 
@@ -36,9 +36,9 @@ end
 GraphQLDocs.build(schema: schema)
 ```
 
-GrophQLDocs also has a simplified CLI (`graphql-docs`) that gets installed with the gem:
+GraphQLDocs also has a simplified CLI (`graphql-docs`) that gets installed with the gem:
 
-``` console
+```console
 graphql-docs schema.graphql
 ```
 
@@ -46,7 +46,7 @@ That will generate the output in the `output` dir.
 
 See all of the supported CLI options with:
 
-``` console
+```console
 graphql-docs -h
 ```
 
@@ -54,14 +54,14 @@ graphql-docs -h
 
 There are several phases going on the single `GraphQLDocs.build` call:
 
-* The GraphQL IDL file is read (if you passed `filename`) through `GraphQL::Client` (or simply read if you passed a string through `schema`).
-* `GraphQL::Parser` manipulates the IDL into a slightly saner format.
-* `GraphQL::Generator` takes that saner format and begins the process of applying items to the HTML templates.
-* `GraphQL::Renderer` technically runs as part of the generation phase. It passes the contents of each page and converts it into HTML.
+- The GraphQL IDL file is read (if you passed `filename`) through `GraphQL::Client` (or simply read if you passed a string through `schema`).
+- `GraphQL::Parser` manipulates the IDL into a slightly saner format.
+- `GraphQL::Generator` takes that saner format and begins the process of applying items to the HTML templates.
+- `GraphQL::Renderer` technically runs as part of the generation phase. It passes the contents of each page and converts it into HTML.
 
 If you wanted to, you could break these calls up individually. For example:
 
-``` ruby
+```ruby
 options = {}
 options[:filename] = "#{File.dirname(__FILE__)}/../data/graphql/schema.idl"
 options[:renderer] = MySuperCoolRenderer
@@ -80,14 +80,14 @@ generator.generate
 
 ## Generating output
 
-By default, the HTML generation process uses ERB to layout the content. There are a bunch of default options provided for you, but feel free to override any of these. The *Configuration* section below has more information on what you can change.
+By default, the HTML generation process uses ERB to layout the content. There are a bunch of default options provided for you, but feel free to override any of these. The _Configuration_ section below has more information on what you can change.
 
 It also uses [html-pipeline](https://github.com/jch/html-pipeline) to perform the rendering by default. You can override this by providing a custom rendering class.You must implement two methods:
 
-* `initialize` - Takes two arguments, the parsed `schema` and the configuration `options`.
-* `render` Takes the contents of a template page. It also takes two optional kwargs, the GraphQL `type` and its `name`. For example:
+- `initialize` - Takes two arguments, the parsed `schema` and the configuration `options`.
+- `render` Takes the contents of a template page. It also takes two optional kwargs, the GraphQL `type` and its `name`. For example:
 
-``` ruby
+```ruby
 class CustomRenderer
   def initialize(parsed_schema, options)
     @parsed_schema = parsed_schema
@@ -120,10 +120,10 @@ If you want to add additional variables for your landing pages, you can add defi
 
 In your ERB layouts, there are several helper methods you can use. The helper methods are:
 
-* `slugify(str)` - This slugifies the given string.
-* `include(filename, opts)` - This embeds a template from your `includes` folder, passing along the local options provided.
-* `markdownify(string)` - This converts a string into HTML via CommonMarker.
-* `graphql_operation_types`, `graphql_mutation_types`, `graphql_object_types`, `graphql_interface_types`, `graphql_enum_types`, `graphql_union_types`, `graphql_input_object_types`, `graphql_scalar_types`, `graphql_directive_types` - Collections of the various GraphQL types.
+- `slugify(str)` - This slugifies the given string.
+- `include(filename, opts)` - This embeds a template from your `includes` folder, passing along the local options provided.
+- `markdownify(string)` - This converts a string into HTML via CommonMarker.
+- `graphql_operation_types`, `graphql_mutation_types`, `graphql_object_types`, `graphql_interface_types`, `graphql_enum_types`, `graphql_union_types`, `graphql_input_object_types`, `graphql_scalar_types`, `graphql_directive_types` - Collections of the various GraphQL types.
 
 To call these methods within templates, you must use the dot notation, such as `<%= slugify.(text) %>`.
 
@@ -131,20 +131,20 @@ To call these methods within templates, you must use the dot notation, such as `
 
 The following options are available:
 
-| Option | Description | Default |
-| :----- | :---------- | :------ |
-| `filename` | The location of your schema's IDL file. | `nil` |
-| `schema` | A string representing a schema IDL file. | `nil` |
-| `output_dir` | The location of the output HTML. | `./output/` |
-| `use_default_styles` | Indicates if you want to use the default styles. | `true` |
-| `base_url` | Indicates the base URL to prepend for assets and links. | `""` |
-| `delete_output` | Deletes `output_dir` before generating content. | `false` |
-| `pipeline_config` | Defines two sub-keys, `pipeline` and `context`, which are used by `html-pipeline` when rendering your output. | `pipeline` has `ExtendedMarkdownFilter`, `EmojiFilter`, and `TableOfContentsFilter`. `context` has `gfm: false` and `asset_root` set to GitHub's CDN. |
-| `renderer` | The rendering class to use. | `GraphQLDocs::Renderer`
-| `templates` | The templates to use when generating HTML. You may override any of the following keys: `default`, `includes`, `operations`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`, `directives`. | The defaults are found in _lib/graphql-docs/layouts/_.
-| `landing_pages` | The landing page to use when generating HTML for each type. You may override any of the following keys: `index`, `query`, `object`, `mutation`, `interface`, `enum`, `union`, `input_object`, `scalar`, `directive`. | The defaults are found in _lib/graphql-docs/landing\_pages/_.
-| `classes` | Additional class names you can provide to certain elements. | The full list is available in _lib/graphql-docs/configuration.rb_.
-| `notices` | A proc used to add notices to schema members. See *Customizing Notices* section below. | `nil` |
+| Option               | Description                                                                                                                                                                                                                    | Default                                                                                                                                               |
+| :------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `filename`           | The location of your schema's IDL file.                                                                                                                                                                                        | `nil`                                                                                                                                                 |
+| `schema`             | A string representing a schema IDL file.                                                                                                                                                                                       | `nil`                                                                                                                                                 |
+| `output_dir`         | The location of the output HTML.                                                                                                                                                                                               | `./output/`                                                                                                                                           |
+| `use_default_styles` | Indicates if you want to use the default styles.                                                                                                                                                                               | `true`                                                                                                                                                |
+| `base_url`           | Indicates the base URL to prepend for assets and links.                                                                                                                                                                        | `""`                                                                                                                                                  |
+| `delete_output`      | Deletes `output_dir` before generating content.                                                                                                                                                                                | `false`                                                                                                                                               |
+| `pipeline_config`    | Defines two sub-keys, `pipeline` and `context`, which are used by `html-pipeline` when rendering your output.                                                                                                                  | `pipeline` has `ExtendedMarkdownFilter`, `EmojiFilter`, and `TableOfContentsFilter`. `context` has `gfm: false` and `asset_root` set to GitHub's CDN. |
+| `renderer`           | The rendering class to use.                                                                                                                                                                                                    | `GraphQLDocs::Renderer`                                                                                                                               |
+| `templates`          | The templates to use when generating HTML. You may override any of the following keys: `default`, `includes`, `operations`, `objects`, `mutations`, `interfaces`, `enums`, `unions`, `input_objects`, `scalars`, `directives`. | The defaults are found in _lib/graphql-docs/layouts/_.                                                                                                |
+| `landing_pages`      | The landing page to use when generating HTML for each type. You may override any of the following keys: `index`, `query`, `object`, `mutation`, `interface`, `enum`, `union`, `input_object`, `scalar`, `directive`.           | The defaults are found in _lib/graphql-docs/landing_pages/_.                                                                                          |
+| `classes`            | Additional class names you can provide to certain elements.                                                                                                                                                                    | The full list is available in _lib/graphql-docs/configuration.rb_.                                                                                    |
+| `notices`            | A proc used to add notices to schema members. See _Customizing Notices_ section below.                                                                                                                                         | `nil`                                                                                                                                                 |
 
 ### Customizing Notices
 
@@ -157,11 +157,11 @@ The proc will be called for each schema member and needs to return an array of n
 
 A `notice` has the following options:
 
-| Option | Description |
-| :----- | :---------- |
-| `body` | CommonMark body of the notice |
-| `title` | Optional title of the notice |
-| `class` | Optional CSS class for the wrapper `<div>` of the notice |
+| Option        | Description                                               |
+| :------------ | :-------------------------------------------------------- |
+| `body`        | CommonMark body of the notice                             |
+| `title`       | Optional title of the notice                              |
+| `class`       | Optional CSS class for the wrapper `<div>` of the notice  |
 | `title_class` | Optional CSS class for the `<span>` of the notice's title |
 
 Example of a `notices` proc that adds a notice to the `TeamDiscussion` type:
@@ -197,8 +197,9 @@ The format of `schema_member_path` is a dot delimited path to the schema member.
 
 ## Supported Ruby Versions
 
-The gem currently supports **Ruby 2.6 and newer**. Any dropping of Ruby version
-support is considered a breaking change and means a major release for the gem.
+The gem officially supports **Ruby 3.1 and newer**.
+
+Any dropping of Ruby version support is considered a breaking change and means a major release for the gem.
 
 ## Upgrading
 
@@ -220,6 +221,15 @@ Projects](https://github.com/users/brettchalupa/projects/7/views/1).
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
 `bin/rake test` to run the tests. You can also run `bin/console` for
 an interactive prompt that will allow you to experiment.
+
+### Releasing a new version of the gem
+
+1. Update CHANGELOG.md
+2. Bump the version in `lib/graphql-docs/version.rb`
+3. Make a commit and tag it with `git commit -a vX.X.X`
+4. Push the commit and tags to GitHub: `git push origin main && git push --tags`
+5. Build the gem: `gem build`
+6. Push the gem to RubyGems.org: `gem push graphql-docs-X.X.X.gem`
 
 ## Sample Site
 

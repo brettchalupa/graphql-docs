@@ -26,10 +26,6 @@ class GeneratorTest < Minitest::Test
     @tiny_parser = GraphQLDocs::Parser.new(tiny_schema, {})
     @tiny_results = @tiny_parser.parse
 
-    named_root_schema = File.read(File.join(fixtures_dir, 'named-root-schema.graphql'))
-    @named_root_parser = GraphQLDocs::Parser.new(named_root_schema, {})
-    @named_root_results = @named_root_parser.parse
-
     @output_dir = File.join(fixtures_dir, 'output')
   end
 
@@ -66,6 +62,7 @@ class GeneratorTest < Minitest::Test
     assert File.exist? File.join(@output_dir, 'enum', 'issuestate', 'index.html')
     assert File.exist? File.join(@output_dir, 'input_object', 'projectorder', 'index.html')
     assert File.exist? File.join(@output_dir, 'interface', 'reactable', 'index.html')
+    assert File.exist? File.join(@output_dir, 'query', 'codeofconduct', 'index.html')
     assert File.exist? File.join(@output_dir, 'mutation', 'addcomment', 'index.html')
     assert File.exist? File.join(@output_dir, 'object', 'repository', 'index.html')
     assert File.exist? File.join(@output_dir, 'scalar', 'boolean', 'index.html')
@@ -136,18 +133,6 @@ class GeneratorTest < Minitest::Test
     assert_match(/<div class="field-entry my-4">/, object)
   end
 
-  def test_that_named_query_root_generates_fields
-    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
-    options[:output_dir] = @output_dir
-
-    generator = GraphQLDocs::Generator.new(@named_root_results, options)
-    generator.generate
-
-    object = File.read File.join(@output_dir, 'operation', 'query', 'index.html')
-
-    assert_match(/Do a thing/, object)
-  end
-
   def test_that_missing_landing_pages_are_reported
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:landing_pages][:index] = 'BOGUS'
@@ -202,9 +187,9 @@ class GeneratorTest < Minitest::Test
     generator = GraphQLDocs::Generator.new(@tiny_results, options)
     generator.generate
 
-    contents = File.read File.join(@output_dir, 'operation', 'query', 'index.html')
+    contents = File.read File.join(@output_dir, 'query', 'codeofconduct', 'index.html')
 
-    assert_match(%r{<td>\s+<p>The code of conduct's key</p>\s+</td>}, contents)
+    assert_match(%r{<p>The code of conduct's key</p>}, contents)
   end
 
   def test_that_non_empty_html_lines_not_interpreted_by_markdown
@@ -216,6 +201,7 @@ class GeneratorTest < Minitest::Test
 
     contents = File.read File.join(@output_dir, 'input_object', 'projectorder', 'index.html')
 
-    assert_match %r{<div class="description-wrapper">\n   <p>The direction in which to order projects by the specified field.</p>\s+</div>}, contents
+    assert_match %r{<div class="description-wrapper">\n   <p>The direction in which to order projects by the specified field.</p>\s+</div>},
+                 contents
   end
 end

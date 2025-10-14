@@ -1,21 +1,22 @@
 name: Ruby
 
-on: [push,pull_request]
+on: 
+  push:
+  pull_request:
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        ruby-version: [3.1.2, 3.0.4, 2.7.6, 2.6.10]
+        ruby-version: [3.4, 3.3, 3.2, 3.1]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby ${{ matrix.ruby-version }}
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby-version }}
-        bundler-cache: true
-    - name: Run the test suite
-      run: bundle exec rake
+      - uses: actions/checkout@v2
+      - name: Set up Ruby ${{ matrix.ruby-version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+      - name: Run test suite
+        run: bundle exec rake

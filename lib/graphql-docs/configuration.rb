@@ -32,6 +32,7 @@ module GraphQLDocs
 
         operations: "#{File.dirname(__FILE__)}/layouts/graphql_operations.html",
         objects: "#{File.dirname(__FILE__)}/layouts/graphql_objects.html",
+        queries: "#{File.dirname(__FILE__)}/layouts/graphql_queries.html",
         mutations: "#{File.dirname(__FILE__)}/layouts/graphql_mutations.html",
         interfaces: "#{File.dirname(__FILE__)}/layouts/graphql_interfaces.html",
         enums: "#{File.dirname(__FILE__)}/layouts/graphql_enums.html",

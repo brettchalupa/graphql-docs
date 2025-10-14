@@ -28,8 +28,14 @@ OptionParser.new do |parser|
   parser.on("-o", "--output-dir DIR", "Where the site is generated to, defaults to ./output")
   parser.on("-d", "--delete-output", "Delete the output-dir before generating, defaults to false")
   parser.on("-b", "--base-url URL", "URL to preprend for assets and links, defaults to \"\"")
+  parser.on("-v", "--version", "Show the version")
   parser.on("--verbose", "Run in verbose mode")
 end.parse!(into: opts)
+
+if opts[:version]
+  puts("v#{GraphQLDocs::VERSION}")
+  exit
+end
 
 def err(msg)
   abort("#{NAME}: Error: #{msg}")

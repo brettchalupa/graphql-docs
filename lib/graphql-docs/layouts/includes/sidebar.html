@@ -1,3 +1,7 @@
+<div id="search">
+  <img src="<%= base_url %>/assets/images/search.svg">
+  <input autocomplete="off" placeholder="Search" />
+</div>
 <ul class="categories">
   <li>
     <ul class="menu-root">
@@ -7,7 +11,7 @@
   </li>
 
   <li>
-    <p>Queries</p>
+    <p>Operations</p>
     <ul class="menu-root">
       <li>
         <a href="<%= base_url %>/operation/query/" class="sidebar-link<% if title == "Query" %> current<% end %>">
@@ -23,12 +27,12 @@
   </li>
 
   <li>
-    <p><a href="<%= base_url %>/object">Objects</a></p>
+    <p><a href="<%= base_url %>/operation/query">Queries</a></p>
     <ul class="menu-root">
-      <% graphql_object_types.().each do |type| %>
-        <% @name = type[:name] %>
+      <% graphql_query_types.().each do |type| %>
+      <% @name = type[:name] %>
       <li>
-        <a href="<%= base_url %>/object/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
+        <a href="<%= base_url %>/query/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
         </a>
       </li>
@@ -43,6 +47,20 @@
       <% @name = type[:name] %>
       <li>
         <a href="<%= base_url %>/mutation/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
+          <%= @name %>
+        </a>
+      </li>
+      <% end %>
+    </ul>
+  </li>
+
+  <li>
+    <p><a href="<%= base_url %>/object">Objects</a></p>
+    <ul class="menu-root">
+      <% graphql_object_types.().each do |type| %>
+        <% @name = type[:name] %>
+      <li>
+        <a href="<%= base_url %>/object/<%= @name.downcase %>/" class="sidebar-link<% if title == @name %> current<% end %>">
           <%= @name %>
         </a>
       </li>

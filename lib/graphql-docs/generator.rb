@@ -2,6 +2,8 @@
 
 require 'erb'
 require 'fileutils'
+require 'sass-embedded'
+require 'ostruct'
 
 module GraphQLDocs
   class Generator
@@ -15,7 +17,7 @@ module GraphQLDocs
 
       @renderer = @options[:renderer].new(@parsed_schema, @options)
 
-      %i[operations objects mutations interfaces enums unions input_objects scalars directives].each do |sym|
+      %i[operations objects queries mutations interfaces enums unions input_objects scalars directives].each do |sym|
         raise IOError, "`#{sym}` template #{@options[:templates][sym]} was not found" unless File.exist?(@options[:templates][sym])
 
         instance_variable_set("@graphql_#{sym}_template", ERB.new(File.read(@options[:templates][sym])))
@@ -50,8 +52,9 @@ module GraphQLDocs
     def generate
       FileUtils.rm_rf(@options[:output_dir]) if @options[:delete_output]
 
-      has_query = create_graphql_query_pages
+      has_query = create_graphql_operation_pages
       create_graphql_object_pages
+      create_graphql_query_pages
       create_graphql_mutation_pages
       create_graphql_interface_pages
       create_graphql_enum_pages
@@ -84,8 +87,8 @@ module GraphQLDocs
         assets_dir = File.join(File.dirname(__FILE__), 'layouts', 'assets')
         FileUtils.mkdir_p(File.join(@options[:output_dir], 'assets'))
 
-        sass = File.join(assets_dir, 'css', 'screen.scss')
-        system `bundle exec dartsass --no-source-map=none #{sass} #{@options[:output_dir]}/assets/style.css`
+        css = Sass.compile(File.join(assets_dir, 'css', 'screen.scss')).css
+        File.write(File.join(@options[:output_dir], 'assets', 'style.css'), css)
 
         FileUtils.cp_r(File.join(assets_dir, 'images'), File.join(@options[:output_dir], 'assets'))
         FileUtils.cp_r(File.join(assets_dir, 'webfonts'), File.join(@options[:output_dir], 'assets'))
@@ -94,7 +97,7 @@ module GraphQLDocs
       true
     end
 
-    def create_graphql_query_pages
+    def create_graphql_operation_pages
       graphql_operation_types.each do |query_type|
         metadata = ''
         next unless query_type[:name] == graphql_root_types['query']
@@ -124,6 +127,15 @@ module GraphQLDocs
 
         contents = @graphql_objects_template.result(OpenStruct.new(opts).instance_eval { binding })
         write_file('object', object_type[:name], contents)
+      end
+    end
+
+    def create_graphql_query_pages
+      graphql_query_types.each do |query|
+        opts = default_generator_options(type: query)
+
+        contents = @graphql_queries_template.result(OpenStruct.new(opts).instance_eval { binding })
+        write_file('query', query[:name], contents)
       end
     end
 

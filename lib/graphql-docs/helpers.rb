@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'commonmarker'
+require 'ostruct'
 
 module GraphQLDocs
   module Helpers
@@ -33,6 +34,10 @@ module GraphQLDocs
 
     def graphql_operation_types
       @parsed_schema[:operation_types] || []
+    end
+
+    def graphql_query_types
+      @parsed_schema[:query_types] || []
     end
 
     def graphql_mutation_types

@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '>= 2.6.0'
+  spec.required_ruby_version = '>= 3.1'
 
   spec.add_dependency 'graphql', '~> 2.0'
 
@@ -43,10 +43,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'extended-markdown-filter', '~> 0.4'
   spec.add_dependency 'gemoji', '~> 3.0'
   spec.add_dependency 'html-pipeline', '>= 2.14.3', '~> 2.14'
-  spec.add_dependency 'dartsass', '~> 1.49'
+  spec.add_dependency 'sass-embedded', '~> 1.58'
+  spec.add_dependency 'ostruct', '~> 0.6'
+  spec.add_dependency 'logger', '~> 1.6'
 
   spec.add_development_dependency 'html-proofer', '~> 3.4'
-  spec.add_development_dependency 'minitest', '~> 5.0'
+  spec.add_development_dependency 'minitest', '~> 5.24'
   spec.add_development_dependency 'minitest-focus', '~> 1.1'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rubocop', '~> 1.37'
