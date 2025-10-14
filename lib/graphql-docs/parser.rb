@@ -60,6 +60,10 @@ module GraphQLDocs
               h[:notices] = @options[:notices].call([object.graphql_name, query.graphql_name].join('.'))
               h[:name] = query.graphql_name
               h[:description] = query.description
+              if query.respond_to?(:deprecation_reason) && !query.deprecation_reason.nil?
+                h[:is_deprecated] = true
+                h[:deprecation_reason] = query.deprecation_reason
+              end
               h[:arguments], = fetch_fields(query.arguments, [object.graphql_name, query.graphql_name].join('.'))
 
               return_type = query.type
@@ -80,6 +84,10 @@ module GraphQLDocs
               h[:notices] = @options[:notices].call([object.graphql_name, mutation.graphql_name].join('.'))
               h[:name] = mutation.graphql_name
               h[:description] = mutation.description
+              if mutation.respond_to?(:deprecation_reason) && !mutation.deprecation_reason.nil?
+                h[:is_deprecated] = true
+                h[:deprecation_reason] = mutation.deprecation_reason
+              end
               h[:input_fields], = fetch_fields(mutation.arguments, [object.graphql_name, mutation.graphql_name].join('.'))
 
               return_type = mutation.type
