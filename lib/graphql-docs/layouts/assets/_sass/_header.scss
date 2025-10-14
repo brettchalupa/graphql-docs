@@ -6,6 +6,12 @@
     text-decoration: none;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  #top-nav {
+    background-color: #0a0a0a;
+  }
+}
 #top-nav-links {
   list-style-type: none;
   position: absolute;
@@ -28,8 +34,8 @@
 #site-nav {
   position: relative;
   height: 70px;
-  background-color: #fff;
-  border-bottom: 1px solid #eee;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
   padding: 14px 30px;
   a {
     vertical-align: bottom;

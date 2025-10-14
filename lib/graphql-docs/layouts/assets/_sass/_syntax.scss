@@ -230,7 +230,7 @@ pre {
 }
 
 .highlight .hll { background-color: #49483e }
-pre  { background: #272822; color: #f8f8f2 }
+pre  { background: var(--bg-code-block); color: #f8f8f2 }
 .highlight .c { color: #75715e } /* Comment */
 .highlight .err { color: #960050; background-color: #1e0010 } /* Error */
 .highlight .k { color: #66d9ef } /* Keyword */

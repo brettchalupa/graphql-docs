@@ -4,13 +4,48 @@
 @use "../_sass/_normalize.scss";
 @use "../_sass/_fonts";
 
+:root {
+  // Light mode (default)
+  --bg-primary: #fff;
+  --bg-secondary: #f8f8f8;
+  --bg-tertiary: #fafafa;
+  --bg-code: #eee;
+  --bg-code-block: #272822;
+  --text-primary: #444;
+  --text-secondary: #999;
+  --text-link: #de4f4f;
+  --text-code: #525252;
+  --border-color: #eee;
+  --border-color-secondary: #ddd;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    // Dark mode
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #252525;
+    --bg-tertiary: #2a2a2a;
+    --bg-code: #333;
+    --bg-code-block: #1e1e1e;
+    --text-primary: #e0e0e0;
+    --text-secondary: #888;
+    --text-link: #ff6b6b;
+    --text-code: #d4d4d4;
+    --border-color: #333;
+    --border-color-secondary: #444;
+    --shadow-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
 body {
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
   font-weight: 400;
-  color: #444;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
 }
 h1,
 h2,
@@ -60,6 +95,6 @@ em {
   z-index: 3;
   background-color: transparent;
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: var(--shadow-color);
   }
 }

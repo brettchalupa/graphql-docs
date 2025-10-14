@@ -7,3 +7,10 @@
     font-weight: bold;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  .deprecation-notice {
+    background: #3d1a0f;
+    color: #ffb499;
+  }
+}

@@ -1,5 +1,5 @@
 #sidebar {
-  background-color: #fff;
+  background-color: var(--bg-primary);
   position: fixed;
   z-index: 2;
   top: 30px;
@@ -12,7 +12,7 @@
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: none;
   font-family: 'ProximaNova-Semibold';
-  border-right: 1px solid #eee;
+  border-right: 1px solid var(--border-color);
   font-size: 16px;
   line-height: 1.1em;
   &::-webkit-scrollbar {
@@ -22,14 +22,14 @@
     margin-bottom: 0.6em;
   }
   a {
-    color: #444;
+    color: var(--text-primary);
     text-decoration: none;
     &:hover {
-      color: #de4f4f;
+      color: var(--text-link);
     }
   }
   a.current {
-    color: #de4f4f;
+    color: var(--text-link);
   }
   a.H2 {
     font-weight: bold;
@@ -38,11 +38,11 @@
     >li {
       >p {
         margin-top: 1.5em;
-        border-top: 1px solid #eee;
+        border-top: 1px solid var(--border-color);
         text-transform: uppercase;
         padding-top: 1.2em;
         margin-bottom: 1em;
-        color: #999;
+        color: var(--text-secondary);
         font-size: 0.8em;
       }
     }
@@ -54,7 +54,7 @@
     font-size: 14px;
     .active {
       position: relative;
-      color: #de4f4f;
+      color: var(--text-link);
       &:before {
         content: "";
         position: absolute;
@@ -65,7 +65,7 @@
         height: 0;
         border-top: 4px solid transparent;
         border-bottom: 4px solid transparent;
-        border-left: 6px solid #de4f4f;
+        border-left: 6px solid var(--text-link);
       }
     }
   }
@@ -73,7 +73,7 @@
     display: flex;
     position: relative;
     align-items: center;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color-secondary);
     border-radius: 5px;
     padding: 0.01em 16px;
     margin-bottom: 20px;
@@ -91,7 +91,7 @@
       width: 100%;
       padding-left: 15px;
       background-color: transparent;
-      color: #444;
+      color: var(--text-primary);
       border: none;
       font-size: 14px;
       font-family: 'ProximaNova-Semibold';
@@ -100,6 +100,12 @@
     input:focus {
       outline: none;
     }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  #sidebar #search img {
+    filter: brightness(0) invert(1);
   }
 }
 
