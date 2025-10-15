@@ -2,10 +2,11 @@
 
 Ruby library and CLI for easily generating beautiful documentation from your GraphQL schema.
 
-![sample](https://cloud.githubusercontent.com/assets/64050/23438604/6a23add0-fdc7-11e6-8852-ef41e8451033.png)
+![Screenshot of sample generated docs](https://cloud.githubusercontent.com/assets/64050/23438604/6a23add0-fdc7-11e6-8852-ef41e8451033.png)
 
 Key links:
 
+- **Demo**: [https://graphql-docs.bcodes.me](https://graphql-docs.bcodes.me).
 - **Ruby documentation**: [https://rubydoc.info/github/brettchalupa/graphql-docs.git/main](https://rubydoc.info/github/brettchalupa/graphql-docs.git/main).
 
 ## Installation
@@ -307,12 +308,14 @@ The documentation will display correctly, but automatic dark mode will not work:
 The default templates use the following modern web features:
 
 **CSS Features:**
+
 - CSS Custom Properties (CSS Variables) - Required for theming
 - `@media (prefers-color-scheme: dark)` - Required for automatic dark mode
 - Flexbox
 - CSS Transforms and Transitions
 
 **JavaScript Features:**
+
 - ES6+ syntax (arrow functions, `const`/`let`, template literals)
 - `sessionStorage` API - For sidebar resize persistence
 - DOM APIs: `querySelector`, `addEventListener`, etc.
