@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'graphql'
+require "graphql"
 
 module GraphQLDocs
   # Parses GraphQL schemas into a structured format for documentation generation.
@@ -34,10 +34,10 @@ module GraphQLDocs
       @options[:notices] ||= ->(_schema_member_path) { [] }
 
       @schema = if schema.is_a?(String)
-                  GraphQL::Schema.from_definition(schema)
-                elsif schema < GraphQL::Schema
-                  schema
-                end
+        GraphQL::Schema.from_definition(schema)
+      elsif schema < GraphQL::Schema
+        schema
+      end
 
       @processed_schema = {
         operation_types: [],
@@ -97,7 +97,7 @@ module GraphQLDocs
           data[:name] = object.graphql_name
           data[:description] = object.description
 
-          if data[:name] == root_types['query']
+          if data[:name] == root_types["query"]
             data[:interfaces] = object.interfaces.map(&:graphql_name).sort
             data[:fields], data[:connections] = fetch_fields(object.fields, object.graphql_name)
             @processed_schema[:operation_types] << data
@@ -105,44 +105,44 @@ module GraphQLDocs
             object.fields.each_value do |query|
               h = {}
 
-              h[:notices] = @options[:notices].call([object.graphql_name, query.graphql_name].join('.'))
+              h[:notices] = @options[:notices].call([object.graphql_name, query.graphql_name].join("."))
               h[:name] = query.graphql_name
               h[:description] = query.description
               if query.respond_to?(:deprecation_reason) && !query.deprecation_reason.nil?
                 h[:is_deprecated] = true
                 h[:deprecation_reason] = query.deprecation_reason
               end
-              h[:arguments], = fetch_fields(query.arguments, [object.graphql_name, query.graphql_name].join('.'))
+              h[:arguments], = fetch_fields(query.arguments, [object.graphql_name, query.graphql_name].join("."))
 
               return_type = query.type
               if return_type.unwrap.respond_to?(:fields)
                 h[:return_fields], = fetch_fields(return_type.unwrap.fields, return_type.graphql_name)
               else # it is a scalar return type
-                h[:return_fields], = fetch_fields({ return_type.graphql_name => query }, return_type.graphql_name)
+                h[:return_fields], = fetch_fields({return_type.graphql_name => query}, return_type.graphql_name)
               end
 
               @processed_schema[:query_types] << h
             end
-          elsif data[:name] == root_types['mutation']
+          elsif data[:name] == root_types["mutation"]
             @processed_schema[:operation_types] << data
 
             object.fields.each_value do |mutation|
               h = {}
 
-              h[:notices] = @options[:notices].call([object.graphql_name, mutation.graphql_name].join('.'))
+              h[:notices] = @options[:notices].call([object.graphql_name, mutation.graphql_name].join("."))
               h[:name] = mutation.graphql_name
               h[:description] = mutation.description
               if mutation.respond_to?(:deprecation_reason) && !mutation.deprecation_reason.nil?
                 h[:is_deprecated] = true
                 h[:deprecation_reason] = mutation.deprecation_reason
               end
-              h[:input_fields], = fetch_fields(mutation.arguments, [object.graphql_name, mutation.graphql_name].join('.'))
+              h[:input_fields], = fetch_fields(mutation.arguments, [object.graphql_name, mutation.graphql_name].join("."))
 
               return_type = mutation.type
               if return_type.unwrap.respond_to?(:fields)
                 h[:return_fields], = fetch_fields(return_type.unwrap.fields, return_type.graphql_name)
               else # it is a scalar return type
-                h[:return_fields], = fetch_fields({ return_type.graphql_name => mutation }, return_type.graphql_name)
+                h[:return_fields], = fetch_fields({return_type.graphql_name => mutation}, return_type.graphql_name)
               end
 
               @processed_schema[:mutation_types] << h
@@ -165,7 +165,7 @@ module GraphQLDocs
 
           data[:values] = object.values.values.map do |val|
             h = {}
-            h[:notices] = @options[:notices].call([object.graphql_name, val.graphql_name].join('.'))
+            h[:notices] = @options[:notices].call([object.graphql_name, val.graphql_name].join("."))
             h[:name] = val.graphql_name
             h[:description] = val.description
             unless val.deprecation_reason.nil?
@@ -233,7 +233,7 @@ module GraphQLDocs
       object_fields.each_value do |field|
         hash = {}
 
-        hash[:notices] = @options[:notices].call([parent_path, field.graphql_name].join('.'))
+        hash[:notices] = @options[:notices].call([parent_path, field.graphql_name].join("."))
         hash[:name] = field.graphql_name
         hash[:description] = field.description
         if field.respond_to?(:deprecation_reason) && !field.deprecation_reason.nil?
@@ -273,24 +273,24 @@ module GraphQLDocs
       name = type.unwrap.graphql_name
 
       path = if type.unwrap < GraphQL::Schema::Object
-               if name == 'Query'
-                 'operation'
-               else
-                 'object'
-               end
-             elsif type.unwrap < GraphQL::Schema::Scalar
-               'scalar'
-             elsif type.unwrap < GraphQL::Schema::Interface
-               'interface'
-             elsif type.unwrap < GraphQL::Schema::Enum
-               'enum'
-             elsif type.unwrap < GraphQL::Schema::InputObject
-               'input_object'
-             elsif type.unwrap < GraphQL::Schema::Union
-               'union'
-             else
-               raise TypeError, "Unknown type for `#{name}`: `#{type.unwrap.class}`"
-             end
+        if name == "Query"
+          "operation"
+        else
+          "object"
+        end
+      elsif type.unwrap < GraphQL::Schema::Scalar
+        "scalar"
+      elsif type.unwrap < GraphQL::Schema::Interface
+        "interface"
+      elsif type.unwrap < GraphQL::Schema::Enum
+        "enum"
+      elsif type.unwrap < GraphQL::Schema::InputObject
+        "input_object"
+      elsif type.unwrap < GraphQL::Schema::Union
+        "union"
+      else
+        raise TypeError, "Unknown type for `#{name}`: `#{type.unwrap.class}`"
+      end
 
       {
         name: name,

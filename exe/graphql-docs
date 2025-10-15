@@ -10,17 +10,17 @@ OptionParser.new do |parser|
   parser.program_name = NAME
   parser.banner = <<~EOS
 
-  Generate GraphQL docs from the passed in schema file.
+    Generate GraphQL docs from the passed in schema file.
 
-  Usage: graphql-docs SCHEMA
+    Usage: graphql-docs SCHEMA
 
-  The only required argument is the path to the schema file to generate the site from.
+    The only required argument is the path to the schema file to generate the site from.
 
-  Examples:
-    $ graphql-docs schema.graphql
-    $ graphql-docs schema.graphql -o _docs
+    Examples:
+      $ graphql-docs schema.graphql
+      $ graphql-docs schema.graphql -o _docs
 
-  Options:
+    Options:
   EOS
 
   parser.version = GraphQLDocs::VERSION
@@ -51,7 +51,7 @@ verbose = opts.delete(:verbose)
 
 puts("Generating site with the following options: #{opts}") if verbose
 
-opts.transform_keys! { |k| k.to_s.gsub("-", "_").to_sym }
+opts.transform_keys! { |k| k.to_s.tr("-", "_").to_sym }
 GraphQLDocs.build(opts)
 
-puts("Site successfully generated in: #{opts[:output_dir] || 'output' }") if verbose
+puts("Site successfully generated in: #{opts[:output_dir] || "output"}") if verbose

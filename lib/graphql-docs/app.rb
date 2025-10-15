@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'erb'
+require "erb"
 
 # Lazy-load Rack when the App class is first instantiated
 begin
-  require 'rack'
-rescue LoadError => e
+  require "rack"
+rescue LoadError
   # Define a stub that will raise a better error message
   module Rack
     def self.const_missing(name)
@@ -76,7 +76,7 @@ module GraphQLDocs
     #
     # @raise [ArgumentError] If neither schema nor filename is provided
     def initialize(schema: nil, filename: nil, options: {})
-      raise ArgumentError, 'Must provide either schema or filename' if schema.nil? && filename.nil?
+      raise ArgumentError, "Must provide either schema or filename" if schema.nil? && filename.nil?
 
       @base_options = Configuration::GRAPHQLDOCS_DEFAULTS.merge(options).freeze
       @options = @base_options.dup
@@ -113,8 +113,8 @@ module GraphQLDocs
       path = clean_path(request.path_info)
 
       route(path)
-    rescue StandardError => e
-      [500, { 'content-type' => 'text/html' }, [error_page(e)]]
+    rescue => e
+      [500, {"content-type" => "text/html"}, [error_page(e)]]
     end
 
     # Clears the page cache.
@@ -140,20 +140,20 @@ module GraphQLDocs
     def clean_path(path)
       # Remove base_url prefix if present
       base = @options[:base_url]
-      path = path.sub(/^#{Regexp.escape(base)}/, '') if base && !base.empty?
+      path = path.sub(/^#{Regexp.escape(base)}/, "") if base && !base.empty?
 
       # Normalize path
-      path = '/' if path.empty?
-      path.sub(/\/$/, '') # Remove trailing slash
+      path = "/" if path.empty?
+      path.sub(/\/$/, "") # Remove trailing slash
     end
 
     def route(path)
       case path
-      when '', '/', '/index.html', '/index'
+      when "", "/", "/index.html", "/index"
         serve_landing_page(:index)
-      when '/operation/query', '/operation/query/index.html', '/operation/query/index'
+      when "/operation/query", "/operation/query/index.html", "/operation/query/index"
         serve_operation_page
-      when '/operation/mutation', '/operation/mutation/index.html', '/operation/mutation/index'
+      when "/operation/mutation", "/operation/mutation/index.html", "/operation/mutation/index"
         serve_mutation_operation_page
       when %r{^/object/([^/]+)(?:/index(?:\.html)?)?$}
         serve_type_page(:object, $1)
@@ -176,7 +176,7 @@ module GraphQLDocs
       when %r{^/assets/(.+)$}
         serve_asset($1)
       else
-        [404, { 'content-type' => 'text/html' }, [not_found_page(path)]]
+        [404, {"content-type" => "text/html"}, [not_found_page(path)]]
       end
     end
 
@@ -187,17 +187,17 @@ module GraphQLDocs
         generate_landing_page(page_type)
       end
 
-      return [404, { 'content-type' => 'text/html' }, ['Landing page not found']] if content.nil?
+      return [404, {"content-type" => "text/html"}, ["Landing page not found"]] if content.nil?
 
-      [200, { 'content-type' => 'text/html; charset=utf-8' }, [content]]
+      [200, {"content-type" => "text/html; charset=utf-8"}, [content]]
     end
 
     def serve_operation_page
-      serve_operation_type_page('query', @query_landing_page, 'Query')
+      serve_operation_type_page("query", @query_landing_page, "Query")
     end
 
     def serve_mutation_operation_page
-      serve_operation_type_page('mutation', @mutation_landing_page, 'Mutation')
+      serve_operation_type_page("mutation", @mutation_landing_page, "Mutation")
     end
 
     def serve_operation_type_page(operation_name, landing_page, display_name)
@@ -211,7 +211,7 @@ module GraphQLDocs
         next nil unless operation_type
 
         # Match Generator behavior: extract YAML metadata from landing page if present
-        metadata = ''
+        metadata = ""
         if landing_page
           landing_page_content = landing_page.dup
           if yaml?(landing_page_content)
@@ -230,16 +230,16 @@ module GraphQLDocs
         contents = @operations_template.result(OpenStruct.new(opts).instance_eval { binding })
 
         # Normalize spacing
-        contents.gsub!(/^\s+$/, '')
-        contents.gsub!(/^\s{4}/m, '  ')
+        contents.gsub!(/^\s+$/, "")
+        contents.gsub!(/^\s{4}/m, "  ")
 
         # Prepend metadata and render
-        render_content(metadata + contents, type_category: 'operation', type_name: operation_name)
+        render_content(metadata + contents, type_category: "operation", type_name: operation_name)
       end
 
-      return [404, { 'content-type' => 'text/html' }, ["#{display_name} type not found"]] if content.nil?
+      return [404, {"content-type" => "text/html"}, ["#{display_name} type not found"]] if content.nil?
 
-      [200, { 'content-type' => 'text/html; charset=utf-8' }, [content]]
+      [200, {"content-type" => "text/html; charset=utf-8"}, [content]]
     end
 
     def serve_type_page(type, name)
@@ -250,26 +250,26 @@ module GraphQLDocs
         generate_page_for_type(type, name)
       end
 
-      return [404, { 'content-type' => 'text/html' }, ["#{type.capitalize} '#{name}' not found"]] if content.nil?
+      return [404, {"content-type" => "text/html"}, ["#{type.capitalize} '#{name}' not found"]] if content.nil?
 
-      [200, { 'content-type' => 'text/html; charset=utf-8' }, [content]]
+      [200, {"content-type" => "text/html; charset=utf-8"}, [content]]
     end
 
     def serve_asset(asset_path)
       # Serve compiled CSS
-      if asset_path == 'style.css' && @compiled_css
-        return [200, { 'content-type' => 'text/css; charset=utf-8' }, [@compiled_css]]
+      if asset_path == "style.css" && @compiled_css
+        return [200, {"content-type" => "text/css; charset=utf-8"}, [@compiled_css]]
       end
 
       # Serve static assets from layouts/assets directory
-      asset_file = File.join(File.dirname(__FILE__), 'layouts', 'assets', asset_path)
+      asset_file = File.join(File.dirname(__FILE__), "layouts", "assets", asset_path)
 
       if File.exist?(asset_file) && File.file?(asset_file)
         content = File.read(asset_file)
         content_type = mime_type_for(asset_path)
-        [200, { 'content-type' => content_type }, [content]]
+        [200, {"content-type" => content_type}, [content]]
       else
-        [404, { 'content-type' => 'text/plain' }, ['Asset not found']]
+        [404, {"content-type" => "text/plain"}, ["Asset not found"]]
       end
     end
 
@@ -277,38 +277,38 @@ module GraphQLDocs
       landing_page_var = instance_variable_get("@#{page_type}_landing_page")
       return nil if landing_page_var.nil?
 
-      render_content(landing_page_var, type_category: 'static', type_name: page_type.to_s)
+      render_content(landing_page_var, type_category: "static", type_name: page_type.to_s)
     end
 
     def generate_page_for_type(type, name)
       collection = case type
-                   when :object then graphql_object_types
-                   when :query then graphql_query_types
-                   when :mutation then graphql_mutation_types
-                   when :interface then graphql_interface_types
-                   when :enum then graphql_enum_types
-                   when :union then graphql_union_types
-                   when :input_object then graphql_input_object_types
-                   when :scalar then graphql_scalar_types
-                   when :directive then graphql_directive_types
-                   else return nil
-                   end
+      when :object then graphql_object_types
+      when :query then graphql_query_types
+      when :mutation then graphql_mutation_types
+      when :interface then graphql_interface_types
+      when :enum then graphql_enum_types
+      when :union then graphql_union_types
+      when :input_object then graphql_input_object_types
+      when :scalar then graphql_scalar_types
+      when :directive then graphql_directive_types
+      else return nil
+      end
 
       # Find the type (case-insensitive)
       type_data = collection.find { |t| t[:name].downcase == name.downcase }
       return nil unless type_data
 
       template_key = case type
-                     when :object then :objects
-                     when :query then :queries
-                     when :mutation then :mutations
-                     when :interface then :interfaces
-                     when :enum then :enums
-                     when :union then :unions
-                     when :input_object then :input_objects
-                     when :scalar then :scalars
-                     when :directive then :directives
-                     end
+      when :object then :objects
+      when :query then :queries
+      when :mutation then :mutations
+      when :interface then :interfaces
+      when :enum then :enums
+      when :union then :unions
+      when :input_object then :input_objects
+      when :scalar then :scalars
+      when :directive then :directives
+      end
 
       generate_type_content(template_key, type_data, type.to_s, name)
     end
@@ -321,8 +321,8 @@ module GraphQLDocs
       contents = template.result(OpenStruct.new(opts).instance_eval { binding })
 
       # Normalize spacing
-      contents.gsub!(/^\s+$/, '')
-      contents.gsub!(/^\s{4}/m, '  ')
+      contents.gsub!(/^\s+$/, "")
+      contents.gsub!(/^\s{4}/m, "  ")
 
       render_content(contents, type_category: type_category, type_name: type_name)
     end
@@ -394,9 +394,9 @@ module GraphQLDocs
         next if landing_page_file.nil? || !File.exist?(landing_page_file)
 
         landing_page_contents = File.read(landing_page_file)
-        metadata = ''
+        metadata = ""
 
-        if File.extname(landing_page_file) == '.erb'
+        if File.extname(landing_page_file) == ".erb"
           opts = @options.merge(@options[:landing_pages][:variables]).merge(helper_methods)
           if yaml?(landing_page_contents)
             metadata, landing_page = split_into_metadata_and_contents(landing_page_contents, parse: false)
@@ -414,11 +414,11 @@ module GraphQLDocs
     def compile_assets
       return unless @options[:use_default_styles]
 
-      assets_dir = File.join(File.dirname(__FILE__), 'layouts', 'assets')
-      scss_file = File.join(assets_dir, 'css', 'screen.scss')
+      assets_dir = File.join(File.dirname(__FILE__), "layouts", "assets")
+      scss_file = File.join(assets_dir, "css", "screen.scss")
 
       if File.exist?(scss_file)
-        require 'sass-embedded'
+        require "sass-embedded"
         @compiled_css = Sass.compile(scss_file).css
       end
     end
@@ -426,17 +426,17 @@ module GraphQLDocs
     def mime_type_for(path)
       ext = File.extname(path).downcase
       case ext
-      when '.css' then 'text/css'
-      when '.js' then 'application/javascript'
-      when '.png' then 'image/png'
-      when '.jpg', '.jpeg' then 'image/jpeg'
-      when '.gif' then 'image/gif'
-      when '.svg' then 'image/svg+xml'
-      when '.woff' then 'font/woff'
-      when '.woff2' then 'font/woff2'
-      when '.ttf' then 'font/ttf'
-      when '.eot' then 'application/vnd.ms-fontobject'
-      else 'application/octet-stream'
+      when ".css" then "text/css"
+      when ".js" then "application/javascript"
+      when ".png" then "image/png"
+      when ".jpg", ".jpeg" then "image/jpeg"
+      when ".gif" then "image/gif"
+      when ".svg" then "image/svg+xml"
+      when ".woff" then "font/woff"
+      when ".woff2" then "font/woff2"
+      when ".ttf" then "font/ttf"
+      when ".eot" then "application/vnd.ms-fontobject"
+      else "application/octet-stream"
       end
     end
 
@@ -463,25 +463,25 @@ module GraphQLDocs
 
     def error_page(error)
       <<~HTML
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>500 Internal Server Error</title>
-          <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; }
-            h1 { color: #de4f4f; }
-            pre { background: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto; }
-          </style>
-        </head>
-        <body>
-          <h1>500 Internal Server Error</h1>
-          <p>An error occurred while generating the documentation page.</p>
-          <h2>Error Details:</h2>
-          <pre>#{Rack::Utils.escape_html(error.class.name)}: #{Rack::Utils.escape_html(error.message)}
-
-#{Rack::Utils.escape_html(error.backtrace.first(10).join("\n"))}</pre>
-        </body>
-        </html>
+                <!DOCTYPE html>
+                <html>
+                <head>
+                  <title>500 Internal Server Error</title>
+                  <style>
+                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; }
+                    h1 { color: #de4f4f; }
+                    pre { background: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto; }
+                  </style>
+                </head>
+                <body>
+                  <h1>500 Internal Server Error</h1>
+                  <p>An error occurred while generating the documentation page.</p>
+                  <h2>Error Details:</h2>
+                  <pre>#{Rack::Utils.escape_html(error.class.name)}: #{Rack::Utils.escape_html(error.message)}
+        
+        #{Rack::Utils.escape_html(error.backtrace.first(10).join("\n"))}</pre>
+                </body>
+                </html>
       HTML
     end
   end

@@ -498,6 +498,30 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run
 `bin/rake test` to run the tests. You can also run `bin/console` for
 an interactive prompt that will allow you to experiment.
 
+### Code Style
+
+This project uses [StandardRB](https://github.com/standardrb/standard) for Ruby code style enforcement. StandardRB is a zero-configuration formatter and linter based on RuboCop.
+
+To check your code style:
+
+```console
+bundle exec rake standard
+```
+
+To automatically fix style issues:
+
+```console
+bundle exec rake standard:fix
+```
+
+The default rake task runs both StandardRB and the test suite:
+
+```console
+bundle exec rake
+```
+
+StandardRB checks are also run in CI, so make sure your code passes before opening a pull request.
+
 ### Releasing a new version of the gem
 
 1. Update CHANGELOG.md

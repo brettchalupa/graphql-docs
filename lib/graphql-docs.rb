@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'graphql-docs/helpers'
-require 'graphql-docs/renderer'
-require 'graphql-docs/configuration'
-require 'graphql-docs/generator'
-require 'graphql-docs/parser'
-require 'graphql-docs/version'
+require "graphql-docs/helpers"
+require "graphql-docs/renderer"
+require "graphql-docs/configuration"
+require "graphql-docs/generator"
+require "graphql-docs/parser"
+require "graphql-docs/version"
 
 # Lazy-load the Rack app - only loads if Rack is available
 begin
-  require 'graphql-docs/app' if defined?(Rack)
+  require "graphql-docs/app" if defined?(Rack)
 rescue LoadError
   # Rack not available, App class won't be loaded
 end
@@ -92,9 +92,9 @@ module GraphQLDocs
       filename = options[:filename]
       schema = options[:schema]
 
-      raise ArgumentError, 'Pass in `filename` or `schema`, but not both!' if !filename.nil? && !schema.nil?
+      raise ArgumentError, "Pass in `filename` or `schema`, but not both!" if !filename.nil? && !schema.nil?
 
-      raise ArgumentError, 'Pass in either `filename` or `schema`' if filename.nil? && schema.nil?
+      raise ArgumentError, "Pass in either `filename` or `schema`" if filename.nil? && schema.nil?
 
       if filename
         raise TypeError, "Expected `String`, got `#{filename.class}`" unless filename.is_a?(String)
@@ -102,10 +102,8 @@ module GraphQLDocs
         raise ArgumentError, "#{filename} does not exist!" unless File.exist?(filename)
 
         schema = File.read(filename)
-      else
-        raise TypeError, "Expected `String` or `GraphQL::Schema`, got `#{schema.class}`" if !schema.is_a?(String) && !schema_type?(schema)
-
-        schema = schema
+      elsif !schema.is_a?(String) && !schema_type?(schema)
+        raise TypeError, "Expected `String` or `GraphQL::Schema`, got `#{schema.class}`"
       end
 
       parser = GraphQLDocs::Parser.new(schema, options)

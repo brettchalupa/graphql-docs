@@ -2,5 +2,5 @@
 
 module GraphQLDocs
   # Current version of the GraphQLDocs gem
-  VERSION = '5.2.0'
+  VERSION = "5.2.0"
 end
