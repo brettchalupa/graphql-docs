@@ -24,6 +24,8 @@ Gem::Specification.new do |spec|
     "bug_tracker_uri"   => "https://github.com/brettchalupa/graphql-docs/issues",
     "changelog_uri"     => "https://github.com/brettchalupa/graphql-docs/blob/main/CHANGELOG.md",
     "wiki_uri"          => "https://github.com/brettchalupa/graphql-docs/wiki",
+    "documentation_uri" => "https://rubydoc.info/github/brettchalupa/graphql-docs.git/main",
+    "source_code_uri"   => "https://github.com/brettchalupa/graphql-docs"
   }
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
