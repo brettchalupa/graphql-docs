@@ -22,6 +22,17 @@ module GraphQLDocs
   # documentation to be served dynamically from a Rack-compatible web server.
   # Pages are generated on-demand and can be cached for performance.
   #
+  # Thread Safety:
+  # This application is designed to be thread-safe for use with multi-threaded
+  # web servers like Puma or Falcon. Thread safety is achieved through:
+  #
+  # 1. Immutable core state: @parsed_schema, @base_options, and @renderer are
+  #    set once during initialization and never mutated.
+  # 2. Temporary renderers: When YAML frontmatter is present, a new temporary
+  #    renderer is created per-request instead of mutating shared state.
+  # 3. Cache thread-safety: The @cache hash may require external synchronization
+  #    in highly concurrent scenarios (consider using a thread-safe cache adapter).
+  #
   # @example Standalone usage
   #   app = GraphQLDocs::App.new(
   #     schema: 'type Query { hello: String }',
@@ -296,18 +307,41 @@ module GraphQLDocs
       render_content(contents, type_category: type_category, type_name: type_name)
     end
 
+    # Renders content with optional YAML frontmatter metadata.
+    #
+    # Thread Safety:
+    # This method is designed to be thread-safe for use in multi-threaded Rack servers.
+    # It achieves thread-safety by using an immutable options pattern:
+    #
+    # 1. When YAML frontmatter is present, a NEW temporary renderer is created with
+    #    merged options, ensuring no mutation of shared @options or @renderer state.
+    # 2. When no YAML frontmatter is present, the shared @renderer is used directly
+    #    (safe because @options and @renderer are immutable after initialization).
+    #
+    # This approach prevents race conditions where YAML metadata from Request A could
+    # leak into Request B when both requests are processed concurrently.
+    #
+    # @param contents [String] Content to render (may include YAML frontmatter)
+    # @param type_category [String] Category of the type being rendered
+    # @param type_name [String] Name of the type being rendered
+    # @return [String] Rendered HTML content
+    #
+    # @api private
     def render_content(contents, type_category:, type_name:)
-      # Parse YAML frontmatter if present (similar to generator.rb write_file)
+      extra_opts = {}
+
+      # Parse YAML frontmatter if present
       if yaml?(contents)
         meta, contents = split_into_metadata_and_contents(contents)
-        # Temporarily merge metadata into options for this render
-        # Need to mutate in place so renderer sees the changes
-        @options.merge!(meta)
-        result = @renderer.render(contents, type: type_category, name: type_name, filename: nil)
-        # Reset options by clearing and repopulating from base (in place)
-        @options.clear
-        @options.merge!(@base_options)
-        result
+        extra_opts = meta
+      end
+
+      # If we have metadata, create a temporary renderer with merged options
+      # This ensures thread-safety by not mutating shared @options or @renderer
+      if extra_opts.any?
+        temp_options = @base_options.merge(extra_opts)
+        temp_renderer = @options[:renderer].new(@parsed_schema, temp_options)
+        temp_renderer.render(contents, type: type_category, name: type_name, filename: nil)
       else
         @renderer.render(contents, type: type_category, name: type_name, filename: nil)
       end

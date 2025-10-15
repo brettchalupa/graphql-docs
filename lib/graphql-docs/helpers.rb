@@ -18,9 +18,9 @@ module GraphQLDocs
     # Matches all characters that are not alphanumeric or common URL-safe characters.
     SLUGIFY_PRETTY_REGEXP = Regexp.new("[^[:alnum:]._~!$&'()+,;=@]+").freeze
 
-    # @!attribute [rw] included_templates
+    # @!attribute [rw] templates
     #   @return [Hash] Cache of loaded ERB templates for includes
-    attr_accessor :included_templates
+    attr_accessor :templates
 
     # Converts a string into a URL-friendly slug.
     #
@@ -153,6 +153,7 @@ module GraphQLDocs
     #
     # @raise [RuntimeError] If YAML front matter format is invalid
     # @raise [RuntimeError] If YAML parsing fails
+    # @raise [TypeError] If parsed YAML is not a Hash
     def split_into_metadata_and_contents(contents, parse: true)
       pieces = yaml_split(contents)
       raise "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format." if pieces.size < 4
@@ -167,6 +168,12 @@ module GraphQLDocs
       rescue Exception => e # rubocop:disable Lint/RescueException
         raise "Could not parse YAML for #{name}: #{e.message}"
       end
+
+      # Validate that parsed YAML is a Hash when parsing is enabled
+      if parse && !meta.is_a?(Hash)
+        raise TypeError, "Expected YAML front matter to be a hash, got #{meta.class}"
+      end
+
       [meta, pieces[4]]
     end
 
@@ -189,13 +196,13 @@ module GraphQLDocs
     private
 
     def fetch_include(filename)
-      @included_templates ||= {}
+      @templates ||= {}
 
-      return @included_templates[filename] unless @included_templates[filename].nil?
+      return @templates[filename] unless @templates[filename].nil?
 
       contents = File.read(File.join(@options[:templates][:includes], filename))
 
-      @included_templates[filename] = ERB.new(contents)
+      @templates[filename] = ERB.new(contents)
     end
 
     def helper_methods

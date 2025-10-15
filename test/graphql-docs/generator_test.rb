@@ -199,30 +199,51 @@ class GeneratorTest < Minitest::Test
     refute_match(/^title: GraphQL documentation$/, contents)
   end
 
-  def test_that_options_mutated_in_place_for_yaml_frontmatter
-    # Critical test: This ensures that @options.merge! is used instead of @options = @options.merge()
-    # Without merge!, the renderer's reference to @options would be broken and YAML frontmatter
-    # variables like 'title' would not be accessible to the template
+  def test_that_yaml_frontmatter_does_not_pollute_across_files
+    # Critical test: Ensures YAML frontmatter from one file doesn't leak into another.
+    # This tests the thread-safe immutable options pattern where each file with YAML
+    # gets its own temporary renderer instead of mutating shared state.
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+    options[:delete_output] = true
+
+    # Set up templates: one with YAML frontmatter, one without
+    options[:templates][:objects] = File.join(fixtures_dir, 'templates', 'with_yaml_title.html')
+    options[:templates][:scalars] = File.join(fixtures_dir, 'templates', 'without_yaml.html')
+
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
+    generator.generate
+
+    # Object should have the custom YAML title
+    object_file = File.read(File.join(@output_dir, 'object', 'codeofconduct', 'index.html'))
+    assert_match(%r{<title>Custom YAML Title</title>}, object_file)
+
+    # Scalar should NOT have the custom YAML title - should use fallback
+    scalar_file = File.read(File.join(@output_dir, 'scalar', 'uri', 'index.html'))
+    refute_match(%r{<title>Custom YAML Title</title>}, scalar_file)
+    assert_match(%r{<title>URI</title>}, scalar_file) # Should use type name fallback
+  end
+
+  def test_that_options_remain_unchanged_after_yaml_processing
+    # Test that @options hash is never mutated during YAML frontmatter processing.
+    # The immutable pattern creates temporary renderers instead of modifying shared state.
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir
     options[:landing_pages][:index] = File.join(fixtures_dir, 'landing_pages', 'whitespace_template.md')
 
     generator = GraphQLDocs::Generator.new(@tiny_results, options)
-
-    # Get references to options from both generator and renderer
     generator_options = generator.instance_variable_get(:@options)
-    renderer_options = generator.instance_variable_get(:@renderer).instance_variable_get(:@options)
 
-    # These should be the same object (same object_id) - verifying shared reference
-    assert_equal generator_options.object_id, renderer_options.object_id,
-                 "Generator and renderer should share the same @options hash object"
+    # Snapshot of options before generation
+    options_before = generator_options.dup
+    has_title_before = generator_options.key?(:title)
 
     generator.generate
 
-    # After generation with YAML frontmatter, both should still be the same object
-    # This is the critical assertion - if merge! isn't used, the object_id would change
-    assert_equal generator_options.object_id, renderer_options.object_id,
-                 "Options should still be the same object after generation (not replaced)"
+    # After generation, @options should not have been modified
+    refute generator_options.key?(:title), "Options should not contain :title from YAML frontmatter"
+    assert_equal has_title_before, generator_options.key?(:title),
+                 "Options keys should not change after generation"
   end
 
   def test_that_empty_html_lines_not_interpreted_by_markdown

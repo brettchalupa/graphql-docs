@@ -289,11 +289,10 @@ module GraphQLDocs
         FileUtils.mkdir_p(path)
       end
 
+      metadata = {}
       if yaml?(contents)
         # Split data
-        meta, contents = split_into_metadata_and_contents(contents)
-        # Use merge! to mutate in place so renderer sees the changes
-        @options.merge!(meta)
+        metadata, contents = split_into_metadata_and_contents(contents)
       end
 
       if trim
@@ -303,8 +302,46 @@ module GraphQLDocs
       end
 
       filename = File.join(path, 'index.html')
-      contents = @renderer.render(contents, type: type, name: name, filename: filename)
+      contents = render_with_metadata(contents, metadata, type: type, name: name, filename: filename)
       File.write(filename, contents) unless contents.nil?
+    end
+
+    # Renders content with optional metadata, without polluting @options.
+    #
+    # File Isolation:
+    # This method ensures that YAML frontmatter metadata from one file doesn't
+    # pollute or leak into other files during batch generation. It achieves this
+    # through an immutable options pattern:
+    #
+    # 1. When metadata is present (from YAML frontmatter), a NEW temporary renderer
+    #    is created with merged options, keeping @options and @renderer unchanged.
+    # 2. When no metadata is present, the shared @renderer is used directly
+    #    (safe because @options and @renderer remain unchanged throughout generation).
+    #
+    # This prevents a bug where title or other metadata from file1.md would
+    # persist and incorrectly appear in file2.md if they were processed sequentially.
+    #
+    # Example:
+    #   # file1.md has "title: Custom Title"
+    #   # file2.md has no YAML frontmatter
+    #   # Without this isolation, file2.md would incorrectly get "Custom Title"
+    #
+    # @param contents [String] Content to render
+    # @param metadata [Hash] Metadata extracted from YAML frontmatter
+    # @param type [String] Type category
+    # @param name [String] Type name
+    # @param filename [String] Output filename
+    # @return [String, nil] Rendered HTML content
+    #
+    # @api private
+    def render_with_metadata(contents, metadata, type:, name:, filename:)
+      if metadata.is_a?(Hash) && metadata.any?
+        temp_options = @options.merge(metadata)
+        temp_renderer = @options[:renderer].new(@parsed_schema, temp_options)
+        temp_renderer.render(contents, type: type, name: name, filename: filename)
+      else
+        @renderer.render(contents, type: type, name: name, filename: filename)
+      end
     end
   end
 end
