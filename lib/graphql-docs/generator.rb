@@ -292,7 +292,8 @@ module GraphQLDocs
       if yaml?(contents)
         # Split data
         meta, contents = split_into_metadata_and_contents(contents)
-        @options = @options.merge(meta)
+        # Use merge! to mutate in place so renderer sees the changes
+        @options.merge!(meta)
       end
 
       if trim

@@ -18,9 +18,9 @@ module GraphQLDocs
     # Matches all characters that are not alphanumeric or common URL-safe characters.
     SLUGIFY_PRETTY_REGEXP = Regexp.new("[^[:alnum:]._~!$&'()+,;=@]+").freeze
 
-    # @!attribute [rw] templates
-    #   @return [Hash] Cache of loaded ERB templates
-    attr_accessor :templates
+    # @!attribute [rw] included_templates
+    #   @return [Hash] Cache of loaded ERB templates for includes
+    attr_accessor :included_templates
 
     # Converts a string into a URL-friendly slug.
     #
@@ -189,13 +189,13 @@ module GraphQLDocs
     private
 
     def fetch_include(filename)
-      @templates ||= {}
+      @included_templates ||= {}
 
-      return @templates[filename] unless @templates[filename].nil?
+      return @included_templates[filename] unless @included_templates[filename].nil?
 
       contents = File.read(File.join(@options[:templates][:includes], filename))
 
-      @templates[filename] = ERB.new(contents)
+      @included_templates[filename] = ERB.new(contents)
     end
 
     def helper_methods

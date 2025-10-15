@@ -83,4 +83,34 @@ namespace :sample do
     server.start
   end
   task server: :serve
+
+  desc 'Run the sample docs as a Rack application (dynamic, on-demand generation)'
+  task :rack do
+    require 'rack'
+    require 'graphql-docs'
+
+    schema_path = File.join(File.dirname(__FILE__), 'test', 'graphql-docs', 'fixtures', 'gh-schema.graphql')
+    schema = File.read(schema_path)
+
+    app = GraphQLDocs::App.new(
+      schema: schema,
+      options: {
+        base_url: '',
+        use_default_styles: true,
+        cache: true
+      }
+    )
+
+    PORT = ENV.fetch('PORT', '9292')
+    puts "Starting Rack server in dynamic mode (on-demand generation)"
+    puts "Navigate to http://localhost:#{PORT} to view the sample docs"
+    puts "Press Ctrl+C to stop"
+    puts ""
+    puts "NOTE: This serves documentation dynamically - pages are generated on request"
+    puts "      Compare with 'rake sample:serve' which serves pre-generated static files"
+    puts ""
+
+    # Use rackup for Rack 3.x compatibility
+    sh "rackup config.ru -p #{PORT}"
+  end
 end

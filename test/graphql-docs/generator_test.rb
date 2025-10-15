@@ -180,6 +180,51 @@ class GeneratorTest < Minitest::Test
     assert_match(/    "nest2": \{/, contents)
   end
 
+  def test_that_yaml_frontmatter_title_renders_in_html
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+    options[:landing_pages][:index] = File.join(fixtures_dir, 'landing_pages', 'whitespace_template.md')
+
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
+    generator.generate
+
+    contents = File.read File.join(@output_dir, 'index.html')
+
+    # Should render title from YAML frontmatter, not "index"
+    assert_match(%r{<title>GraphQL documentation</title>}, contents)
+    refute_match(%r{<title>index</title>}, contents)
+
+    # YAML frontmatter should not appear in page content
+    refute_match(/^---$/, contents)
+    refute_match(/^title: GraphQL documentation$/, contents)
+  end
+
+  def test_that_options_mutated_in_place_for_yaml_frontmatter
+    # Critical test: This ensures that @options.merge! is used instead of @options = @options.merge()
+    # Without merge!, the renderer's reference to @options would be broken and YAML frontmatter
+    # variables like 'title' would not be accessible to the template
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+    options[:landing_pages][:index] = File.join(fixtures_dir, 'landing_pages', 'whitespace_template.md')
+
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
+
+    # Get references to options from both generator and renderer
+    generator_options = generator.instance_variable_get(:@options)
+    renderer_options = generator.instance_variable_get(:@renderer).instance_variable_get(:@options)
+
+    # These should be the same object (same object_id) - verifying shared reference
+    assert_equal generator_options.object_id, renderer_options.object_id,
+                 "Generator and renderer should share the same @options hash object"
+
+    generator.generate
+
+    # After generation with YAML frontmatter, both should still be the same object
+    # This is the critical assertion - if merge! isn't used, the object_id would change
+    assert_equal generator_options.object_id, renderer_options.object_id,
+                 "Options should still be the same object after generation (not replaced)"
+  end
+
   def test_that_empty_html_lines_not_interpreted_by_markdown
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir

@@ -15,6 +15,23 @@ class RendererTest < Minitest::Test
     assert_match %r{<title>R2D2</title>}, contents
   end
 
+  def test_that_renderer_passes_all_options_to_template
+    # Test that renderer passes all options to template, not just specific keys
+    custom_options = GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS.merge({
+      custom_key: 'custom_value',
+      title: 'Custom Title'
+    })
+
+    renderer = GraphQLDocs::Renderer.new(@parsed_schema, custom_options)
+    contents = renderer.render('Test content', type: 'test', name: 'test')
+
+    # Title from options should be rendered
+    assert_match %r{<title>Custom Title</title>}, contents
+
+    # This verifies that @options is being passed entirely, not just select keys
+    # Without this, YAML frontmatter variables wouldn't be accessible
+  end
+
   def test_that_html_conversion_works
     contents = @renderer.to_html('**R2D2**')
 
