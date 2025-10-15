@@ -193,31 +193,51 @@ module GraphQLDocs
     end
 
     def serve_operation_page
-      cache_key = 'operation:query'
-
-      content = fetch_from_cache(cache_key) do
-        query_type = graphql_operation_types.find { |qt| qt[:name] == graphql_root_types['query'] }
-        return nil unless query_type
-
-        generate_type_content(:operations, query_type, 'operation', 'query')
-      end
-
-      return [404, { 'content-type' => 'text/html' }, ['Query type not found']] if content.nil?
-
-      [200, { 'content-type' => 'text/html; charset=utf-8' }, [content]]
+      serve_operation_type_page('query', @query_landing_page, 'Query')
     end
 
     def serve_mutation_operation_page
-      cache_key = 'operation:mutation'
+      serve_operation_type_page('mutation', @mutation_landing_page, 'Mutation')
+    end
+
+    def serve_operation_type_page(operation_name, landing_page, display_name)
+      cache_key = "operation:#{operation_name}"
 
       content = fetch_from_cache(cache_key) do
-        mutation_type = graphql_operation_types.find { |mt| mt[:name] == graphql_root_types['mutation'] }
-        return nil unless mutation_type
+        # Find the operation type from the schema
+        operation_type = graphql_operation_types.find do |op|
+          op[:name] == graphql_root_types[operation_name]
+        end
+        next nil unless operation_type
 
-        generate_type_content(:operations, mutation_type, 'operation', 'mutation')
+        # Match Generator behavior: extract YAML metadata from landing page if present
+        metadata = ''
+        if landing_page
+          landing_page_content = landing_page.dup
+          if yaml?(landing_page_content)
+            pieces = yaml_split(landing_page_content)
+            pieces[2] = pieces[2].chomp
+            metadata = pieces[1, 3].join("\n")
+            landing_page_content = pieces[4]
+          end
+          # Set description like Generator does (thread-safe via dup)
+          operation_type = operation_type.dup
+          operation_type[:description] = landing_page_content
+        end
+
+        # Generate template content
+        opts = @options.merge(type: operation_type).merge(helper_methods)
+        contents = @operations_template.result(OpenStruct.new(opts).instance_eval { binding })
+
+        # Normalize spacing
+        contents.gsub!(/^\s+$/, '')
+        contents.gsub!(/^\s{4}/m, '  ')
+
+        # Prepend metadata and render
+        render_content(metadata + contents, type_category: 'operation', type_name: operation_name)
       end
 
-      return [404, { 'content-type' => 'text/html' }, ['Mutation type not found']] if content.nil?
+      return [404, { 'content-type' => 'text/html' }, ["#{display_name} type not found"]] if content.nil?
 
       [200, { 'content-type' => 'text/html; charset=utf-8' }, [content]]
     end

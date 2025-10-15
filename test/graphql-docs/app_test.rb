@@ -199,6 +199,128 @@ class AppTest < Minitest::Test
     assert_equal body1, body2
   end
 
+  def test_operation_query_page_yaml_frontmatter
+    # Test that query operation page uses YAML frontmatter title from landing page
+    schema = File.read(File.join(__dir__, 'fixtures', 'tiny-schema.graphql'))
+    query_app = GraphQLDocs::App.new(
+      schema: schema,
+      options: {
+        cache: false,
+        landing_pages: {
+          query: File.join(File.dirname(__FILE__), '..', '..', 'lib', 'graphql-docs', 'landing_pages', 'query.md')
+        }
+      }
+    )
+
+    env = Rack::MockRequest.env_for('/operation/query')
+    response = query_app.call(env)
+    body = response[2].join
+
+    assert_equal 200, response[0]
+
+    # Should render title from YAML frontmatter "Queries", not "query"
+    assert_includes body, '<title>Queries</title>'
+    refute_includes body, '<title>query</title>'
+
+    # Should include the landing page description content
+    assert_includes body, 'Every GraphQL schema has a root type for both queries and mutations'
+
+    # YAML frontmatter should not appear as literal text in page content
+    refute_match(/^---$/, body)
+    refute_includes body, 'title: Queries'
+  end
+
+  def test_operation_mutation_page_yaml_frontmatter
+    # Test that mutation operation page uses YAML frontmatter title from landing page
+    # Use gh-schema which has mutations
+    schema = File.read(File.join(__dir__, 'fixtures', 'gh-schema.graphql'))
+    mutation_app = GraphQLDocs::App.new(
+      schema: schema,
+      options: {
+        cache: false,
+        landing_pages: {
+          mutation: File.join(File.dirname(__FILE__), '..', '..', 'lib', 'graphql-docs', 'landing_pages', 'mutation.md')
+        }
+      }
+    )
+
+    env = Rack::MockRequest.env_for('/operation/mutation')
+    response = mutation_app.call(env)
+    body = response[2].join
+
+    assert_equal 200, response[0]
+
+    # Should render title from YAML frontmatter "Mutations"
+    assert_includes body, '<title>Mutations</title>'
+    refute_includes body, '<title>mutation</title>'
+
+    # Should include the landing page description content
+    assert_includes body, 'Every GraphQL schema has a root type for both queries and mutations'
+  end
+
+  def test_operation_page_yaml_does_not_pollute_other_pages
+    # Critical test: Ensures YAML frontmatter from operation page doesn't leak into other pages
+    schema = File.read(File.join(__dir__, 'fixtures', 'tiny-schema.graphql'))
+    multi_app = GraphQLDocs::App.new(
+      schema: schema,
+      options: {
+        cache: false,
+        landing_pages: {
+          query: File.join(File.dirname(__FILE__), '..', '..', 'lib', 'graphql-docs', 'landing_pages', 'query.md')
+        }
+      }
+    )
+
+    # First request: operation/query with YAML frontmatter title "Queries"
+    env1 = Rack::MockRequest.env_for('/operation/query')
+    response1 = multi_app.call(env1)
+    body1 = response1[2].join
+
+    assert_includes body1, '<title>Queries</title>'
+
+    # Second request: different page without that YAML frontmatter
+    env2 = Rack::MockRequest.env_for('/object/codeofconduct')
+    response2 = multi_app.call(env2)
+    body2 = response2[2].join
+
+    # Second page should NOT have the "Queries" title from the operation page
+    refute_includes body2, '<title>Queries</title>'
+    assert_includes body2, '<title>codeofconduct</title>'
+  end
+
+  def test_operation_page_with_caching_preserves_yaml
+    # Test that operation page YAML metadata is correctly cached and reused
+    schema = File.read(File.join(__dir__, 'fixtures', 'tiny-schema.graphql'))
+    cached_query_app = GraphQLDocs::App.new(
+      schema: schema,
+      options: {
+        cache: true,
+        landing_pages: {
+          query: File.join(File.dirname(__FILE__), '..', '..', 'lib', 'graphql-docs', 'landing_pages', 'query.md')
+        }
+      }
+    )
+
+    # Make two requests to the same operation page
+    env = Rack::MockRequest.env_for('/operation/query')
+    response1 = cached_query_app.call(env)
+    response2 = cached_query_app.call(env)
+
+    body1 = response1[2].join
+    body2 = response2[2].join
+
+    # Both should have the YAML frontmatter title
+    assert_includes body1, '<title>Queries</title>'
+    assert_includes body2, '<title>Queries</title>'
+
+    # Both should include the description
+    assert_includes body1, 'Every GraphQL schema has a root type'
+    assert_includes body2, 'Every GraphQL schema has a root type'
+
+    # Responses should be identical
+    assert_equal body1, body2
+  end
+
   private
 
   def app
