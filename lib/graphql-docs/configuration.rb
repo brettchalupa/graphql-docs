@@ -29,21 +29,21 @@ module GraphQLDocs
 
       # Generating
       delete_output: false,
-      output_dir: './output/',
+      output_dir: "./output/",
       pipeline_config: {
         pipeline:
           %i[ExtendedMarkdownFilter
-             EmojiFilter
-             TableOfContentsFilter],
+            EmojiFilter
+            TableOfContentsFilter],
         context: {
           gfm: false,
           unsafe: true, # necessary for layout needs, given that it's all HTML templates
-          asset_root: 'https://a248.e.akamai.net/assets.github.com/images/icons'
+          asset_root: "https://a248.e.akamai.net/assets.github.com/images/icons"
         }
       },
       renderer: GraphQLDocs::Renderer,
       use_default_styles: true,
-      base_url: '',
+      base_url: "",
 
       templates: {
         default: "#{File.dirname(__FILE__)}/layouts/default.html",
@@ -78,10 +78,10 @@ module GraphQLDocs
       },
 
       classes: {
-        field_entry: '',
-        deprecation_notice: '',
-        notice: '',
-        notice_title: ''
+        field_entry: "",
+        deprecation_notice: "",
+        notice: "",
+        notice_title: ""
       }
     }.freeze
   end

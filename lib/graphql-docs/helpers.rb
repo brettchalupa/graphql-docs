@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'commonmarker'
-require 'ostruct'
+require "commonmarker"
+require "ostruct"
 
 module GraphQLDocs
   # Helper methods module for use in ERB templates.
@@ -31,8 +31,8 @@ module GraphQLDocs
     #   slugify("My Type Name") # => "my-type-name"
     #   slugify("Author.firstName") # => "author.firstname"
     def slugify(str)
-      slug = str.gsub(SLUGIFY_PRETTY_REGEXP, '-')
-      slug.gsub!(/^\-|\-$/i, '')
+      slug = str.gsub(SLUGIFY_PRETTY_REGEXP, "-")
+      slug.gsub!(/^-|-$/i, "")
       slug.downcase
     end
 
@@ -49,7 +49,7 @@ module GraphQLDocs
     #   <%= include.("field_table.html", fields: type[:fields]) %>
     def include(filename, opts = {})
       template = fetch_include(filename)
-      opts = { base_url: @options[:base_url], classes: @options[:classes] }.merge(opts)
+      opts = {base_url: @options[:base_url], classes: @options[:classes]}.merge(opts)
       template.result(OpenStruct.new(opts.merge(helper_methods)).instance_eval { binding })
     end
 
@@ -62,7 +62,7 @@ module GraphQLDocs
     #   markdownify("**bold**") # => "<strong>bold</strong>"
     #   markdownify(nil) # => ""
     def markdownify(string)
-      return '' if string.nil?
+      return "" if string.nil?
 
       type = @options[:pipeline_config][:context][:unsafe] ? :UNSAFE : :DEFAULT
       ::CommonMarker.render_html(string, type).strip
@@ -161,10 +161,10 @@ module GraphQLDocs
       # Parse
       begin
         meta = if parse
-                 YAML.safe_load(pieces[2]) || {}
-               else
-                 pieces[2]
-               end
+          YAML.safe_load(pieces[2]) || {}
+        else
+          pieces[2]
+        end
       rescue Exception => e # rubocop:disable Lint/RescueException
         raise "Could not parse YAML for #{name}: #{e.message}"
       end

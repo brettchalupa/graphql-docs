@@ -1,19 +1,20 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
-require 'graphql-docs'
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
+require "graphql-docs"
 
-require 'minitest/autorun'
-require 'minitest/pride'
-require 'minitest/focus'
+require "minitest/autorun"
+require "minitest/pride"
+require "minitest/focus"
 
 def fixtures_dir
-  File.join(File.dirname(__FILE__), 'graphql-docs', 'fixtures')
+  File.join(File.dirname(__FILE__), "graphql-docs", "fixtures")
 end
 
 def output_dir
-  File.join(fixtures_dir, 'output')
+  File.join(fixtures_dir, "output")
 end
+
 def clean_up_output
   FileUtils.rm_rf(output_dir)
 end

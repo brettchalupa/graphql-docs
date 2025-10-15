@@ -8,10 +8,10 @@
 # Run with: rackup config.ru
 # Or with specific port: rackup config.ru -p 9292
 
-require_relative 'lib/graphql-docs'
+require_relative "lib/graphql-docs"
 
 # Load the sample GraphQL schema
-schema_path = File.join(__dir__, 'test', 'graphql-docs', 'fixtures', 'gh-schema.graphql')
+schema_path = File.join(__dir__, "test", "graphql-docs", "fixtures", "gh-schema.graphql")
 
 unless File.exist?(schema_path)
   puts "Error: Sample schema not found at #{schema_path}"
@@ -25,7 +25,7 @@ schema = File.read(schema_path)
 app = GraphQLDocs::App.new(
   schema: schema,
   options: {
-    base_url: '',
+    base_url: "",
     use_default_styles: true,
     cache: true
   }
@@ -35,7 +35,7 @@ app = GraphQLDocs::App.new(
 use Rack::CommonLogger
 
 # Add reloader for development (optional, requires 'rack' gem)
-if ENV['RACK_ENV'] != 'production'
+if ENV["RACK_ENV"] != "production"
   puts "Running in development mode"
   puts "Visit http://localhost:9292 to view the documentation"
   puts "Press Ctrl+C to stop the server"

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'erb'
-require 'fileutils'
-require 'sass-embedded'
-require 'ostruct'
+require "erb"
+require "fileutils"
+require "sass-embedded"
+require "ostruct"
 
 module GraphQLDocs
   # Generates HTML documentation files from a parsed GraphQL schema.
@@ -57,9 +57,9 @@ module GraphQLDocs
         end
 
         landing_page_contents = File.read(@options[:landing_pages][sym])
-        metadata = ''
+        metadata = ""
 
-        if File.extname((@options[:landing_pages][sym])) == '.erb'
+        if File.extname(@options[:landing_pages][sym]) == ".erb"
           opts = @options.merge(@options[:landing_pages][:variables]).merge(helper_methods)
           if yaml?(landing_page_contents)
             metadata, landing_page = split_into_metadata_and_contents(landing_page_contents, parse: false)
@@ -100,35 +100,35 @@ module GraphQLDocs
       create_graphql_scalar_pages
       create_graphql_directive_pages
 
-      write_file('static', 'index', @graphql_index_landing_page, trim: false) unless @graphql_index_landing_page.nil?
+      write_file("static", "index", @graphql_index_landing_page, trim: false) unless @graphql_index_landing_page.nil?
 
-      write_file('static', 'object', @graphql_object_landing_page, trim: false) unless @graphql_object_landing_page.nil?
+      write_file("static", "object", @graphql_object_landing_page, trim: false) unless @graphql_object_landing_page.nil?
 
-      write_file('operation', 'query', @graphql_query_landing_page, trim: false) if !@graphql_query_landing_page.nil? && !has_query
+      write_file("operation", "query", @graphql_query_landing_page, trim: false) if !@graphql_query_landing_page.nil? && !has_query
 
-      write_file('operation', 'mutation', @graphql_mutation_landing_page, trim: false) unless @graphql_mutation_landing_page.nil?
+      write_file("operation", "mutation", @graphql_mutation_landing_page, trim: false) unless @graphql_mutation_landing_page.nil?
 
-      write_file('static', 'interface', @graphql_interface_landing_page, trim: false) unless @graphql_interface_landing_page.nil?
+      write_file("static", "interface", @graphql_interface_landing_page, trim: false) unless @graphql_interface_landing_page.nil?
 
-      write_file('static', 'enum', @graphql_enum_landing_page, trim: false) unless @graphql_enum_landing_page.nil?
+      write_file("static", "enum", @graphql_enum_landing_page, trim: false) unless @graphql_enum_landing_page.nil?
 
-      write_file('static', 'union', @graphql_union_landing_page, trim: false) unless @graphql_union_landing_page.nil?
+      write_file("static", "union", @graphql_union_landing_page, trim: false) unless @graphql_union_landing_page.nil?
 
-      write_file('static', 'input_object', @graphql_input_object_landing_page, trim: false) unless @graphql_input_object_landing_page.nil?
+      write_file("static", "input_object", @graphql_input_object_landing_page, trim: false) unless @graphql_input_object_landing_page.nil?
 
-      write_file('static', 'scalar', @graphql_scalar_landing_page, trim: false) unless @graphql_scalar_landing_page.nil?
+      write_file("static", "scalar", @graphql_scalar_landing_page, trim: false) unless @graphql_scalar_landing_page.nil?
 
-      write_file('static', 'directive', @graphql_directive_landing_page, trim: false) unless @graphql_directive_landing_page.nil?
+      write_file("static", "directive", @graphql_directive_landing_page, trim: false) unless @graphql_directive_landing_page.nil?
 
       if @options[:use_default_styles]
-        assets_dir = File.join(File.dirname(__FILE__), 'layouts', 'assets')
-        FileUtils.mkdir_p(File.join(@options[:output_dir], 'assets'))
+        assets_dir = File.join(File.dirname(__FILE__), "layouts", "assets")
+        FileUtils.mkdir_p(File.join(@options[:output_dir], "assets"))
 
-        css = Sass.compile(File.join(assets_dir, 'css', 'screen.scss')).css
-        File.write(File.join(@options[:output_dir], 'assets', 'style.css'), css)
+        css = Sass.compile(File.join(assets_dir, "css", "screen.scss")).css
+        File.write(File.join(@options[:output_dir], "assets", "style.css"), css)
 
-        FileUtils.cp_r(File.join(assets_dir, 'images'), File.join(@options[:output_dir], 'assets'))
-        FileUtils.cp_r(File.join(assets_dir, 'webfonts'), File.join(@options[:output_dir], 'assets'))
+        FileUtils.cp_r(File.join(assets_dir, "images"), File.join(@options[:output_dir], "assets"))
+        FileUtils.cp_r(File.join(assets_dir, "webfonts"), File.join(@options[:output_dir], "assets"))
       end
 
       true
@@ -140,8 +140,8 @@ module GraphQLDocs
     # @api private
     def create_graphql_operation_pages
       graphql_operation_types.each do |query_type|
-        metadata = ''
-        next unless query_type[:name] == graphql_root_types['query']
+        metadata = ""
+        next unless query_type[:name] == graphql_root_types["query"]
 
         unless @options[:landing_pages][:query].nil?
           query_landing_page = @options[:landing_pages][:query]
@@ -156,7 +156,7 @@ module GraphQLDocs
         end
         opts = default_generator_options(type: query_type)
         contents = @graphql_operations_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('operation', 'query', metadata + contents)
+        write_file("operation", "query", metadata + contents)
         return true
       end
       false
@@ -170,7 +170,7 @@ module GraphQLDocs
         opts = default_generator_options(type: object_type)
 
         contents = @graphql_objects_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('object', object_type[:name], contents)
+        write_file("object", object_type[:name], contents)
       end
     end
 
@@ -182,7 +182,7 @@ module GraphQLDocs
         opts = default_generator_options(type: query)
 
         contents = @graphql_queries_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('query', query[:name], contents)
+        write_file("query", query[:name], contents)
       end
     end
 
@@ -194,7 +194,7 @@ module GraphQLDocs
         opts = default_generator_options(type: mutation)
 
         contents = @graphql_mutations_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('mutation', mutation[:name], contents)
+        write_file("mutation", mutation[:name], contents)
       end
     end
 
@@ -206,7 +206,7 @@ module GraphQLDocs
         opts = default_generator_options(type: interface_type)
 
         contents = @graphql_interfaces_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('interface', interface_type[:name], contents)
+        write_file("interface", interface_type[:name], contents)
       end
     end
 
@@ -218,7 +218,7 @@ module GraphQLDocs
         opts = default_generator_options(type: enum_type)
 
         contents = @graphql_enums_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('enum', enum_type[:name], contents)
+        write_file("enum", enum_type[:name], contents)
       end
     end
 
@@ -230,7 +230,7 @@ module GraphQLDocs
         opts = default_generator_options(type: union_type)
 
         contents = @graphql_unions_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('union', union_type[:name], contents)
+        write_file("union", union_type[:name], contents)
       end
     end
 
@@ -242,7 +242,7 @@ module GraphQLDocs
         opts = default_generator_options(type: input_object_type)
 
         contents = @graphql_input_objects_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('input_object', input_object_type[:name], contents)
+        write_file("input_object", input_object_type[:name], contents)
       end
     end
 
@@ -254,7 +254,7 @@ module GraphQLDocs
         opts = default_generator_options(type: scalar_type)
 
         contents = @graphql_scalars_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('scalar', scalar_type[:name], contents)
+        write_file("scalar", scalar_type[:name], contents)
       end
     end
 
@@ -266,7 +266,7 @@ module GraphQLDocs
         opts = default_generator_options(type: directive_type)
 
         contents = @graphql_directives_template.result(OpenStruct.new(opts).instance_eval { binding })
-        write_file('directive', directive_type[:name], contents)
+        write_file("directive", directive_type[:name], contents)
       end
     end
 
@@ -277,8 +277,8 @@ module GraphQLDocs
     end
 
     def write_file(type, name, contents, trim: true)
-      if type == 'static'
-        if name == 'index'
+      if type == "static"
+        if name == "index"
           path = @options[:output_dir]
         else
           path = File.join(@options[:output_dir], name)
@@ -297,11 +297,11 @@ module GraphQLDocs
 
       if trim
         # normalize spacing so that CommonMarker doesn't treat it as `pre`
-        contents.gsub!(/^\s+$/, '')
-        contents.gsub!(/^\s{4}/m, '  ')
+        contents.gsub!(/^\s+$/, "")
+        contents.gsub!(/^\s{4}/m, "  ")
       end
 
-      filename = File.join(path, 'index.html')
+      filename = File.join(path, "index.html")
       contents = render_with_metadata(contents, metadata, type: type, name: name, filename: filename)
       File.write(filename, contents) unless contents.nil?
     end

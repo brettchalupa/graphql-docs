@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'html/pipeline'
-require 'yaml'
-require 'extended-markdown-filter'
-require 'ostruct'
+require "html/pipeline"
+require "yaml"
+require "extended-markdown-filter"
+require "ostruct"
 
 module GraphQLDocs
   # Renders documentation content into HTML.
@@ -79,9 +79,9 @@ module GraphQLDocs
     #   html = renderer.render(markdown, type: 'object', name: 'User')
     def render(contents, type: nil, name: nil, filename: nil)
       # Include all options (like Generator does) to support YAML frontmatter variables like title
-      opts = @options.merge({ type: type, name: name, filename: filename }).merge(helper_methods)
+      opts = @options.merge({type: type, name: name, filename: filename}).merge(helper_methods)
 
-      contents = to_html(contents, context: { filename: filename })
+      contents = to_html(contents, context: {filename: filename})
       return contents if @graphql_default_layout.nil?
 
       opts[:content] = contents
