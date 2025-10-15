@@ -7,6 +7,13 @@ require 'graphql-docs/generator'
 require 'graphql-docs/parser'
 require 'graphql-docs/version'
 
+# Lazy-load the Rack app - only loads if Rack is available
+begin
+  require 'graphql-docs/app' if defined?(Rack)
+rescue LoadError
+  # Rack not available, App class won't be loaded
+end
+
 # GraphQLDocs is a library for generating beautiful HTML documentation from GraphQL schemas.
 # It parses GraphQL schema files or schema objects and generates a complete documentation website
 # with customizable templates and styling.

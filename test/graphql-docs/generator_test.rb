@@ -180,6 +180,72 @@ class GeneratorTest < Minitest::Test
     assert_match(/    "nest2": \{/, contents)
   end
 
+  def test_that_yaml_frontmatter_title_renders_in_html
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+    options[:landing_pages][:index] = File.join(fixtures_dir, 'landing_pages', 'whitespace_template.md')
+
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
+    generator.generate
+
+    contents = File.read File.join(@output_dir, 'index.html')
+
+    # Should render title from YAML frontmatter, not "index"
+    assert_match(%r{<title>GraphQL documentation</title>}, contents)
+    refute_match(%r{<title>index</title>}, contents)
+
+    # YAML frontmatter should not appear in page content
+    refute_match(/^---$/, contents)
+    refute_match(/^title: GraphQL documentation$/, contents)
+  end
+
+  def test_that_yaml_frontmatter_does_not_pollute_across_files
+    # Critical test: Ensures YAML frontmatter from one file doesn't leak into another.
+    # This tests the thread-safe immutable options pattern where each file with YAML
+    # gets its own temporary renderer instead of mutating shared state.
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+    options[:delete_output] = true
+
+    # Set up templates: one with YAML frontmatter, one without
+    options[:templates][:objects] = File.join(fixtures_dir, 'templates', 'with_yaml_title.html')
+    options[:templates][:scalars] = File.join(fixtures_dir, 'templates', 'without_yaml.html')
+
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
+    generator.generate
+
+    # Object should have the custom YAML title
+    object_file = File.read(File.join(@output_dir, 'object', 'codeofconduct', 'index.html'))
+    assert_match(%r{<title>Custom YAML Title</title>}, object_file)
+
+    # Scalar should NOT have the custom YAML title - should use fallback
+    scalar_file = File.read(File.join(@output_dir, 'scalar', 'uri', 'index.html'))
+    refute_match(%r{<title>Custom YAML Title</title>}, scalar_file)
+    assert_match(%r{<title>URI</title>}, scalar_file) # Should use type name fallback
+  end
+
+  def test_that_options_remain_unchanged_after_yaml_processing
+    # Test that @options hash is never mutated during YAML frontmatter processing.
+    # The immutable pattern creates temporary renderers instead of modifying shared state.
+    options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
+    options[:output_dir] = @output_dir
+    options[:landing_pages][:index] = File.join(fixtures_dir, 'landing_pages', 'whitespace_template.md')
+
+    generator = GraphQLDocs::Generator.new(@tiny_results, options)
+    generator_options = generator.instance_variable_get(:@options)
+
+    # Snapshot of options before generation
+    options_before = generator_options.dup
+    has_title_before = generator_options.key?(:title)
+
+    generator.generate
+
+    # After generation, @options should not have been modified
+    refute generator_options.key?(:title), "Options should not contain :title from YAML frontmatter"
+    assert_equal has_title_before, generator_options.key?(:title),
+                 "Options keys should not change after generation"
+  end
+
   def test_that_empty_html_lines_not_interpreted_by_markdown
     options = deep_copy(GraphQLDocs::Configuration::GRAPHQLDOCS_DEFAULTS)
     options[:output_dir] = @output_dir

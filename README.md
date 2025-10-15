@@ -25,6 +25,13 @@ gem install graphql-docs
 
 ## Usage
 
+GraphQLDocs provides two ways to serve your documentation:
+
+1. **Static Site Generator (SSG)** - Pre-generate all HTML files (default)
+2. **Rack Application** - Serve documentation dynamically on-demand
+
+### Static Site Generation (SSG)
+
 GraphQLDocs can be used as a Ruby library to build the documentation website. Using it as a Ruby library allows for more control and using every supported option. Here's an example:
 
 ```ruby
@@ -54,6 +61,110 @@ See all of the supported CLI options with:
 ```console
 graphql-docs -h
 ```
+
+### Rack Application (Dynamic)
+
+For more flexibility and control, you can serve documentation dynamically using the Rack application. This is useful for:
+
+- Internal tools with frequently changing schemas
+- Integration with existing Rails/Sinatra applications
+- Adding authentication/authorization middleware
+- Dynamic schema loading from databases or APIs
+
+**Requirements**: The Rack application feature requires the `rack` gem (version 2.x or 3.x). Add it to your Gemfile:
+
+```ruby
+gem 'rack', '~> 3.0'  # or '~> 2.0' for Rack 2.x
+```
+
+The gem is compatible with both Rack 2.x and 3.x, so you can use whichever version your application requires.
+
+#### Standalone Rack App
+
+Create a `config.ru` file:
+
+```ruby
+require 'graphql-docs'
+
+schema = File.read('schema.graphql')
+
+app = GraphQLDocs::App.new(
+  schema: schema,
+  options: {
+    base_url: '',
+    use_default_styles: true,
+    cache: true  # Enable page caching
+  }
+)
+
+run app
+```
+
+Then run with:
+
+```console
+rackup config.ru
+```
+
+Visit `http://localhost:9292` to view your docs.
+
+#### Mounting in Rails
+
+```ruby
+# config/routes.rb
+require 'graphql-docs'
+
+Rails.application.routes.draw do
+  mount GraphQLDocs::App.new(schema: MyGraphQLSchema) => '/docs'
+end
+```
+
+#### Mounting in Sinatra
+
+```ruby
+require 'sinatra'
+require 'graphql-docs'
+
+schema = File.read('schema.graphql')
+docs_app = GraphQLDocs::App.new(schema: schema)
+
+map '/docs' do
+  run docs_app
+end
+
+map '/' do
+  run Sinatra::Application
+end
+```
+
+#### Rack App Features
+
+- **On-demand generation** - Pages are generated when requested
+- **Built-in caching** - Generated pages are cached in memory (disable with `cache: false`)
+- **Schema reloading** - Update schema without restarting server:
+
+```ruby
+app = GraphQLDocs::App.new(schema: schema)
+
+# Later, reload with new schema
+new_schema = File.read('updated_schema.graphql')
+app.reload_schema!(new_schema)
+```
+
+- **Asset serving** - CSS, fonts, and images served automatically
+- **Error handling** - Friendly error pages for missing types
+
+#### SSG vs Rack Comparison
+
+| Feature | SSG | Rack App |
+|---------|-----|----------|
+| Setup complexity | Low | Medium |
+| First page load | Instant | Fast (with caching) |
+| Schema updates | Manual rebuild | Automatic/reload |
+| Hosting | Any static host | Requires Ruby server |
+| Memory usage | Minimal | Higher (cached pages) |
+| Authentication | Separate layer | Built-in middleware |
+| Best for | Public docs, open source | Internal tools, dynamic schemas |
 
 ## Breakdown
 
@@ -398,19 +509,41 @@ an interactive prompt that will allow you to experiment.
 
 ## Sample Site
 
-Clone this repository and run:
+Clone this repository and try out both modes:
 
-```
+### Static Site Generation
+
+Generate the sample documentation to the `output` directory:
+
+```console
 bin/rake sample:generate
 ```
 
-to see some sample output in the `output` dir.
+Then boot up a server to view the pre-generated files:
 
-Boot up a server to view it:
-
-```
+```console
 bin/rake sample:serve
 ```
+
+Visit `http://localhost:5050` to view the static documentation.
+
+### Rack Application (Dynamic)
+
+Run the sample docs as a dynamic Rack application:
+
+```console
+bin/rake sample:rack
+```
+
+Or use the config.ru directly:
+
+```console
+rackup config.ru
+```
+
+Visit `http://localhost:9292` to view the documentation served dynamically.
+
+**Key Difference**: The SSG version pre-generates all pages (faster initial load, no runtime cost), while the Rack version generates pages on-demand (better for dynamic schemas, easier integration).
 
 ## Credits
 

@@ -50,9 +50,17 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'ostruct', '~> 0.6'
   spec.add_dependency 'logger', '~> 1.6'
 
+  # rack application support (optional, only needed for GraphQLDocs::App)
+  # Users can install rack separately if they want to use the Rack app feature:
+  #   gem 'rack', '~> 2.0' or gem 'rack', '~> 3.0'
+  # The gem works with both Rack 2.x and 3.x
+
   spec.add_development_dependency 'html-proofer', '~> 3.4'
   spec.add_development_dependency 'minitest', '~> 5.24'
   spec.add_development_dependency 'minitest-focus', '~> 1.1'
+  spec.add_development_dependency 'rack', '>= 2.0', '< 4'
+  spec.add_development_dependency 'rack-test', '~> 2.0'
+  spec.add_development_dependency 'rackup', '~> 2.0'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rubocop', '~> 1.37'
   spec.add_development_dependency 'rubocop-performance', '~> 1.15'

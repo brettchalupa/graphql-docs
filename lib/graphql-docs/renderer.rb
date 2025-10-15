@@ -78,7 +78,8 @@ module GraphQLDocs
     # @example
     #   html = renderer.render(markdown, type: 'object', name: 'User')
     def render(contents, type: nil, name: nil, filename: nil)
-      opts = { base_url: @options[:base_url], output_dir: @options[:output_dir] }.merge({ type: type, name: name, filename: filename }).merge(helper_methods)
+      # Include all options (like Generator does) to support YAML frontmatter variables like title
+      opts = @options.merge({ type: type, name: name, filename: filename }).merge(helper_methods)
 
       contents = to_html(contents, context: { filename: filename })
       return contents if @graphql_default_layout.nil?

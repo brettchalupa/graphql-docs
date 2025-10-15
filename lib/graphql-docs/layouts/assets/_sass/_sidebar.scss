@@ -78,11 +78,12 @@
     padding: 0.01em 16px;
     margin-bottom: 20px;
 
-    img {
+    svg {
       position: absolute;
       left: 10px;
       height: 16px;
       width: 16px;
+      fill: currentColor;
     }
 
     input {
@@ -104,7 +105,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  #sidebar #search img {
+  #sidebar #search svg {
     filter: brightness(0) invert(1);
   }
 }
