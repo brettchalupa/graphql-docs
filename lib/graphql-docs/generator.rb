@@ -6,11 +6,37 @@ require 'sass-embedded'
 require 'ostruct'
 
 module GraphQLDocs
+  # Generates HTML documentation files from a parsed GraphQL schema.
+  #
+  # The Generator takes the parsed schema structure and creates individual HTML pages
+  # for each GraphQL type, along with landing pages and static assets. It uses ERB
+  # templates for layout and the Renderer for converting content to HTML.
+  #
+  # @example Basic usage
+  #   generator = GraphQLDocs::Generator.new(parsed_schema, options)
+  #   generator.generate
+  #
+  # @see Parser
+  # @see Renderer
   class Generator
     include Helpers
 
+    # @!attribute [rw] parsed_schema
+    #   @return [Hash] The parsed schema structure from {Parser}
     attr_accessor :parsed_schema
 
+    # Initializes a new Generator instance.
+    #
+    # Sets up ERB templates for all GraphQL types and landing pages. Validates that
+    # all required template files exist before generation begins.
+    #
+    # @param parsed_schema [Hash] The parsed schema from {Parser#parse}
+    # @param options [Hash] Configuration options
+    # @option options [Hash] :templates Paths to ERB template files
+    # @option options [Hash] :landing_pages Paths to landing page files
+    # @option options [Class] :renderer Renderer class to use
+    #
+    # @raise [IOError] If any required template or landing page file is not found
     def initialize(parsed_schema, options)
       @parsed_schema = parsed_schema
       @options = options
@@ -49,6 +75,17 @@ module GraphQLDocs
       end
     end
 
+    # Generates all HTML documentation files.
+    #
+    # This is the main generation method that creates:
+    # - Individual pages for each GraphQL type
+    # - Landing pages for type categories
+    # - Static assets (CSS, fonts, images) if using default styles
+    #
+    # @return [Boolean] Returns true on successful generation
+    #
+    # @example
+    #   generator.generate # Creates all docs in output directory
     def generate
       FileUtils.rm_rf(@options[:output_dir]) if @options[:delete_output]
 
@@ -97,6 +134,10 @@ module GraphQLDocs
       true
     end
 
+    # Creates HTML pages for GraphQL operation types (Query, Mutation).
+    #
+    # @return [Boolean] Returns true if Query type was found and generated
+    # @api private
     def create_graphql_operation_pages
       graphql_operation_types.each do |query_type|
         metadata = ''
@@ -121,6 +162,9 @@ module GraphQLDocs
       false
     end
 
+    # Creates HTML pages for GraphQL object types.
+    # @return [void]
+    # @api private
     def create_graphql_object_pages
       graphql_object_types.each do |object_type|
         opts = default_generator_options(type: object_type)
@@ -130,6 +174,9 @@ module GraphQLDocs
       end
     end
 
+    # Creates HTML pages for GraphQL query fields.
+    # @return [void]
+    # @api private
     def create_graphql_query_pages
       graphql_query_types.each do |query|
         opts = default_generator_options(type: query)
@@ -139,6 +186,9 @@ module GraphQLDocs
       end
     end
 
+    # Creates HTML pages for GraphQL mutation fields.
+    # @return [void]
+    # @api private
     def create_graphql_mutation_pages
       graphql_mutation_types.each do |mutation|
         opts = default_generator_options(type: mutation)
@@ -148,6 +198,9 @@ module GraphQLDocs
       end
     end
 
+    # Creates HTML pages for GraphQL interface types.
+    # @return [void]
+    # @api private
     def create_graphql_interface_pages
       graphql_interface_types.each do |interface_type|
         opts = default_generator_options(type: interface_type)
@@ -157,6 +210,9 @@ module GraphQLDocs
       end
     end
 
+    # Creates HTML pages for GraphQL enum types.
+    # @return [void]
+    # @api private
     def create_graphql_enum_pages
       graphql_enum_types.each do |enum_type|
         opts = default_generator_options(type: enum_type)
@@ -166,6 +222,9 @@ module GraphQLDocs
       end
     end
 
+    # Creates HTML pages for GraphQL union types.
+    # @return [void]
+    # @api private
     def create_graphql_union_pages
       graphql_union_types.each do |union_type|
         opts = default_generator_options(type: union_type)
@@ -175,6 +234,9 @@ module GraphQLDocs
       end
     end
 
+    # Creates HTML pages for GraphQL input object types.
+    # @return [void]
+    # @api private
     def create_graphql_input_object_pages
       graphql_input_object_types.each do |input_object_type|
         opts = default_generator_options(type: input_object_type)
@@ -184,6 +246,9 @@ module GraphQLDocs
       end
     end
 
+    # Creates HTML pages for GraphQL scalar types.
+    # @return [void]
+    # @api private
     def create_graphql_scalar_pages
       graphql_scalar_types.each do |scalar_type|
         opts = default_generator_options(type: scalar_type)
@@ -193,6 +258,9 @@ module GraphQLDocs
       end
     end
 
+    # Creates HTML pages for GraphQL directives.
+    # @return [void]
+    # @api private
     def create_graphql_directive_pages
       graphql_directive_types.each do |directive_type|
         opts = default_generator_options(type: directive_type)

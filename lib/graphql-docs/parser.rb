@@ -3,11 +3,31 @@
 require 'graphql'
 
 module GraphQLDocs
+  # Parses GraphQL schemas into a structured format for documentation generation.
+  #
+  # The Parser takes a GraphQL schema (as a string or schema class) and transforms it
+  # into a normalized hash structure that's easier to work with during HTML generation.
+  # It extracts all types, fields, arguments, and metadata from the schema.
+  #
+  # @example Basic usage
+  #   parser = GraphQLDocs::Parser.new(schema_string, options)
+  #   parsed = parser.parse
+  #
+  # @example Accessing parsed data
+  #   parsed[:object_types] # => Array of object type hashes
+  #   parsed[:query_types]  # => Array of query hashes
   class Parser
     include Helpers
 
+    # @!attribute [r] processed_schema
+    #   @return [Hash] The parsed schema structure containing all GraphQL types
     attr_reader :processed_schema
 
+    # Initializes a new Parser instance.
+    #
+    # @param schema [String, GraphQL::Schema] GraphQL schema as IDL string or schema class
+    # @param options [Hash] Configuration options including the notices proc
+    # @option options [Proc] :notices Proc for adding custom notices to schema members
     def initialize(schema, options)
       @options = options
 
@@ -33,6 +53,34 @@ module GraphQLDocs
       }
     end
 
+    # Parses the GraphQL schema into a structured hash.
+    #
+    # This method processes the entire schema and extracts all types, including:
+    # - Operation types (Query, Mutation)
+    # - Object types
+    # - Interface types
+    # - Enum types
+    # - Union types
+    # - Input object types
+    # - Scalar types
+    # - Directive types
+    #
+    # Each type includes its fields, arguments, deprecation notices, and custom notices.
+    #
+    # @return [Hash] Structured hash containing all parsed schema data with keys:
+    #   - :root_types - Query and Mutation root type names
+    #   - :operation_types - Array of operation type hashes
+    #   - :query_types - Array of query field hashes
+    #   - :mutation_types - Array of mutation field hashes
+    #   - :object_types - Array of object type hashes
+    #   - :interface_types - Array of interface type hashes
+    #   - :enum_types - Array of enum type hashes
+    #   - :union_types - Array of union type hashes
+    #   - :input_object_types - Array of input object type hashes
+    #   - :scalar_types - Array of scalar type hashes
+    #   - :directive_types - Array of directive hashes
+    #
+    # @raise [TypeError] If an unknown GraphQL type is encountered
     def parse
       root_types = {}
       %w[query mutation].each do |operation|

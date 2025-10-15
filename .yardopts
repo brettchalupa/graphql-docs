@@ -1,0 +1,9 @@
+--markup markdown
+--markup-provider commonmarker
+--output-dir doc
+--protected
+--no-private
+lib/**/*.rb
+-
+README.md
+CHANGELOG.md
