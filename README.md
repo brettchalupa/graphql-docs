@@ -4,6 +4,10 @@ Ruby library and CLI for easily generating beautiful documentation from your Gra
 
 ![sample](https://cloud.githubusercontent.com/assets/64050/23438604/6a23add0-fdc7-11e6-8852-ef41e8451033.png)
 
+Key links:
+
+- **Ruby documentation**: [https://rubydoc.info/github/brettchalupa/graphql-docs.git/main](https://rubydoc.info/github/brettchalupa/graphql-docs.git/main).
+
 ## Installation
 
 Add the gem to your project with this command:
@@ -315,7 +319,7 @@ This starts a server at http://localhost:8808 that automatically reloads when yo
 
 ### Online Documentation
 
-The API documentation is available online at [RubyDoc.info](https://www.rubydoc.info/gems/graphql-docs).
+The API documentation is available online at [https://rubydoc.info/github/brettchalupa/graphql-docs.git/main](https://rubydoc.info/github/brettchalupa/graphql-docs.git/main).
 
 ### Documentation Coverage
 
