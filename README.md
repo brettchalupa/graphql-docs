@@ -270,6 +270,55 @@ The format of `schema_member_path` is a dot delimited path to the schema member.
 "Mutation.addLike" # a mutation
 ```
 
+## Browser Support
+
+The generated documentation sites work best on modern browsers. Browser requirements are determined by the CSS and JavaScript features used in the default templates.
+
+### Fully Supported Browsers
+
+All features work, including automatic dark mode based on system preferences:
+
+- **Chrome/Edge**: 79+ (January 2020)
+- **Firefox**: 67+ (May 2019)
+- **Safari**: 12.1+ (March 2019)
+- **Mobile Safari (iOS)**: 12.1+
+- **Chrome for Android**: 79+
+
+### Partial Support
+
+The documentation will display correctly, but automatic dark mode will not work:
+
+- **Chrome**: 49-78
+- **Firefox**: 31-66
+- **Safari**: 9.1-12.0
+- **Edge**: 15-78
+
+### Unsupported
+
+- **Internet Explorer**: All versions (does not support CSS custom properties)
+- **Browsers released before 2016**
+
+### Technical Requirements
+
+The default templates use the following modern web features:
+
+**CSS Features:**
+- CSS Custom Properties (CSS Variables) - Required for theming
+- `@media (prefers-color-scheme: dark)` - Required for automatic dark mode
+- Flexbox
+- CSS Transforms and Transitions
+
+**JavaScript Features:**
+- ES6+ syntax (arrow functions, `const`/`let`, template literals)
+- `sessionStorage` API - For sidebar resize persistence
+- DOM APIs: `querySelector`, `addEventListener`, etc.
+
+### Browser Support Policy
+
+- The gem targets browsers released in 2019 or later for full feature support
+- Graceful degradation ensures basic functionality on older browsers
+- Any changes that drop support for currently supported browsers will be considered breaking changes and will require a major version release
+
 ## Supported Ruby Versions
 
 The gem officially supports **Ruby 3.1 and newer**.
