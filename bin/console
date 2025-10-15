@@ -1,9 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env ruby
+# frozen_string_literal: true
 
-set -e
+puts "===> Bundling..."
+system("bin/setup", "--quiet") || exit(1)
 
-echo "===> Bundling..."
-bin/setup --quiet
-
-echo "===> Launching..."
-bin/rake console
+puts "===> Launching..."
+exec("bin/rake", "console")
