@@ -1,7 +1,27 @@
 # frozen_string_literal: true
 
 module GraphQLDocs
+  # Configuration module that defines default options for GraphQLDocs.
+  #
+  # All configuration options can be overridden when calling {GraphQLDocs.build}.
+  #
+  # @see GraphQLDocs.build
   module Configuration
+    # Default configuration options for GraphQLDocs.
+    #
+    # @return [Hash] Hash of default configuration values
+    #
+    # @option defaults [String] :filename (nil) Path to GraphQL schema IDL file
+    # @option defaults [String, GraphQL::Schema] :schema (nil) GraphQL schema as string or class
+    # @option defaults [Boolean] :delete_output (false) Delete output directory before generating
+    # @option defaults [String] :output_dir ('./output/') Directory for generated HTML files
+    # @option defaults [Hash] :pipeline_config Configuration for html-pipeline rendering
+    # @option defaults [Class] :renderer (GraphQLDocs::Renderer) Renderer class to use
+    # @option defaults [Boolean] :use_default_styles (true) Include default CSS styles
+    # @option defaults [String] :base_url ('') Base URL to prepend to assets and links
+    # @option defaults [Hash] :templates Paths to ERB template files for different GraphQL types
+    # @option defaults [Hash] :landing_pages Paths to landing page files for each type
+    # @option defaults [Hash] :classes Additional CSS class names for styling elements
     GRAPHQLDOCS_DEFAULTS = {
       # initialize
       filename: nil,

@@ -40,6 +40,24 @@ task :console do
   IRB.start
 end
 
+namespace :yard do
+  desc 'Generate YARD documentation'
+  task :doc do
+    sh 'bundle exec yard doc'
+  end
+
+  desc 'Run YARD documentation server'
+  task :server do
+    puts "Starting YARD server at http://localhost:8808"
+    puts "Press Ctrl+C to stop"
+    sh 'bundle exec yard server --reload --bind 0.0.0.0 --port 8808'
+  end
+end
+
+# Alias for convenience
+desc 'Generate YARD documentation'
+task yard: 'yard:doc'
+
 namespace :sample do
   desc 'Generate the sample documentation'
   task :generate do

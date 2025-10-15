@@ -198,8 +198,8 @@ To customize the colors, create a custom CSS file and load it after the default 
 Then reference it in your custom template by overriding the `default` template and adding a link to your stylesheet:
 
 ```html
-<link rel="stylesheet" href="<%= base_url %>/assets/style.css">
-<link rel="stylesheet" href="<%= base_url %>/assets/custom-theme.css">
+<link rel="stylesheet" href="<%= base_url %>/assets/style.css" />
+<link rel="stylesheet" href="<%= base_url %>/assets/custom-theme.css" />
 ```
 
 ## Configuration
@@ -290,6 +290,40 @@ painless as possible.
 
 Upcoming work for the project is organized publicly via [GitHub
 Projects](https://github.com/users/brettchalupa/projects/7/views/1).
+
+## API Documentation
+
+This gem uses [YARD](https://yardoc.org/) for API documentation. All public classes and methods are documented with examples and detailed descriptions.
+
+### Viewing the API Documentation
+
+To generate and view the API documentation locally:
+
+```console
+bundle exec rake yard
+```
+
+This will generate HTML documentation in the `doc/` directory. Open `doc/index.html` in your browser to view it.
+
+Alternatively, you can run a live documentation server with auto-reload:
+
+```console
+bundle exec rake yard:server
+```
+
+This starts a server at http://localhost:8808 that automatically reloads when you make changes to the code.
+
+### Online Documentation
+
+The API documentation is available online at [RubyDoc.info](https://www.rubydoc.info/gems/graphql-docs).
+
+### Documentation Coverage
+
+The codebase maintains 100% documentation coverage for all public APIs. You can check documentation statistics with:
+
+```console
+bundle exec yard stats
+```
 
 ## Development
 
