@@ -7,7 +7,7 @@
     font-style: italic;
   }
   strong {
-    font-family: 'ProximaNova-Bold';
+    font-weight: 700;
   }
   h1 {
     margin: 15px 0;
@@ -188,7 +188,7 @@
   .highlight.html {
     .code {
       &:after {
-        font-family: 'ProximaNova-Semibold';
+        font-weight: 600;
         position: absolute;
         top: 0;
         right: 0;
@@ -206,7 +206,7 @@
   .highlight.js {
     .code {
       &:after {
-        font-family: 'ProximaNova-Semibold';
+        font-weight: 600;
         position: absolute;
         top: 0;
         right: 0;
@@ -224,7 +224,7 @@
   .highlight.bash {
     .code {
       &:after {
-        font-family: 'ProximaNova-Semibold';
+        font-weight: 600;
         position: absolute;
         top: 0;
         right: 0;
@@ -242,7 +242,7 @@
   .highlight.css {
     .code {
       &:after {
-        font-family: 'ProximaNova-Semibold';
+        font-weight: 600;
         position: absolute;
         top: 0;
         right: 0;
@@ -260,7 +260,7 @@
   .highlight.jsx {
     .code {
       &:after {
-        font-family: 'ProximaNova-Semibold';
+        font-weight: 600;
         position: absolute;
         top: 0;
         right: 0;
@@ -460,7 +460,7 @@
       }
     }
     th {
-      font-family: 'ProximaNova-Semibold';
+      font-weight: 600;
       padding: 12px 13px;
       border: 1px solid var(--border-color);
       vertical-align: middle;
@@ -481,7 +481,7 @@
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 25px;
     a {
-      font-family: 'ProximaNova-Semibold';
+      font-weight: 600;
       margin: 0 5px;
     }
   }
@@ -489,7 +489,7 @@
     text-align: center;
     a {
       color: #aaa;
-      font-family: 'ProximaNova-Semibold';
+      font-weight: 600;
       &:before {
         content: '';
         display: inline-block;
