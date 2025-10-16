@@ -31,10 +31,7 @@ module GraphQLDocs
       delete_output: false,
       output_dir: "./output/",
       pipeline_config: {
-        pipeline:
-          %i[ExtendedMarkdownFilter
-            EmojiFilter
-            TableOfContentsFilter],
+        pipeline: [], # html-pipeline 3 filters are instantiated differently
         context: {
           gfm: false,
           unsafe: true, # necessary for layout needs, given that it's all HTML templates

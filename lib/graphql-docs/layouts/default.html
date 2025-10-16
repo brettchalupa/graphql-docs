@@ -167,7 +167,7 @@
       <!-- mobile only -->
       <div id="mobile-header">
         <a class="menu-button" onclick="document.body.classList.toggle('sidebar-open')"></a>
-        <a class="logo" href="<%= base_url.present? ? base_url : '/' %>">
+        <a class="logo" href="<%= base_url && !base_url.empty? ? base_url : '/' %>">
 
         </a>
       </div>

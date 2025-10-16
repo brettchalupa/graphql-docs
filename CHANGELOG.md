@@ -5,6 +5,63 @@ A concise overview of the public-facing changes to the gem from version to versi
 ## Unreleased
 
 - Add Rake task `graphql-docs:generate` for integration with Rails and other Ruby projects that use Rake. Supports both task arguments and environment variables for configuration. Can be used with `Rake::Task["assets:precompile"].enhance(["graphql-docs:generate"])` to generate docs as part of the build process.
+- **breaking:** Upgrade commonmarker, html-pipeline, and gemoji dependencies, see **BREAKING CHANGES** section below
+
+### 🚨 BREAKING CHANGES
+
+This release upgrades three major dependencies with significant breaking changes.
+
+#### Dependency Upgrades
+
+- **commonmarker**: `0.23.x` → `2.0.x` - Complete API rewrite with improved performance and standards compliance
+- **html-pipeline**: `2.14.x` → `3.0.x` - Simplified architecture, filter API changed
+- **gemoji**: `3.0.x` → `4.0.x` - Updated emoji mappings
+- **Removed**: `extended-markdown-filter` (no longer maintained, incompatible with html-pipeline 3)
+
+#### Breaking Changes for Advanced Users
+
+1. **Custom html-pipeline filters no longer work**
+   - html-pipeline 3.x has a completely different filter API
+   - If you configured custom filters via `pipeline_config[:pipeline]`, they will not work
+   - **Migration**: Rewrite custom filters using html-pipeline 3.x API (see [html-pipeline migration guide](https://github.com/jch/html-pipeline/blob/main/CHANGELOG.md))
+   - The gem now handles markdown and emoji rendering directly
+
+2. **Custom Renderer API changes**
+   - If you implemented a custom renderer that directly uses CommonMarker:
+   - **Old API**: `CommonMarker.render_html(string, :UNSAFE)`
+   - **New API**: `Commonmarker.parse(string).to_html(options: {render: {unsafe: true}})`
+   - Note the lowercase 'm' in `Commonmarker` in version 2.x
+
+3. **Table of Contents filter removed from defaults**
+   - The default `TableOfContentsFilter` is no longer applied
+   - **Migration**: Implement a custom post-processing step if needed
+
+#### What Still Works (and is Better!)
+
+- ✅ GitHub Flavored Markdown (tables, strikethrough, autolinks, task lists)
+- ✅ **Emoji rendering** - `:emoji:` syntax like `:smile:` works out of the box
+- ✅ Header anchors (automatically generated with IDs)
+- ✅ Safe and unsafe HTML rendering modes
+- ✅ Code blocks with syntax highlighting
+- ✅ All existing templates and layouts
+- ✅ Faster markdown rendering
+- ✅ More standards-compliant HTML output
+
+#### Why Upgrade?
+
+- **Security**: Updates to latest stable versions with security patches
+- **Performance**: commonmarker 2.x is significantly faster and more standards-compliant
+- **Maintainability**: All dependencies are actively maintained
+- **Modern**: Uses current Ruby ecosystem standards
+
+#### Migration Guide
+
+For most users with default configuration, this upgrade should be seamless. Advanced users should check:
+
+- [ ] Do you use custom `pipeline_config[:pipeline]` filters? → Rewrite for html-pipeline 3.x
+- [ ] Do you have a custom `Renderer` subclass that calls CommonMarker directly? → Update API calls
+- [ ] Run full test suite after upgrade
+- [ ] Regenerate documentation and visually inspect output
 
 ## v5.2.0 - 2025-02-09
 
