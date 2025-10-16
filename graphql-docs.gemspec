@@ -30,7 +30,9 @@ Gem::Specification.new do |spec|
   }
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
+    f.match(%r{^(test|spec|features|\.github)/}) ||
+      f.match(%r{^(Gemfile|Rakefile|CODE_OF_CONDUCT\.md|CONTRIBUTING\.md|\.gitignore|\.rubocop\.yml|\.standard\.yml|config\.ru)$}) ||
+      f.match(%r{/webfonts/}) # Exclude webfonts directory - using system fonts
   end
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }

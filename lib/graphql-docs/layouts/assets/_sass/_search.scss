@@ -20,7 +20,7 @@
     background-color: var(--bg-primary);
     color: var(--text-primary);
     outline: none;
-    font-family: 'ProximaNova-Regular';
+    font-family: inherit;
     font-size: 14px;
     padding: 7px 12px 6px 32px;
     border-radius: 20px;
@@ -42,7 +42,7 @@
   background-color: var(--bg-primary);
   color: var(--text-primary);
   outline: none;
-  font-family: 'ProximaNova-Regular';
+  font-family: inherit;
   font-size: 14px;
   padding: 7px 12px 6px 32px;
   border-radius: 20px;

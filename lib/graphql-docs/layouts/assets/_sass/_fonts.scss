@@ -1,21 +1,6 @@
-@import "//hello.myfonts.net/count/2c4b9d";
-@font-face {
-  font-family: 'ProximaNova-Light';
-  src: url("webfonts/2C4B9D_B_0.eot");
-  src: url("webfonts/2C4B9D_B_0.eot?#iefix") format('embedded-opentype'), url("webfonts/2C4B9D_B_0.woff2") format('woff2'), url("webfonts/2C4B9D_B_0.woff") format('woff'), url("webfonts/2C4B9D_B_0.ttf") format('truetype');
-}
-@font-face {
-  font-family: 'ProximaNova-Semibold';
-  src: url("webfonts/2C4B9D_C_0.eot");
-  src: url("webfonts/2C4B9D_C_0.eot?#iefix") format('embedded-opentype'), url("webfonts/2C4B9D_C_0.woff2") format('woff2'), url("webfonts/2C4B9D_C_0.woff") format('woff'), url("webfonts/2C4B9D_C_0.ttf") format('truetype');
-}
-@font-face {
-  font-family: 'ProximaNova-Regular';
-  src: url("webfonts/2C4B9D_D_0.eot");
-  src: url("webfonts/2C4B9D_D_0.eot?#iefix") format('embedded-opentype'), url("webfonts/2C4B9D_D_0.woff2") format('woff2'), url("webfonts/2C4B9D_D_0.woff") format('woff'), url("webfonts/2C4B9D_D_0.ttf") format('truetype');
-}
-@font-face {
-  font-family: 'ProximaNova-Bold';
-  src: url("webfonts/2C4B9D_E_0.eot");
-  src: url("webfonts/2C4B9D_E_0.eot?#iefix") format('embedded-opentype'), url("webfonts/2C4B9D_E_0.woff2") format('woff2'), url("webfonts/2C4B9D_E_0.woff") format('woff'), url("webfonts/2C4B9D_E_0.ttf") format('truetype');
-}
+// Modern system font stack - no webfonts needed!
+$font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-stack-light: $font-stack;
+$font-stack-regular: $font-stack;
+$font-stack-semibold: $font-stack;
+$font-stack-bold: $font-stack;

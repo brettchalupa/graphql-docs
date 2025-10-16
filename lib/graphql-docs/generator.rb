@@ -128,7 +128,6 @@ module GraphQLDocs
         File.write(File.join(@options[:output_dir], "assets", "style.css"), css)
 
         FileUtils.cp_r(File.join(assets_dir, "images"), File.join(@options[:output_dir], "assets"))
-        FileUtils.cp_r(File.join(assets_dir, "webfonts"), File.join(@options[:output_dir], "assets"))
       end
 
       true

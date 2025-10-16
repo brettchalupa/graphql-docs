@@ -11,7 +11,7 @@
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: none;
-  font-family: 'ProximaNova-Semibold';
+  font-weight: 600;
   border-right: 1px solid var(--border-color);
   font-size: 16px;
   line-height: 1.1em;
@@ -48,7 +48,7 @@
     }
   }
   .sub-menu {
-    font-family: 'ProximaNova-Regular';
+    font-weight: 400;
     padding-left: 20px;
     margin: 0.6em 0;
     font-size: 14px;
@@ -95,7 +95,7 @@
       color: var(--text-primary);
       border: none;
       font-size: 14px;
-      font-family: 'ProximaNova-Semibold';
+      font-weight: 600;
     }
 
     input:focus {
