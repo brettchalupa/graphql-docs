@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "html/pipeline"
+require "html_pipeline"
+require "gemoji"
 require "yaml"
-require "extended-markdown-filter"
 require "ostruct"
 
 module GraphQLDocs
@@ -43,25 +43,16 @@ module GraphQLDocs
       @graphql_default_layout = ERB.new(File.read(@options[:templates][:default])) unless @options[:templates][:default].nil?
 
       @pipeline_config = @options[:pipeline_config] || {}
-      pipeline = @pipeline_config[:pipeline] || {}
       context = @pipeline_config[:context] || {}
 
-      filters = pipeline.map do |f|
-        if filter?(f)
-          f
-        else
-          key = filter_key(f)
-          filter = HTML::Pipeline.constants.find { |c| c.downcase == key }
-          # possibly a custom filter
-          if filter.nil?
-            Kernel.const_get(f)
-          else
-            HTML::Pipeline.const_get(filter)
-          end
-        end
-      end
+      # Convert context for html-pipeline 3
+      @pipeline_context = {}
+      @pipeline_context[:unsafe] = context[:unsafe] if context.key?(:unsafe)
+      @pipeline_context[:asset_root] = context[:asset_root] if context.key?(:asset_root)
 
-      @pipeline = HTML::Pipeline.new(filters, context)
+      # html-pipeline 3 uses a simplified API - we'll just use text-to-text processing
+      # since markdown conversion is handled by commonmarker directly
+      @pipeline = nil # We'll handle markdown conversion directly in to_html
     end
 
     # Renders content into complete HTML with layout.
@@ -88,27 +79,57 @@ module GraphQLDocs
       @graphql_default_layout.result(OpenStruct.new(opts).instance_eval { binding })
     end
 
-    # Converts a string to HTML using html-pipeline.
+    # Converts a string to HTML using commonmarker with emoji support.
     #
     # @param string [String] Content to convert
-    # @param context [Hash] Additional context for pipeline filters
-    # @return [String] HTML output from pipeline
+    # @param context [Hash] Additional context (unused, kept for compatibility)
+    # @return [String] HTML output
     #
     # @api private
     def to_html(string, context: {})
-      @pipeline.to_html(string, context)
+      return "" if string.nil?
+      return "" if string.empty?
+
+      begin
+        # Replace emoji shortcodes before markdown processing
+        string_with_emoji = emojify(string)
+
+        # Commonmarker 2.x uses parse/render API
+        # Parse with GitHub Flavored Markdown extensions enabled by default
+        doc = ::Commonmarker.parse(string_with_emoji)
+
+        # Convert to HTML - commonmarker 2.x automatically includes:
+        # - GitHub Flavored Markdown (tables, strikethrough, etc.)
+        # - Header anchors with IDs
+        # - Safe HTML by default (unless unsafe mode is enabled)
+        html = if @pipeline_context[:unsafe]
+          doc.to_html(options: {render: {unsafe: true}})
+        else
+          doc.to_html
+        end
+
+        # Strip trailing newline that commonmarker adds
+        html.chomp
+      rescue => e
+        # Log error and return safe fallback
+        warn "Failed to parse markdown: #{e.message}"
+        require "cgi" unless defined?(CGI)
+        CGI.escapeHTML(string.to_s)
+      end
+    end
+
+    # Converts emoji shortcodes like :smile: to emoji characters
+    #
+    # @param string [String] Text containing emoji shortcodes
+    # @return [String] Text with shortcodes replaced by emoji
+    # @api private
+    def emojify(string)
+      string.gsub(/:([a-z0-9_+-]+):/) do |match|
+        emoji = Emoji.find_by_alias(Regexp.last_match(1))
+        emoji ? emoji.raw : match
+      end
     end
 
     private
-
-    def filter_key(str)
-      str.downcase
-    end
-
-    def filter?(filter)
-      filter < HTML::Pipeline::Filter
-    rescue LoadError, ArgumentError
-      false
-    end
   end
 end
