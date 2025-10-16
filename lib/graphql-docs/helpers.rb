@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "commonmarker"
+require "gemoji"
 require "ostruct"
 
 module GraphQLDocs
@@ -64,8 +65,31 @@ module GraphQLDocs
     def markdownify(string)
       return "" if string.nil?
 
-      type = @options[:pipeline_config][:context][:unsafe] ? :UNSAFE : :DEFAULT
-      ::CommonMarker.render_html(string, type).strip
+      begin
+        # Replace emoji shortcodes before markdown processing
+        string_with_emoji = emojify(string)
+
+        doc = ::Commonmarker.parse(string_with_emoji)
+        html = if @options[:pipeline_config][:context][:unsafe]
+          doc.to_html(options: {render: {unsafe: true}})
+        else
+          doc.to_html
+        end
+        html.strip
+      rescue => e
+        # Log error and return safe fallback
+        warn "Failed to parse markdown: #{e.message}"
+        require "cgi" unless defined?(CGI)
+        CGI.escapeHTML(string)
+      end
+    end
+
+    # Converts emoji shortcodes like :smile: to emoji characters
+    def emojify(string)
+      string.gsub(/:([a-z0-9_+-]+):/) do |match|
+        emoji = Emoji.find_by_alias(Regexp.last_match(1))
+        emoji ? emoji.raw : match
+      end
     end
 
     # Returns the root types (query, mutation) from the parsed schema.
