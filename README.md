@@ -62,6 +62,80 @@ See all of the supported CLI options with:
 graphql-docs -h
 ```
 
+### Rake Task
+
+GraphQLDocs includes a Rake task for integration with Rails applications and other Ruby projects that use Rake. This allows you to generate documentation as part of your build process or hook it into other Rake tasks.
+
+#### Basic Usage
+
+Using task arguments (recommended):
+
+```console
+rake graphql-docs:generate[schema.graphql]
+rake graphql-docs:generate[schema.graphql,./docs]
+rake graphql-docs:generate[schema.graphql,./docs,/api-docs,true]
+```
+
+Or using environment variables:
+
+```console
+GRAPHQL_SCHEMA_FILE=schema.graphql rake graphql-docs:generate
+```
+
+#### Available Arguments
+
+Arguments are passed in order: `[schema_file, output_dir, base_url, delete_output]`
+
+1. `schema_file` - Path to GraphQL schema file (required)
+2. `output_dir` - Output directory (default: `./output/`)
+3. `base_url` - Base URL for assets and links (default: `''`)
+4. `delete_output` - Delete output directory before generating (`true`/`false`, default: `false`)
+
+#### Available Environment Variables
+
+- `GRAPHQL_SCHEMA_FILE` - Path to GraphQL schema file (required)
+- `GRAPHQL_OUTPUT_DIR` - Output directory (default: `./output/`)
+- `GRAPHQL_BASE_URL` - Base URL for assets and links (default: `''`)
+- `GRAPHQL_DELETE_OUTPUT` - Delete output directory before generating (`true`/`false`)
+
+Note: Task arguments take precedence over environment variables.
+
+#### Example: Generate Docs Before Asset Compilation
+
+In Rails, you can automatically generate documentation before compiling assets:
+
+```ruby
+# Rakefile or lib/tasks/docs.rake
+Rake::Task["assets:precompile"].enhance(["graphql-docs:generate"])
+```
+
+Then configure using environment variables:
+
+```ruby
+# config/application.rb or .env
+ENV["GRAPHQL_SCHEMA_FILE"] = Rails.root.join("app/graphql/schema.graphql").to_s
+```
+
+Or invoke with arguments in your custom task:
+
+```ruby
+# lib/tasks/custom_docs.rake
+namespace :docs do
+  desc "Generate API documentation"
+  task :generate do
+    Rake::Task["graphql-docs:generate"].invoke(
+      "app/graphql/schema.graphql",  # schema_file
+      "public/api-docs",              # output_dir
+      "/api-docs",                    # base_url
+      "true"                          # delete_output
+    )
+  end
+end
+
+# Hook into asset compilation
+Rake::Task["assets:precompile"].enhance(["docs:generate"])
+```
+
 ### Rack Application (Dynamic)
 
 For more flexibility and control, you can serve documentation dynamically using the Rack application. This is useful for:
