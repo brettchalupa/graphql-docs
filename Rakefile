@@ -5,6 +5,9 @@ require "rake/testtask"
 
 require "standard/rake"
 
+# Load graphql-docs rake tasks
+Dir.glob("lib/tasks/**/*.rake").each { |r| load r }
+
 Rake::TestTask.new(:test) do |t|
   t.libs << "test"
   t.libs << "lib"
