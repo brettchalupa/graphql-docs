@@ -43,11 +43,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency "graphql", "~> 2.0"
 
   # rendering
-  spec.add_dependency "commonmarker", ">= 0.23.6", "~> 0.23"
+  spec.add_dependency "commonmarker", "~> 2.0"
   spec.add_dependency "escape_utils", "~> 1.2"
-  spec.add_dependency "extended-markdown-filter", "~> 0.4"
-  spec.add_dependency "gemoji", "~> 3.0"
-  spec.add_dependency "html-pipeline", ">= 2.14.3", "~> 2.14"
+  spec.add_dependency "gemoji", "~> 4.0"
+  spec.add_dependency "html-pipeline", "~> 3.0"
   spec.add_dependency "sass-embedded", "~> 1.58"
   spec.add_dependency "ostruct", "~> 0.6"
   spec.add_dependency "logger", "~> 1.6"
