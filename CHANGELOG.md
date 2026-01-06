@@ -6,6 +6,7 @@ A concise overview of the public-facing changes to the gem from version to versi
 
 - Add Rake task `graphql-docs:generate` for integration with Rails and other Ruby projects that use Rake. Supports both task arguments and environment variables for configuration. Can be used with `Rake::Task["assets:precompile"].enhance(["graphql-docs:generate"])` to generate docs as part of the build process.
 - **breaking:** Upgrade commonmarker, html-pipeline, and gemoji dependencies, see **BREAKING CHANGES** section below
+- Run CI against Ruby 4.0
 
 ### 🚨 BREAKING CHANGES
 

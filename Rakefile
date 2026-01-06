@@ -19,11 +19,11 @@ task default: [:standard, :test]
 
 desc "Invoke HTML-Proofer"
 task :html_proofer do
-  Rake::Task[:generate_sample]
+  Rake::Task["sample:generate"]
   require "html-proofer"
   output_dir = File.join(File.dirname(__FILE__), "output")
 
-  proofer_options = {disable_external: true, assume_extension: true}
+  proofer_options = {ignore_urls: [/^https?:\/\//], assume_extension: ".html"}
   HTMLProofer.check_directory(output_dir, proofer_options).run
 end
 

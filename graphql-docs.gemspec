@@ -56,7 +56,7 @@ Gem::Specification.new do |spec|
   #   gem 'rack', '~> 2.0' or gem 'rack', '~> 3.0'
   # The gem works with both Rack 2.x and 3.x
 
-  spec.add_development_dependency "html-proofer", "~> 3.4"
+  spec.add_development_dependency "html-proofer", "~> 5.0"
   spec.add_development_dependency "minitest", "~> 5.24"
   spec.add_development_dependency "minitest-focus", "~> 1.1"
   spec.add_development_dependency "rack", ">= 2.0", "< 4"
