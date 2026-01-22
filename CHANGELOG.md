@@ -4,9 +4,25 @@ A concise overview of the public-facing changes to the gem from version to versi
 
 ## Unreleased
 
+## v6.0.0 - 2026-01-22
+
+### Features
+
 - Add Rake task `graphql-docs:generate` for integration with Rails and other Ruby projects that use Rake. Supports both task arguments and environment variables for configuration. Can be used with `Rake::Task["assets:precompile"].enhance(["graphql-docs:generate"])` to generate docs as part of the build process.
-- **breaking:** Upgrade commonmarker, html-pipeline, and gemoji dependencies, see **BREAKING CHANGES** section below
+- Add support for running as a Rack app for easy integration with existing web applications
+- Add resizable sidebar for better UX
+- Add Dark Mode styles support
+- Render deprecation info for queries and mutations
+
+### Improvements
+
+- Replace jQuery with vanilla JavaScript for smaller bundle size and fewer dependencies
+- Optimize packaged gem size and use system fonts for better performance
 - Run CI against Ruby 4.0
+
+### Breaking Changes
+
+- **breaking:** Upgrade commonmarker, html-pipeline, and gemoji dependencies, see **BREAKING CHANGES** section below
 
 ### 🚨 BREAKING CHANGES
 
