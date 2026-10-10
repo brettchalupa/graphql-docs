@@ -6,7 +6,7 @@ Ruby library and CLI for easily generating beautiful documentation from your Gra
 
 Key links:
 
-- **Demo**: [https://graphql-docs.bcodes.me](https://graphql-docs.bcodes.me).
+- **RubyGems.org**: [https://rubygems.org/gems/graphql-docs](https://rubygems.org/gems/graphql-docs)
 - **Ruby documentation**: [https://rubydoc.info/github/brettchalupa/graphql-docs.git/main](https://rubydoc.info/github/brettchalupa/graphql-docs.git/main).
 
 ## Installation
